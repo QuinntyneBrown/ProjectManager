@@ -6,5 +6,9 @@
   .to-do-list__list {
     display: grid;
     gap:10px;
+
+    > div {
+      cursor: pointer;
+    }
   }
 }

@@ -1,0 +1,31 @@
+{
+  "projects": null,
+  "path": "C:\\Projects\\AngularCaching",
+  "solutionName": null,
+  "rootNamespace": null,
+  "domainNamespace": "AngularCaching.Api",
+  "applicationNamespace": "AngularCaching.Api",
+  "infrastructureNamespace": "AngularCaching.Api",
+  "apiNamespace": "AngularCaching.Api",
+  "domainDirectory": "C:\\Projects\\AngularCaching\\src\\AngularCaching.Api",
+  "applicationDirectory": "C:\\Projects\\AngularCaching\\src\\AngularCaching.Api",
+  "infrastructureDirectory": "C:\\Projects\\AngularCaching\\src\\AngularCaching.Api",
+  "apiDirectory": "C:\\Projects\\AngularCaching\\src\\AngularCaching.Api",
+  "appDirectories": null,
+  "buildingBlocksCoreNamespace": "BuildingBlocks.Core",
+  "buildingBlocksEventStoreNamespace": "BuildingBlocks.EventStore",
+  "store": null,
+  "namespace": null,
+  "domain": null,
+  "core": null,
+  "api": null,
+  "entityIdDataType": null,
+  "sourceFolder": "src",
+  "testFolder": null,
+  "dbContext": "AngularCachingDbContext",
+  "eventSourcing": false,
+  "resources": [
+    "ToDo",
+    "StoredEvent"
+  ]
+}

@@ -1,0 +1,11 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <div>
+    <h2>To Do List</h2>
+
+    <div class="to-do-list__list">
+      <div *ngFor="let toDo of vm.toDos" [routerLink]="['/','to-dos','edit',toDo.toDoId]">
+        {{ toDo.description }}
+      </div>
+    </div>
+  </div>
+</ng-container>

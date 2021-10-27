@@ -1,0 +1,15 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <h2 *ngIf="!vm.form.value.toDoId">Create To Do</h2>
+  <h2 *ngIf="vm.form.value.toDoId">Edit To Do</h2>
+
+  <form [formGroup]="vm.form">
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <input type="text" matInput formControlName="description">
+    </mat-form-field>
+  </form>
+
+  <button mat-raised-button (click)="save(vm.form.value)">
+    Save
+  </button>
+</ng-container>

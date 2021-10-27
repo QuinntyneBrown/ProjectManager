@@ -1,0 +1,14 @@
+:host {
+  width: 100%;
+  display: block;
+  padding: 60px;
+
+  h1 {
+    padding-bottom: 60px;
+  }
+  div {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    place-items: start start;
+  }
+}

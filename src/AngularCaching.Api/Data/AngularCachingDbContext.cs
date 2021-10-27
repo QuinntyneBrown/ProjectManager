@@ -12,7 +12,7 @@ namespace AngularCaching.Api.Data
         public DbSet<ToDo> ToDos { get; private set; }
         public DbSet<StoredEvent> StoredEvents { get; private set; }
         public AngularCachingDbContext(DbContextOptions options)
-            :base()
+            :base(options)
         {
             SavingChanges += DbContext_SavingChanges;
         }

@@ -11,7 +11,7 @@
   "applicationDirectory": "C:\\Projects\\AngularCaching\\src\\AngularCaching.Api",
   "infrastructureDirectory": "C:\\Projects\\AngularCaching\\src\\AngularCaching.Api",
   "apiDirectory": "C:\\Projects\\AngularCaching\\src\\AngularCaching.Api",
-  "appDirectories": null,
+  "appDirectories": [ "C:\\Projects\\AngularCaching\\src\\AngularCaching.App"],
   "buildingBlocksCoreNamespace": "BuildingBlocks.Core",
   "buildingBlocksEventStoreNamespace": "BuildingBlocks.EventStore",
   "store": null,

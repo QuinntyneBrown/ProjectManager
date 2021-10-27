@@ -1,15 +1,15 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ToDo, ToDoService } from '@api';
-import { AppStateService } from '@core';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { ToDo } from '@api/models';
+import { ToDoService } from '@api/services/to-do.service';
+import { AppStateService } from '@core/app-state.service';
 import { map, tap } from 'rxjs/operators';
-
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  selector: 'app-to-do-list',
+  templateUrl: './to-do-list.component.html',
+  styleUrls: ['./to-do-list.component.scss']
 })
-export class AppComponent {
+export class ToDoListComponent  {
 
   public form: FormGroup = new FormGroup({
     toDoId: new FormControl(null, []),
@@ -38,4 +38,5 @@ export class AppComponent {
     )
     .subscribe();
   }
+
 }

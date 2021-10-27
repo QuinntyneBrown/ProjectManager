@@ -11,7 +11,7 @@ namespace AngularCaching.Api.Features
             {
                 ToDoId = toDo.ToDoId,
                 Description = toDo.Description,
-                Status = toDo.Description
+                Status = toDo.Status
             };
         }        
     }

@@ -1,11 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7B1B5534-7FBD-4EC2-841B-8CFA5D876D8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AngularCaching.Api", "src\AngularCaching.Api\AngularCaching.Api.csproj", "{3D587074-9DB5-4EA9-AD5B-3B84F12DC2B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AngularCaching.Api", "src\AngularCaching.Api\AngularCaching.Api.csproj", "{3D587074-9DB5-4EA9-AD5B-3B84F12DC2B9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CDCF899F-D8AE-4139-87E5-B3FA08F6889E}"
+	ProjectSection(SolutionItems) = preProject
+		clisettings.json = clisettings.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +20,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3D587074-9DB5-4EA9-AD5B-3B84F12DC2B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -33,7 +35,13 @@ Global
 		{3D587074-9DB5-4EA9-AD5B-3B84F12DC2B9}.Release|x86.ActiveCfg = Release|Any CPU
 		{3D587074-9DB5-4EA9-AD5B-3B84F12DC2B9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3D587074-9DB5-4EA9-AD5B-3B84F12DC2B9} = {7B1B5534-7FBD-4EC2-841B-8CFA5D876D8D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {558F8E9F-43A9-407B-B505-F780C7C89436}
 	EndGlobalSection
 EndGlobal

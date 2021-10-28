@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ToDo, ToDoService } from '@api';
+import { ToDo } from '@api';
 import { AppStateService } from '@core';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -11,31 +10,11 @@ import { map, tap } from 'rxjs/operators';
 })
 export class AppComponent {
 
-  public form: FormGroup = new FormGroup({
-    toDoId: new FormControl(null, []),
-    description: new FormControl(null, [])
-  })
-
-  public vm$ = this._appStateService.getEntities$()
+  public count$ = this._appStateService.getEntities$()
   .pipe(
-    map(toDos => ({ toDos }))
-  )
-
+    map((toDos: ToDo[]) => toDos.length)
+  );
   constructor(
-    private readonly _appStateService: AppStateService,
-    private readonly _toDoService: ToDoService
+    private readonly _appStateService: AppStateService
   ) { }
-
-  public save(toDo: ToDo) {
-    this._toDoService.create({
-      toDo
-    })
-    .pipe(
-      tap(_ => {
-        this.form.reset();
-        this._appStateService.refreshEntities();
-      })
-    )
-    .subscribe();
-  }
 }

@@ -1,4 +1,3 @@
-using System;
 using AngularCaching.Api.Models;
 
 namespace AngularCaching.Api.Features

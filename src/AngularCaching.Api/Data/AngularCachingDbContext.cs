@@ -7,12 +7,12 @@ using System.Linq;
 
 namespace AngularCaching.Api.Data
 {
-    public class AngularCachingDbContext: DbContext, IAngularCachingDbContext
+    public class AngularCachingDbContext : DbContext, IAngularCachingDbContext
     {
         public DbSet<ToDo> ToDos { get; private set; }
         public DbSet<StoredEvent> StoredEvents { get; private set; }
         public AngularCachingDbContext(DbContextOptions options)
-            :base(options)
+            : base(options)
         {
             SavingChanges += DbContext_SavingChanges;
         }
@@ -25,7 +25,7 @@ namespace AngularCaching.Api.Data
                     e.State == EntityState.Modified)
                 .Select(e => e.Entity)
                 .ToList();
-            
+
             foreach (var aggregate in entries)
             {
                 foreach (var storedEvent in aggregate.StoredEvents)
@@ -34,27 +34,27 @@ namespace AngularCaching.Api.Data
                 }
             }
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AngularCachingDbContext).Assembly);
         }
-        
+
         public override void Dispose()
         {
             SavingChanges -= DbContext_SavingChanges;
-            
+
             base.Dispose();
         }
-        
+
         public override ValueTask DisposeAsync()
         {
             SavingChanges -= DbContext_SavingChanges;
-            
+
             return base.DisposeAsync();
         }
-        
+
     }
 }

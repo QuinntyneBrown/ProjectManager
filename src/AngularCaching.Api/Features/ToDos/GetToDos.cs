@@ -12,27 +12,28 @@ namespace AngularCaching.Api.Features
 {
     public class GetToDos
     {
-        public class Request: IRequest<Response> { }
+        public class Request : IRequest<Response> { }
 
-        public class Response: ResponseBase
+        public class Response : ResponseBase
         {
             public List<ToDoDto> ToDos { get; set; }
         }
 
-        public class Handler: IRequestHandler<Request, Response>
+        public class Handler : IRequestHandler<Request, Response>
         {
             private readonly IAngularCachingDbContext _context;
-        
+
             public Handler(IAngularCachingDbContext context)
                 => _context = context;
-        
+
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                return new () {
+                return new()
+                {
                     ToDos = await _context.ToDos.Select(x => x.ToDto()).ToListAsync()
                 };
             }
-            
+
         }
     }
 }

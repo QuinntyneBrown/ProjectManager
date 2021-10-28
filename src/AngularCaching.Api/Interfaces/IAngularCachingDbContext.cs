@@ -10,6 +10,6 @@ namespace AngularCaching.Api.Interfaces
         DbSet<ToDo> ToDos { get; }
         DbSet<StoredEvent> StoredEvents { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
-        
+
     }
 }

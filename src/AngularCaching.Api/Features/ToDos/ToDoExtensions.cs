@@ -6,12 +6,12 @@ namespace AngularCaching.Api.Features
     {
         public static ToDoDto ToDto(this ToDo toDo)
         {
-            return new ()
+            return new()
             {
                 ToDoId = toDo.ToDoId,
                 Description = toDo.Description,
                 Status = toDo.Status
             };
-        }        
+        }
     }
 }

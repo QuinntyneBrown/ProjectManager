@@ -4,7 +4,7 @@ using System;
 
 namespace AngularCaching.Api.Models
 {
-    public class ToDo: AggregateRoot
+    public class ToDo : AggregateRoot
     {
         public Guid ToDoId { get; private set; }
         public string Description { get; private set; }
@@ -23,7 +23,7 @@ namespace AngularCaching.Api.Models
 
         protected override void EnsureValidState()
         {
-            if(string.IsNullOrEmpty(Description) || string.IsNullOrEmpty(Status))
+            if (string.IsNullOrEmpty(Description) || string.IsNullOrEmpty(Status))
             {
                 throw new Exception();
             }

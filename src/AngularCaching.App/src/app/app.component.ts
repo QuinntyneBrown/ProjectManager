@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ToDo } from '@api';
-import { AppStateService } from '@core';
+import { CachedQueryService } from '@core';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -10,11 +10,11 @@ import { map } from 'rxjs/operators';
 })
 export class AppComponent {
 
-  public count$ = this._appStateService.getEntities$()
+  public count$ = this._cachedQueryService.getEntities$()
   .pipe(
     map((toDos: ToDo[]) => toDos.length)
   );
   constructor(
-    private readonly _appStateService: AppStateService
+    private readonly _cachedQueryService: CachedQueryService
   ) { }
 }

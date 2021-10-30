@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AppStateService } from './app-state.service';
+import { CachedQueryService } from './cached-query.service';
 
-describe('AppStateService', () => {
-  let service: AppStateService;
+describe('CachedQueryService', () => {
+  let service: CachedQueryService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(AppStateService);
+    service = TestBed.inject(CachedQueryService);
   });
 
   it('should be created', () => {

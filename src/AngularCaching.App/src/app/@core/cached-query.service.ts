@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ToDoService } from '@api';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { shareReplay, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import { Cache } from './cache';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class AppStateService extends Cache {
+export class CachedQueryService extends Cache {
 
   private readonly _refreshEntities$: BehaviorSubject<void> = new BehaviorSubject(null);
   private readonly _refreshEntity$: BehaviorSubject<void> = new BehaviorSubject(null);
@@ -30,7 +30,6 @@ export class AppStateService extends Cache {
     );
   }
 
-
   constructor(
     private readonly _toDoService: ToDoService,
   ) {
@@ -39,9 +38,5 @@ export class AppStateService extends Cache {
 
   public refreshEntities() {
     this._refreshEntities$.next();
-  }
-
-  public refreshEntity(toDoId: string) {
-    this._refreshEntity$.next();
   }
 }

@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToDo } from '@api/models';
 import { ToDoService } from '@api/services/to-do.service';
-import { AppStateService } from '@core/app-state.service';
+import { CachedQueryService } from '@core/cached-query.service';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
@@ -26,7 +26,7 @@ export class ToDoComponent {
     map(paramMap => paramMap.get("toDoId")),
     switchMap(toDoId => {
       return toDoId != null
-      ? this._appStateService.getEntity$(toDoId)
+      ? this._cachedQueryService.getEntity$(toDoId)
       : of({ })
     }),
     map((toDo: ToDo) => {
@@ -44,7 +44,7 @@ export class ToDoComponent {
   )
 
   constructor(
-    private readonly _appStateService: AppStateService,
+    private readonly _cachedQueryService: CachedQueryService,
     private readonly _toDoService: ToDoService,
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _router: Router
@@ -63,8 +63,7 @@ export class ToDoComponent {
     obs$
     .pipe(
       tap(_ => {
-        this._appStateService.refreshEntities();
-        this._appStateService.refreshEntity(toDo.toDoId);
+        this._cachedQueryService.refreshEntities();
         this._router.navigate(['/']);
       })
     )

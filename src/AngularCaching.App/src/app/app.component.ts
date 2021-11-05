@@ -10,11 +10,5 @@ import { map } from 'rxjs/operators';
 })
 export class AppComponent {
 
-  public count$ = this._cachedQueryService.getEntities$()
-  .pipe(
-    map((toDos: ToDo[]) => toDos.length)
-  );
-  constructor(
-    private readonly _cachedQueryService: CachedQueryService
-  ) { }
+
 }

@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { SidenavModule } from '@shared';
-
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,8 @@ import { SidenavModule } from '@shared';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    SidenavModule
+    SidenavModule,
+    MatIconModule,
   ],
   providers: [
     {

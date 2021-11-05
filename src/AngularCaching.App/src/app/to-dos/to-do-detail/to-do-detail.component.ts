@@ -8,11 +8,11 @@ import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-to-do',
-  templateUrl: './to-do.component.html',
-  styleUrls: ['./to-do.component.scss']
+  selector: 'app-to-do-detail',
+  templateUrl: './to-do-detail.component.html',
+  styleUrls: ['./to-do-detail.component.scss']
 })
-export class ToDoComponent {
+export class ToDoDetailComponent {
 
   public form: FormGroup = new FormGroup({
     toDoId: new FormControl(null, []),

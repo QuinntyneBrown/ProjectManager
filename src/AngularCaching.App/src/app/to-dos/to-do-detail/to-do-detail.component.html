@@ -2,7 +2,7 @@
   <h2 *ngIf="!vm.form.value.toDoId">Create To Do</h2>
   <h2 *ngIf="vm.form.value.toDoId">Edit To Do</h2>
 
-  <mat-icon appIconPill>
+  <mat-icon appIconPill *ngIf="vm.form.value.toDoId" (click)="complete(vm.form.value)">
     done
   </mat-icon>
 

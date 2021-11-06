@@ -11,4 +11,8 @@
       cursor: pointer;
     }
   }
+
+  .to-do--completed {
+    text-decoration: line-through;
+  }
 }

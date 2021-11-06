@@ -3,7 +3,7 @@
     <h2>To Do List</h2>
 
     <div class="to-do-list__list">
-      <div *ngFor="let toDo of vm.toDos" [routerLink]="['/','to-dos','edit',toDo.toDoId]">
+      <div *ngFor="let toDo of vm.toDos" [routerLink]="['/','to-dos','edit',toDo.toDoId]" [ngClass]="{'to-do--completed': toDo.status == 'Complete'}">
         {{ toDo.description }}
       </div>
     </div>

@@ -30,13 +30,11 @@ export class ToDoDetailComponent {
       : of({ })
     }),
     map((toDo: ToDo) => {
-
       const form: FormGroup = new FormGroup({
         toDoId: new FormControl(toDo.toDoId, []),
         description: new FormControl(toDo.description, []),
         status: new FormControl(toDo.status,[])
       });
-
       return {
         form
       }
@@ -51,7 +49,6 @@ export class ToDoDetailComponent {
   ) { }
 
   public save(toDo: ToDo) {
-
     const obs$ = toDo.toDoId != null
     ? this._toDoService.update({
       toDo
@@ -61,6 +58,18 @@ export class ToDoDetailComponent {
     });
 
     obs$
+    .pipe(
+      tap(_ => {
+        this._cachedQueryService.refreshEntities();
+        this._router.navigate(['/']);
+      })
+    )
+    .subscribe();
+  }
+
+  public complete(toDo: ToDo) {
+    toDo.status = "Complete";
+    this._toDoService.update({ toDo })
     .pipe(
       tap(_ => {
         this._cachedQueryService.refreshEntities();

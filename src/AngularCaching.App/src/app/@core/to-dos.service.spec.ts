@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CachedQueryService } from './cached-query.service';
+import { ToDos } from './to-dos.service';
 
-describe('CachedQueryService', () => {
-  let service: CachedQueryService;
+describe('ToDosService', () => {
+  let service: ToDos;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(CachedQueryService);
+    service = TestBed.inject(ToDos);
   });
 
   it('should be created', () => {

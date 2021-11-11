@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ToDo } from '@api/models';
 import { ToDoService } from '@api/services/to-do.service';
-import { CachedQueryService } from '@core/cached-query.service';
+import { ToDos } from '@core/stateful-services/to-dos';
 import { map, tap } from 'rxjs/operators';
 
 
@@ -18,13 +18,13 @@ export class ToDoListComponent  {
     description: new FormControl(null, [])
   })
 
-  public vm$ = this._cachedQueryService.getEntities$()
+  public vm$ = this._toDos.query()
   .pipe(
     map(toDos => ({ toDos }))
   )
 
   constructor(
-    private readonly _cachedQueryService: CachedQueryService,
+    private readonly _toDos: ToDos,
     private readonly _toDoService: ToDoService
   ) { }
 
@@ -35,7 +35,6 @@ export class ToDoListComponent  {
     .pipe(
       tap(_ => {
         this.form.reset();
-        this._cachedQueryService.refreshEntities();
       })
     )
     .subscribe();

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ToDo } from '@api';
-import { CachedQueryService } from '@core';
+import { ToDos } from '@core/stateful-services/to-dos';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -10,7 +10,7 @@ import { map } from 'rxjs/operators';
 })
 export class SidenavComponent   {
 
-  public count$ = this._cachedQueryService.getEntities$()
+  public count$ = this._toDos.query()
   .pipe(
     map((toDos: ToDo[]) => {
       return toDos.filter(x => x.status != 'Complete').length;
@@ -18,7 +18,7 @@ export class SidenavComponent   {
   );
 
   constructor(
-    private readonly _cachedQueryService: CachedQueryService
+    private readonly _toDos: ToDos
   ) { }
 
 }

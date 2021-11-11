@@ -7,7 +7,7 @@ export class Cache {
 
   protected readonly _cache = new Map<string, Observable<any>>();
 
-  protected _fromCacheOrService$(id:string, func: {(): Observable<any>}): Observable<any> {
+  public fromCacheOrService$(id:string, func: {(): Observable<any>}): Observable<any> {
     if (!this._cache.get(id)) {
       this._cache.set(
         id,

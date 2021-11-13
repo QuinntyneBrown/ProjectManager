@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { ToDo } from '@api';
 import { NavigationService } from '@core';
 import { AuthService } from '@core/services/auth.service';
-import { ToDos } from '@core/stateful-services';
-import { map } from 'rxjs/operators';
+import { ToDosByProjectName } from '@core/stateful-services';
+import { CurrentUser } from '@core/stateful-services/queries/current-user';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-project-panel',
@@ -12,15 +13,18 @@ import { map } from 'rxjs/operators';
 })
 export class ProjectPanelComponent {
 
-  public count$ = this._toDos.query()
+  public count$ = this._currentUser
+  .query()
   .pipe(
+    switchMap(user => this._toDosByProjectName.query(user.currentProjectName)),
     map((toDos: ToDo[]) => {
       return toDos.filter(x => x.status != 'Complete').length;
     })
   );
 
   constructor(
-    private readonly _toDos: ToDos,
+    private readonly _currentUser: CurrentUser,
+    private readonly _toDosByProjectName: ToDosByProjectName,
     private readonly _authService: AuthService,
     private readonly _navigationService: NavigationService
   ) { }

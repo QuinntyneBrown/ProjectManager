@@ -1,11 +1,13 @@
-using System.Net;
-using System.Threading.Tasks;
 using AngularCaching.Api.Features;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace AngularCaching.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ToDoController
@@ -31,6 +33,14 @@ namespace AngularCaching.Api.Controllers
 
             return response;
         }
+
+        [HttpGet("project/{name}", Name = "GetToDosByProjectNameRoute")]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(GetToDosByProjectName.Response), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<GetToDosByProjectName.Response>> GetByProjectName([FromRoute] GetToDosByProjectName.Request request)
+            => await _mediator.Send(request);
 
         [HttpGet(Name = "GetToDosRoute")]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]

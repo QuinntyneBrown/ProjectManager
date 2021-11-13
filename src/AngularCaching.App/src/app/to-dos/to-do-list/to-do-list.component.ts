@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ToDo } from '@api/models';
 import { ToDoService } from '@api/services/to-do.service';
-import { ToDos } from '@core/stateful-services/queries/to-dos';
-import { map, tap } from 'rxjs/operators';
+import { CurrentUser } from '@core/stateful-services/queries/current-user';
+import { ToDosByProjectName } from '@core/stateful-services/queries/to-dos-by-project-name';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -18,14 +19,17 @@ export class ToDoListComponent  {
     description: new FormControl(null, [])
   })
 
-  public vm$ = this._toDos.query()
+  public vm$ = this._currentUser
+  .query()
   .pipe(
+    switchMap(user => this._toDos.query(user.currentProjectName)),
     map(toDos => ({ toDos }))
   )
 
   constructor(
-    private readonly _toDos: ToDos,
-    private readonly _toDoService: ToDoService
+    private readonly _toDos: ToDosByProjectName,
+    private readonly _toDoService: ToDoService,
+    private readonly _currentUser: CurrentUser
   ) { }
 
   public save(toDo: ToDo) {

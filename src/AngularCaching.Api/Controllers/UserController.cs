@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace AngularCaching.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController

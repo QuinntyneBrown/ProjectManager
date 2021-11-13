@@ -1,15 +1,22 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '@api';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-user',
   templateUrl: './edit-user.component.html',
   styleUrls: ['./edit-user.component.scss']
 })
-export class EditUserComponent implements OnInit {
+export class EditUserComponent {
 
-  constructor() { }
+  public vm$ = this._userService.getCurrent()
+  .pipe(
+    map(user => ({ user }))
+  );
 
-  ngOnInit(): void {
+  constructor(
+    private readonly _userService: UserService
+  ) {
+
   }
-
 }

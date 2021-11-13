@@ -12,8 +12,8 @@ import { takeUntil, tap } from 'rxjs/operators';
 })
 export class LoginComponent extends Destroyable {
   public form = new FormGroup({
-    username: new FormControl(null, [Validators.required]),
-    password: new FormControl(null, [Validators.required]),
+    username: new FormControl("Quinn", [Validators.required]),
+    password: new FormControl("ngrx", [Validators.required]),
     rememberMe: new FormControl(null, [])
   });
 

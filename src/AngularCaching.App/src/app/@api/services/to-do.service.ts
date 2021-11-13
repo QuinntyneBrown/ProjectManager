@@ -28,6 +28,13 @@ export class ToDoService implements IPagableService<ToDo> {
       );
   }
 
+  public getByProjectName(name: string): Observable<ToDo[]> {
+    return this._client.get<{ toDos: ToDo[] }>(`${this._baseUrl}api/toDo/project/${name}`)
+      .pipe(
+        map(x => x.toDos)
+      );
+  }
+
   public getById(options: { toDoId: string }): Observable<ToDo> {
     return this._client.get<{ toDo: ToDo }>(`${this._baseUrl}api/toDo/${options.toDoId}`)
       .pipe(

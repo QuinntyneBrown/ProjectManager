@@ -2,6 +2,7 @@ using AngularCaching.Api.Features;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -15,6 +16,23 @@ namespace AngularCaching.Api.Controllers
 
         public UserController(IMediator mediator)
             => _mediator = mediator;
+
+        [AllowAnonymous]
+        [HttpGet("current", Name = "GetCurrentUserRoute")]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(CurrentUser.Response), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<CurrentUser.Response>> GetCurrent()
+        {
+            try
+            {
+                return await _mediator.Send(new CurrentUser.Request());
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
 
         [HttpGet("{userId}", Name = "GetUserByIdRoute")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]

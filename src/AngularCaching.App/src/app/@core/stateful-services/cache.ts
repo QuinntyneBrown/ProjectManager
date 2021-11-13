@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Logger } from "@core/services/logger";
 import { Observable } from "rxjs";
-import { filter, finalize, shareReplay, startWith, switchMap, tap } from "rxjs/operators";
+import { concatMap, filter, finalize, shareReplay, startWith, tap } from "rxjs/operators";
 import { Dispatcher } from "./dispatcher";
 
 
@@ -27,17 +27,22 @@ export class Cache {
           for (var i = 0; i < keys.length; i++) {
             this._inner.set(keys[i], null);
           }
-          _dispatcher.emit(action, true);
+          _dispatcher.emitRefresh(action, true);
         })
       )
       .subscribe();
   }
 
   public fromCacheOrService$(key: string, func: { (): Observable<any> }): Observable<any> {
+    if (this._processing.get(key) != null) return this._processing.get(key);
+
     if (!this._inner.get(key)) {
       this._inner.set(key, func().pipe(shareReplay(1)));
     }
-    return this._inner.get(key);
+
+    this._processing.set(key, this._inner.get(key).pipe(finalize(() => this._processing.delete(key))));
+
+    return this._processing.get(key);
   }
 
   public fromCacheOrServiceWithRefresh$(key: string, func: any, action: string) {
@@ -47,15 +52,7 @@ export class Cache {
       tap(action => this._logger.trace(`${action} action dispatched to the refresh stream`)),
       filter(action => action == action),
       startWith(action),
-      switchMap(_ => {
-        if (this._processing.get(key) != null) return this._processing.get(key);
-
-        this._logger.trace(`${key} processing cache miss`);
-
-        this._processing.set(key, this.fromCacheOrService$(key, func).pipe(finalize(() => this._processing.set(key, null))));
-
-        return this._processing.get(key);
-      })
+      concatMap(_ => this.fromCacheOrService$(key, func))
     );
   }
 

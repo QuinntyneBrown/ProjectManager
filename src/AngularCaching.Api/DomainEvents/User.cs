@@ -1,4 +1,5 @@
 ﻿using AngularCaching.Api.Core;
+using AngularCaching.Api.Models;
 using System;
 using System.Security.Cryptography;
 
@@ -79,6 +80,16 @@ namespace AngularCaching.Api.DomainEvents
         {
             UserId = userId;
         }
+    }
+
+    public class QueryCurrentUser : BaseDomainEvent
+    {
+
+    }
+
+    public class QueriedCurrentUser : BaseDomainEvent
+    {
+        public User User { get; set; }
     }
 
 }

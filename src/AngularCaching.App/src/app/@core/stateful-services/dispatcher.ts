@@ -15,7 +15,11 @@ export class Dispatcher {
   public refreshStream$: Observable<Action> = this._refreshSubject.asObservable();
 
   public emit(action: Action, refresh: boolean = false) {
-    const subject = refresh ? this._refreshSubject : this._invalidateSubject;
-    subject.next(action);
+    this._invalidateSubject.next(action);
+  }
+
+  public emitRefresh(action: Action, refresh: boolean = false) {
+    console.log("EMIT REFRESH");
+    this._refreshSubject.next(action);
   }
 }

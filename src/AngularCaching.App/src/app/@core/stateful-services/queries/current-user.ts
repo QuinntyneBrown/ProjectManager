@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { User, UserService } from "@api";
 import { Observable } from "rxjs";
 import { Cache } from "@core/stateful-services/cache";
+import { CURRENT_USER_CHANGED } from "../actions";
 
 @Injectable({
   providedIn: "root"
@@ -13,6 +14,6 @@ export class CurrentUser {
   ) { }
 
   public query(): Observable<User> {
-    return this._cache.fromCacheOrServiceWithRefresh$("CURRENT_USER", () => this._userService.getCurrent());
+    return this._cache.fromCacheOrServiceWithRefresh$("CURRENT_USER", () => this._userService.getCurrent(), CURRENT_USER_CHANGED);
   }
 }

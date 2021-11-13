@@ -31,6 +31,12 @@ namespace AngularCaching.Api.Features
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
+                var project = await _context.Projects.SingleOrDefaultAsync(x => x.ProjectId == request.ProjectId);
+
+                var todos = await (from toDo in _context.ToDos
+                                   where toDo.ProjectName == project.Name
+                                   select toDo).ToListAsync();
+
                 return new()
                 {
                     Promotions = await _context.Promotions.Select(x => x.ToDto()).ToListAsync()

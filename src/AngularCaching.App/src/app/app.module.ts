@@ -1,7 +1,7 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { baseUrl } from '@core';
+import { BASE_URL, HeadersInterceptor, JwtInterceptor } from '@core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -9,8 +9,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { SidenavModule } from '@shared';
 import { MatIconModule } from '@angular/material/icon';
+import { LayoutModule } from '@shared/layout/layout.module';
 
 @NgModule({
   declarations: [
@@ -25,13 +25,23 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    SidenavModule,
     MatIconModule,
+    LayoutModule
   ],
   providers: [
     {
-      provide: baseUrl,
+      provide: BASE_URL,
       useValue: "https://localhost:5001/"
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HeadersInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
     }
   ],
   bootstrap: [AppComponent]

@@ -28,7 +28,7 @@ namespace AngularCaching.Api
                 {
                     Version = "v1",
                     Title = "Angular Caching",
-                    Description = "",
+                    Description = "Investigating State Management Implementations",
                     TermsOfService = new Uri("https://example.com/terms"),
                     Contact = new OpenApiContact
                     {

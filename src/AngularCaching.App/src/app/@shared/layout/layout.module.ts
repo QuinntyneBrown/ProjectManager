@@ -1,20 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SidenavComponent } from './sidenav.component';
+import { LayoutComponent } from './layout.component';
 import { RouterModule } from '@angular/router';
+import { ProjectPanelModule } from '@shared/project-panel';
 
 
 
 @NgModule({
   declarations: [
-    SidenavComponent
+    LayoutComponent
   ],
   exports: [
-    SidenavComponent
+    LayoutComponent
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    ProjectPanelModule
   ]
 })
-export class SidenavModule { }
+export class LayoutModule { }

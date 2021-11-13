@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { StoredEvent } from '@api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { baseUrl, EntityPage, IPagableService } from '@core';
+import { BASE_URL, EntityPage, IPagableService } from '@core';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class StoredEventService implements IPagableService<StoredEvent> {
   uniqueIdentifierName: string = "storedEventId";
 
   constructor(
-    @Inject(baseUrl) private readonly _baseUrl: string,
+    @Inject(BASE_URL) private readonly _baseUrl: string,
     private readonly _client: HttpClient
   ) { }
 
@@ -42,7 +42,7 @@ export class StoredEventService implements IPagableService<StoredEvent> {
   public create(options: { storedEvent: StoredEvent }): Observable<{ storedEvent: StoredEvent }> {
     return this._client.post<{ storedEvent: StoredEvent }>(`${this._baseUrl}api/storedEvent`, { storedEvent: options.storedEvent });
   }
-  
+
   public update(options: { storedEvent: StoredEvent }): Observable<{ storedEvent: StoredEvent }> {
     return this._client.put<{ storedEvent: StoredEvent }>(`${this._baseUrl}api/storedEvent`, { storedEvent: options.storedEvent });
   }

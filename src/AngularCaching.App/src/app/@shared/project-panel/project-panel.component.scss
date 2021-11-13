@@ -1,0 +1,16 @@
+:host {
+  display: grid;
+  grid-template-columns: 1fr;
+
+  .g-brand {
+    margin-bottom: 60px;
+  }
+
+  span {
+    margin: 45px 0;
+  }
+
+  a {
+    cursor: pointer;
+  }
+}

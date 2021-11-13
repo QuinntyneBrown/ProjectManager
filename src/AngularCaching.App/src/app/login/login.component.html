@@ -1,0 +1,31 @@
+<div>
+  <div>
+    <h1 class="g-brand">
+      Angular Caching
+    </h1>
+  </div>
+  <form novalidate autocomplete='off' spellcheck='false' [formGroup]='form'>
+    <mat-form-field class="g-form-field">
+      <input  matInput placeholder='Username'
+             class='username'
+             formControlName='username' required>
+    </mat-form-field>
+
+    <mat-form-field class="g-form-field">
+      <input cdkFocusInitial matInput
+             placeholder='Password'
+             id='password'
+             formControlName='password'
+             type='password'
+             required>
+    </mat-form-field>
+  </form>
+
+  <div>
+    <button mat-stroked-button (click)="tryToLogin(form.value)">
+      Save
+    </button>
+  </div>
+
+
+</div>

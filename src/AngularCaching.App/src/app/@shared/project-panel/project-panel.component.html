@@ -1,11 +1,12 @@
-<ng-container>
+<ng-container *ngIf="vm$ | async as vm">
+
   <div class="project-panel__header">
     <h1 class="g-brand" [routerLink]="['/']">
       Angular Caching
     </h1>
 
     <div>
-      <app-remaining-days></app-remaining-days>
+      <app-remaining-days [project]="vm.project"></app-remaining-days>
 
     </div>
   </div>
@@ -14,6 +15,7 @@
     <a [routerLink]="['/','edit-user']">Edit User</a>
   </div>
   <div class="project-panel__footer">
+    <a [routerLink]="['/','promotions']">Promotions</a>
     <a (click)="logout()">Logout</a>
   </div>
 </ng-container>

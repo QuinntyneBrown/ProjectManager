@@ -9,7 +9,8 @@ namespace AngularCaching.Api.Features
             return new()
             {
                 ProjectId = project.ProjectId,
-                Name = project.Name
+                Name = project.Name,
+                DueDate = project.DueDate
             };
         }
 

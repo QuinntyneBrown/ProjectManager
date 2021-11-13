@@ -35,13 +35,6 @@ export class UserService implements IPagableService<User> {
       );
   }
 
-  public getCurrentUserProject(): Observable<Project> {
-    return this._client.get<{ project: Project }>(`${this._baseUrl}api/user/current/project`)
-      .pipe(
-        map(x => x.project)
-      );
-  }
-
   public getById(options: { userId: string }): Observable<User> {
     return this._client.get<{ user: User }>(`${this._baseUrl}api/user/${options.userId}`)
       .pipe(

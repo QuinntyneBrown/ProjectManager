@@ -6,5 +6,6 @@ namespace AngularCaching.Api.Features
     {
         public Guid ProjectId { get; set; }
         public string Name { get; set; }
+        public DateTime DueDate { get; set; }
     }
 }

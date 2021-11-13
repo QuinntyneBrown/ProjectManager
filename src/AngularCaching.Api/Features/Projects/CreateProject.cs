@@ -39,7 +39,7 @@ namespace AngularCaching.Api.Features
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                var project = new Project(new(request.Project.Name));
+                var project = new Project(new(request.Project.Name, request.Project.DueDate));
 
                 _context.Projects.Add(project);
 

@@ -28,6 +28,7 @@ namespace AngularCaching.Api.Models
         {
             ProjectId = @event.ProjectId;
             Name = @event.Name;
+            DueDate = @event.DueDate;
         }
     }
 }

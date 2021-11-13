@@ -17,7 +17,8 @@ namespace AngularCaching.Api.Features
 
     public class UserEventHandler :
         INotificationHandler<Messages.CreateUser>,
-        INotificationHandler<BuildToken>
+        INotificationHandler<BuildToken>,
+        INotificationHandler<QueryCurrentUser>
     {
         private readonly IAngularCachingDbContext _context;
         private readonly IOrchestrationHandler _orchestrationHandler;

@@ -4,6 +4,8 @@ import { NavigationService } from '@core';
 import { AuthService } from '@core/services/auth.service';
 import { ToDosByProjectName } from '@core/stateful-services';
 import { CurrentUser } from '@core/stateful-services/queries/current-user';
+import { CurrentUserProject } from '@core/stateful-services/queries/current-user-project';
+import { combineLatest } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 @Component({
@@ -13,18 +15,23 @@ import { map, switchMap } from 'rxjs/operators';
 })
 export class ProjectPanelComponent {
 
-  public count$ = this._currentUser
-  .query()
+  public vm$ = combineLatest([
+    this._currentUser.query(),
+    this._currentUserProject.query()
+  ])
   .pipe(
-    switchMap(user => this._toDosByProjectName.query(user.currentProjectName)),
-    map((toDos: ToDo[]) => {
-      return toDos.filter(x => x.status != 'Complete').length;
+    switchMap(([user, project]) => {
+      return this._toDosByProjectName.query(user.currentProjectName)
+      .pipe(
+        map(toDos => ({ toDos, user, project }))
+      )
     })
   );
 
   constructor(
     private readonly _currentUser: CurrentUser,
     private readonly _toDosByProjectName: ToDosByProjectName,
+    private readonly _currentUserProject: CurrentUserProject,
     private readonly _authService: AuthService,
     private readonly _navigationService: NavigationService
   ) { }

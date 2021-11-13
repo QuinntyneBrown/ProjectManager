@@ -17,6 +17,13 @@ export class ProjectService implements IPagableService<Project> {
     private readonly _client: HttpClient
   ) { }
 
+  public getCurrentUserProject(): Observable<Project> {
+    return this._client.get<{ project: Project }>(`${this._baseUrl}api/project/user/current`)
+      .pipe(
+        map(x => x.project)
+      );
+  }
+
   getPage(options: { pageIndex: number; pageSize: number; }): Observable<EntityPage<Project>> {
     return this._client.get<EntityPage<Project>>(`${this._baseUrl}api/project/page/${options.pageSize}/${options.pageIndex}`)
   }

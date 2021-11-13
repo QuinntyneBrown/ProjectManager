@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { UserService } from '@api';
+import { CurrentUser } from '@core/stateful-services/queries/current-user';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -9,12 +10,13 @@ import { map } from 'rxjs/operators';
 })
 export class EditUserComponent {
 
-  public vm$ = this._userService.getCurrent()
+  public vm$ = this._currentUser.query()
   .pipe(
     map(user => ({ user }))
   );
 
   constructor(
+    private readonly _currentUser: CurrentUser,
     private readonly _userService: UserService
   ) {
 

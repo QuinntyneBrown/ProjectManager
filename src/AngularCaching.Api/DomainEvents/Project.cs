@@ -7,9 +7,11 @@ namespace AngularCaching.Api.DomainEvents
     {
         public Guid ProjectId { get; private set; } = Guid.NewGuid();
         public string Name { get; private set; }
+        public DateTime DueDate { get; set; }
 
-        public CreateProject(string name)
+        public CreateProject(string name, DateTime dueDate)
         {
+            DueDate = dueDate;
             Name = name;
         }
     }

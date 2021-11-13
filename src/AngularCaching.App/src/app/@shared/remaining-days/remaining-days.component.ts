@@ -9,10 +9,9 @@ import { Project } from '@api';
 export class RemainingDaysComponent {
 
   public get days() {
-    return 0;
-    let moveInDate = new Date(this.project.dueDate) as any;
+    let dueDate = new Date(this.project.dueDate) as any;
     let today = new Date() as any;
-    const diffTime = Math.abs(today - moveInDate);
+    const diffTime = Math.abs(today - dueDate);
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   }
 

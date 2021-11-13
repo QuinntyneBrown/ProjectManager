@@ -1,4 +1,3 @@
-using System;
 using AngularCaching.Api.Models;
 
 namespace AngularCaching.Api.Features
@@ -7,11 +6,12 @@ namespace AngularCaching.Api.Features
     {
         public static ProjectDto ToDto(this Project project)
         {
-            return new ()
+            return new()
             {
-                ProjectId = project.ProjectId
+                ProjectId = project.ProjectId,
+                Name = project.Name
             };
         }
-        
+
     }
 }

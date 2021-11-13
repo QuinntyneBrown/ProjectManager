@@ -1,4 +1,3 @@
-using System;
 using AngularCaching.Api.Models;
 
 namespace AngularCaching.Api.Features
@@ -7,11 +6,12 @@ namespace AngularCaching.Api.Features
     {
         public static PromotionDto ToDto(this Promotion promotion)
         {
-            return new ()
+            return new()
             {
-                PromotionId = promotion.PromotionId
+                PromotionId = promotion.PromotionId,
+                Name = promotion.Name
             };
         }
-        
+
     }
 }

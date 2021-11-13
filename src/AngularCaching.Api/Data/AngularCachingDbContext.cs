@@ -1,13 +1,13 @@
-using AngularCaching.Api.Models;
 using AngularCaching.Api.Core;
 using AngularCaching.Api.Interfaces;
+using AngularCaching.Api.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AngularCaching.Api.Data
 {
-    public class AngularCachingDbContext: DbContext, IAngularCachingDbContext
+    public class AngularCachingDbContext : DbContext, IAngularCachingDbContext
     {
         public DbSet<ToDo> ToDos { get; private set; }
         public DbSet<StoredEvent> StoredEvents { get; private set; }
@@ -15,9 +15,10 @@ namespace AngularCaching.Api.Data
         public DbSet<User> Users { get; private set; }
         public DbSet<Promotion> Promotions { get; private set; }
         public AngularCachingDbContext(DbContextOptions options)
-            {
-                SavingChanges += DbContext_SavingChanges;
-            }
+            : base(options)
+        {
+            SavingChanges += DbContext_SavingChanges;
+        }
 
         private void DbContext_SavingChanges(object sender, SavingChangesEventArgs e)
         {
@@ -27,7 +28,7 @@ namespace AngularCaching.Api.Data
                     e.State == EntityState.Modified)
                 .Select(e => e.Entity)
                 .ToList();
-            
+
             foreach (var aggregate in entries)
             {
                 foreach (var storedEvent in aggregate.StoredEvents)
@@ -36,27 +37,27 @@ namespace AngularCaching.Api.Data
                 }
             }
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AngularCachingDbContext).Assembly);
         }
-        
+
         public override void Dispose()
         {
             SavingChanges -= DbContext_SavingChanges;
-            
+
             base.Dispose();
         }
-        
+
         public override ValueTask DisposeAsync()
         {
             SavingChanges -= DbContext_SavingChanges;
-            
+
             return base.DisposeAsync();
         }
-        
+
     }
 }

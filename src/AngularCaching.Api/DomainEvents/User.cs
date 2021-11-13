@@ -10,7 +10,7 @@ namespace AngularCaching.Api.DomainEvents
         public string Username { get; private set; }
         public string Password { get; private set; }
         public byte[] Salt { get; private set; }
-        public string CurrentProjectName { get; set; }
+        public string CurrentProjectName { get; private set; }
 
         public CreateUser(string projectName, string username, string password, IPasswordHasher passwordHasher)
         {
@@ -33,6 +33,51 @@ namespace AngularCaching.Api.DomainEvents
         public SetCurrentProjectName(string projectName)
         {
             ProjectName = projectName;
+        }
+    }
+
+    public class BuildToken : BaseDomainEvent
+    {
+        public BuildToken(string username)
+        {
+            Username = username;
+        }
+        public string Username { get; private set; }
+    }
+
+    public class BuiltToken : BaseDomainEvent
+    {
+        public BuiltToken(Guid userId, string accessToken)
+        {
+            UserId = userId;
+            AccessToken = accessToken;
+        }
+        public Guid UserId { get; private set; }
+        public string AccessToken { get; private set; }
+
+        public void Deconstruct(out Guid userId, out string accessToken)
+        {
+            userId = UserId;
+            accessToken = AccessToken;
+        }
+    }
+
+    public class AuthenticatedUser : BaseDomainEvent
+    {
+        public AuthenticatedUser(string username)
+        {
+            Username = username;
+        }
+        public string Username { get; private set; }
+    }
+
+    public class CreatedUser : BaseDomainEvent
+    {
+        public Guid UserId { get; private set; }
+
+        public CreatedUser(Guid userId)
+        {
+            UserId = userId;
         }
     }
 

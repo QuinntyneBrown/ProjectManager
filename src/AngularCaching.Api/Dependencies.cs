@@ -1,12 +1,20 @@
+using AngularCaching.Api.Core;
 using AngularCaching.Api.Data;
 using AngularCaching.Api.Extensions;
 using AngularCaching.Api.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AngularCaching.Api
 {
@@ -53,6 +61,45 @@ namespace AngularCaching.Api
 
             services.AddTransient<IAngularCachingDbContext, AngularCachingDbContext>();
 
+            services.AddScoped<IOrchestrationHandler, OrchestrationHandler>();
+
+            services.AddSingleton<IPasswordHasher, PasswordHasher>();
+
+            services.AddSingleton<ITokenProvider, TokenProvider>();
+
+            services.AddTransient<ITokenBuilder, TokenBuilder>();
+
+            var jwtSecurityTokenHandler = new JwtSecurityTokenHandler
+            {
+                InboundClaimTypeMap = new Dictionary<string, string>()
+            };
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.SecurityTokenValidators.Clear();
+                options.SecurityTokenValidators.Add(jwtSecurityTokenHandler);
+                options.TokenValidationParameters = GetTokenValidationParameters(configuration);
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        context.Request.Query.TryGetValue("access_token", out StringValues token);
+
+                        if (!string.IsNullOrEmpty(token)) context.Token = token;
+
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
+
             services.AddDbContext<AngularCachingDbContext>(options =>
             {
                 options.UseInMemoryDatabase(nameof(AngularCaching.Api))
@@ -61,6 +108,24 @@ namespace AngularCaching.Api
             });
 
             services.AddControllers();
+        }
+
+        public static TokenValidationParameters GetTokenValidationParameters(IConfiguration configuration)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration[$"{nameof(Authentication)}:{nameof(Authentication.JwtKey)}"])),
+                ValidateIssuer = true,
+                ValidIssuer = configuration[$"{nameof(Authentication)}:{nameof(Authentication.JwtIssuer)}"],
+                ValidateAudience = true,
+                ValidAudience = configuration[$"{nameof(Authentication)}:{nameof(Authentication.JwtAudience)}"],
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero,
+                NameClaimType = JwtRegisteredClaimNames.UniqueName
+            };
+
+            return tokenValidationParameters;
         }
     }
 }

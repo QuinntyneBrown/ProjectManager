@@ -1,7 +1,19 @@
-<h1 class="g-brand">
-  Angular Caching
-</h1>
+<ng-container>
+  <div class="project-panel__header">
+    <h1 class="g-brand" [routerLink]="['/']">
+      Angular Caching
+    </h1>
 
-<div>
-  <a (click)="logout()">Logout</a>
-</div>
+    <div>
+      <app-remaining-days></app-remaining-days>
+
+    </div>
+  </div>
+  <div class="project-panel__container">
+    <a [routerLink]="['/','edit-project']">Edit Project</a>
+    <a [routerLink]="['/','edit-user']">Edit User</a>
+  </div>
+  <div class="project-panel__footer">
+    <a (click)="logout()">Logout</a>
+  </div>
+</ng-container>

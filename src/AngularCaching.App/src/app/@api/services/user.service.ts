@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { User } from '@api';
+import { Project, User } from '@api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BASE_URL, EntityPage, IPagableService } from '@core';
@@ -25,6 +25,20 @@ export class UserService implements IPagableService<User> {
     return this._client.get<{ users: User[] }>(`${this._baseUrl}api/user`)
       .pipe(
         map(x => x.users)
+      );
+  }
+
+  public getCurrent(): Observable<User> {
+    return this._client.get<{ user: User }>(`${this._baseUrl}api/user/current`)
+      .pipe(
+        map(x => x.user)
+      );
+  }
+
+  public getCurrentUserProject(): Observable<Project> {
+    return this._client.get<{ project: Project }>(`${this._baseUrl}api/user/current/project`)
+      .pipe(
+        map(x => x.project)
       );
   }
 

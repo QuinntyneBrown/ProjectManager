@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { ToDo, ToDoService } from "@api";
 import { Observable } from "rxjs";
-import { Cache } from "./cache";
+import { Cache } from "@core/stateful-services/cache";
+import { TO_DOS_CHANGED } from "../actions";
 
 @Injectable({
   providedIn: "root"
@@ -12,5 +13,5 @@ export class ToDos {
     private readonly _toDoService: ToDoService
   ) { }
 
-  public query(): Observable<ToDo[]> { return this._cache.fromCacheOrService$("TO_DOS", () => this._toDoService.get()); }
+  public query(): Observable<ToDo[]> { return this._cache.fromCacheOrServiceWithRefresh$(TO_DOS_CHANGED, () => this._toDoService.get(), TO_DOS_CHANGED); }
 }

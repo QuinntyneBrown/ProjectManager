@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProjectPanelComponent } from './project-panel.component';
+import { RemainingDaysModule } from '@shared/remaining-days';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -12,7 +14,9 @@ import { ProjectPanelComponent } from './project-panel.component';
     ProjectPanelComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    RemainingDaysModule,
+    RouterModule
   ]
 })
 export class ProjectPanelModule { }

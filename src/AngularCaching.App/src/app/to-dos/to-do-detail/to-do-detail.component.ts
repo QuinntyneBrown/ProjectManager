@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToDo } from '@api/models';
-import { ToDoService } from '@api/services/to-do.service';
-import { ToDoById } from '@core/stateful-services/to-do-by-id';
+import { ToDo, ToDoService } from '@api';
+import { Dispatcher, ToDoById } from '@core/stateful-services';
+import { TO_DOS_CHANGED } from '@core/stateful-services/actions';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
@@ -45,7 +45,8 @@ export class ToDoDetailComponent {
     private readonly _toDoById: ToDoById,
     private readonly _toDoService: ToDoService,
     private readonly _activatedRoute: ActivatedRoute,
-    private readonly _router: Router
+    private readonly _router: Router,
+    private readonly _dispatcher: Dispatcher
   ) { }
 
   public save(toDo: ToDo) {
@@ -60,6 +61,7 @@ export class ToDoDetailComponent {
     obs$
     .pipe(
       tap(_ => {
+        this._dispatcher.emit(TO_DOS_CHANGED);
         this._router.navigate(['/']);
       })
     )
@@ -71,6 +73,7 @@ export class ToDoDetailComponent {
     this._toDoService.update({ toDo })
     .pipe(
       tap(_ => {
+        this._dispatcher.emit(TO_DOS_CHANGED);
         this._router.navigate(['/']);
       })
     )

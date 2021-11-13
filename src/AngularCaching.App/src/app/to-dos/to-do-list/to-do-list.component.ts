@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ToDo } from '@api/models';
 import { ToDoService } from '@api/services/to-do.service';
-import { ToDos } from '@core/stateful-services/to-dos';
+import { ToDos } from '@core/stateful-services/queries/to-dos';
 import { map, tap } from 'rxjs/operators';
 
 

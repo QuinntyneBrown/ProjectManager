@@ -1,6 +1,10 @@
 :host {
   display: grid;
   grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  height: 100vh;
+  box-sizing: border-box;
+  padding:45px;
 
   .g-brand {
     margin-bottom: 60px;
@@ -10,7 +14,19 @@
     margin: 45px 0;
   }
 
-  a {
+  a,
+  a:link,
+  a:visited {
     cursor: pointer;
+    display: block;
+    margin-bottom: 30px;
+    text-decoration: none;
+    color:#000;
+  }
+
+  .project-panel__header,
+  .project-panel__container {
+    border-bottom: 1px solid #425E73;
+    margin-bottom: 30px;
   }
 }

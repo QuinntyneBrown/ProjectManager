@@ -1,3 +1,21 @@
-export class Dispatcher {
+import { Injectable } from "@angular/core";
+import { Observable, Subject } from "rxjs";
+import { Action } from './actions';
 
+@Injectable({
+  providedIn: "root"
+})
+export class Dispatcher {
+  private readonly _invalidateSubject: Subject<Action> = new Subject();
+
+  private readonly _refreshSubject: Subject<Action> = new Subject();
+
+  public invalidateStream$: Observable<Action> = this._invalidateSubject.asObservable();
+
+  public refreshStream$: Observable<Action> = this._refreshSubject.asObservable();
+
+  public emit(action: Action, refresh: boolean = false) {
+    const subject = refresh ? this._refreshSubject : this._invalidateSubject;
+    subject.next(action);
+  }
 }

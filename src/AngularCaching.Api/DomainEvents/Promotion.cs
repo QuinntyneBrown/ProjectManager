@@ -1,0 +1,4 @@
+﻿namespace AngularCaching.Api.DomainEvents
+{
+
+}

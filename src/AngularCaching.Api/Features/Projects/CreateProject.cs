@@ -8,26 +8,26 @@ using System.Threading.Tasks;
 
 namespace AngularCaching.Api.Features
 {
-    public class CreateToDo
+    public class CreateProject
     {
         public class Validator : AbstractValidator<Request>
         {
             public Validator()
             {
-                RuleFor(request => request.ToDo).NotNull();
-                RuleFor(request => request.ToDo).SetValidator(new ToDoValidator());
+                RuleFor(request => request.Project).NotNull();
+                RuleFor(request => request.Project).SetValidator(new ProjectValidator());
             }
 
         }
 
         public class Request : IRequest<Response>
         {
-            public ToDoDto ToDo { get; set; }
+            public ProjectDto Project { get; set; }
         }
 
         public class Response : ResponseBase
         {
-            public ToDoDto ToDo { get; set; }
+            public ProjectDto Project { get; set; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
@@ -39,15 +39,15 @@ namespace AngularCaching.Api.Features
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                var toDo = new ToDo(new(request.ToDo.ProjectName, request.ToDo.Description));
+                var project = new Project(new(request.Project.Name));
 
-                _context.ToDos.Add(toDo);
+                _context.Projects.Add(project);
 
                 await _context.SaveChangesAsync(cancellationToken);
 
-                return new()
+                return new Response()
                 {
-                    ToDo = toDo.ToDto()
+                    Project = project.ToDto()
                 };
             }
 

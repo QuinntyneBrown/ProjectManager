@@ -7,10 +7,11 @@ namespace AngularCaching.Api.DomainEvents
     {
         public Guid ToDoId { get; private set; } = Guid.NewGuid();
         public string Description { get; private set; }
+        public string ProjectName { get; set; }
 
-
-        public CreateToDo(string description)
+        public CreateToDo(string projectName, string description)
         {
+            ProjectName = projectName;
             Description = description;
         }
     }

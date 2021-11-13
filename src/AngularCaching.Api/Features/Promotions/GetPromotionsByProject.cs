@@ -1,33 +1,25 @@
-using AngularCaching.Api.Core;
+﻿using AngularCaching.Api.Core;
 using AngularCaching.Api.Interfaces;
-using AngularCaching.Api.Models;
-using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace AngularCaching.Api.Features
 {
-    public class CreateToDo
+    public class GetPromotionsByProject
     {
-        public class Validator : AbstractValidator<Request>
-        {
-            public Validator()
-            {
-                RuleFor(request => request.ToDo).NotNull();
-                RuleFor(request => request.ToDo).SetValidator(new ToDoValidator());
-            }
-
-        }
-
         public class Request : IRequest<Response>
         {
-            public ToDoDto ToDo { get; set; }
+            public Guid ProjectId { get; set; }
         }
 
         public class Response : ResponseBase
         {
-            public ToDoDto ToDo { get; set; }
+            public List<PromotionDto> Promotions { get; set; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
@@ -39,15 +31,9 @@ namespace AngularCaching.Api.Features
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                var toDo = new ToDo(new(request.ToDo.ProjectName, request.ToDo.Description));
-
-                _context.ToDos.Add(toDo);
-
-                await _context.SaveChangesAsync(cancellationToken);
-
                 return new()
                 {
-                    ToDo = toDo.ToDto()
+                    Promotions = await _context.Promotions.Select(x => x.ToDto()).ToListAsync()
                 };
             }
 

@@ -7,6 +7,7 @@ namespace AngularCaching.Api.Models
     public class ToDo : AggregateRoot
     {
         public Guid ToDoId { get; private set; }
+        public string ProjectName { get; private set; }
         public string Description { get; private set; }
         public string Status { get; private set; }
         public bool IsDeleted { get; set; }
@@ -23,7 +24,7 @@ namespace AngularCaching.Api.Models
 
         protected override void EnsureValidState()
         {
-            if (string.IsNullOrEmpty(Description) || string.IsNullOrEmpty(Status))
+            if (string.IsNullOrEmpty(Description) || string.IsNullOrEmpty(Status) || string.IsNullOrEmpty(ProjectName))
             {
                 throw new Exception();
             }
@@ -34,6 +35,7 @@ namespace AngularCaching.Api.Models
         private void When(CreateToDo @event)
         {
             ToDoId = @event.ToDoId;
+            ProjectName = @event.ProjectName;
             Description = @event.Description;
             Status = "New";
         }

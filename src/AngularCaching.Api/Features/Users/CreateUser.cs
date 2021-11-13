@@ -8,46 +8,47 @@ using System.Threading.Tasks;
 
 namespace AngularCaching.Api.Features
 {
-    public class CreateToDo
+    public class CreateUser
     {
         public class Validator : AbstractValidator<Request>
         {
             public Validator()
             {
-                RuleFor(request => request.ToDo).NotNull();
-                RuleFor(request => request.ToDo).SetValidator(new ToDoValidator());
+                RuleFor(request => request.User).NotNull();
+                RuleFor(request => request.User).SetValidator(new UserValidator());
             }
 
         }
 
         public class Request : IRequest<Response>
         {
-            public ToDoDto ToDo { get; set; }
+            public UserDto User { get; set; }
         }
 
         public class Response : ResponseBase
         {
-            public ToDoDto ToDo { get; set; }
+            public UserDto User { get; set; }
         }
 
         public class Handler : IRequestHandler<Request, Response>
         {
             private readonly IAngularCachingDbContext _context;
+            private readonly IPasswordHasher _passwordHasher;
 
             public Handler(IAngularCachingDbContext context)
                 => _context = context;
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                var toDo = new ToDo(new(request.ToDo.ProjectName, request.ToDo.Description));
+                var user = new User(new(request.User.Name, request.User.CurrentProjectName, null, _passwordHasher));
 
-                _context.ToDos.Add(toDo);
+                _context.Users.Add(user);
 
                 await _context.SaveChangesAsync(cancellationToken);
 
-                return new()
+                return new Response()
                 {
-                    ToDo = toDo.ToDto()
+                    User = user.ToDto()
                 };
             }
 

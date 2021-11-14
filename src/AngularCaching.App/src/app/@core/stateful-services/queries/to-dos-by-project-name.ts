@@ -13,5 +13,8 @@ export class ToDosByProjectName {
     private readonly _toDoService: ToDoService
   ) { }
 
-  public query(projectName: string): Observable<ToDo[]> { return this._cache.fromCacheOrServiceWithRefresh$(TO_DOS_CHANGED, () => this._toDoService.getByProjectName(projectName), TO_DOS_CHANGED); }
+  public query(projectName: string): Observable<ToDo[]> {
+    const func = () => this._toDoService.getByProjectName(projectName);
+    return this._cache.fromCacheOrServiceWithRefresh$(`TO_DOS_BY_PROJECT_NAME_${projectName}`, func, [TO_DOS_CHANGED]);
+  }
 }

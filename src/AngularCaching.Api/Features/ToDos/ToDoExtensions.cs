@@ -9,6 +9,7 @@ namespace AngularCaching.Api.Features
             return new()
             {
                 ToDoId = toDo.ToDoId,
+                ProjectName = toDo.ProjectName,
                 Description = toDo.Description,
                 Status = toDo.Status
             };

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { User, UserService } from '@api';
 import { Destroyable, Dispatcher } from '@core';
-import { CURRENT_USER_PROJECT_CHANGED } from '@core/stateful-services/actions';
+import { CURRENT_USER_CHANGED, CURRENT_USER_PROJECT_CHANGED } from '@core/stateful-services/actions';
 import { CurrentUser } from '@core/stateful-services/queries/current-user';
 import { BehaviorSubject } from 'rxjs';
 import { map, switchMap, takeUntil, tap } from 'rxjs/operators';
@@ -34,7 +34,7 @@ export class EditUserComponent extends Destroyable {
             } as User
           })
         }),
-        tap(_ => this._dispatcher.emit(CURRENT_USER_PROJECT_CHANGED))
+        tap(_ => this._dispatcher.emit(CURRENT_USER_CHANGED))
       ).subscribe();
 
       return {

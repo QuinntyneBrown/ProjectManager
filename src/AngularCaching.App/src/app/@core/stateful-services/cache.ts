@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Logger } from "@core/services/logger";
 import { Observable } from "rxjs";
-import { concatMap, filter, finalize, shareReplay, startWith, tap } from "rxjs/operators";
+import { concatMap, filter, finalize, shareReplay, startWith, switchMap, tap } from "rxjs/operators";
 import { Dispatcher } from "./dispatcher";
 
 
@@ -45,14 +45,22 @@ export class Cache {
     return this._processing.get(key);
   }
 
-  public fromCacheOrServiceWithRefresh$(key: string, func: any, action: string) {
-    this.register(key, action);
+  public fromCacheOrServiceWithRefresh$(key: string, func: any, action: string | string[]) {
+
+    action = Array.isArray(action) ? action : [action];
+
+    for(var i = 0; i < action.length; i++) {
+      this.register(key,  action[i]);
+    }
+
 
     return this._dispatcher.refreshStream$.pipe(
-      tap(action => this._logger.trace(`${action} action dispatched to the refresh stream`)),
-      filter(action => action == action),
-      startWith(action),
-      concatMap(_ => this.fromCacheOrService$(key, func))
+      tap(x => this._logger.trace(`${x} action dispatched to the refresh stream`)),
+      filter(x => {
+        return (action as string[]).indexOf(x) > -1
+      }),
+      startWith(action[0]),
+      switchMap(_ => this.fromCacheOrService$(key, func))
     );
   }
 

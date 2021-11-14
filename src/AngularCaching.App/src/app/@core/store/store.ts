@@ -43,7 +43,9 @@ export class Store {
     if (this._processing.get(key) != null) return this._processing.get(key);
 
     if (!this._inner.get(key)) {
-      this._inner.set(key, func().pipe(shareReplay(1)));
+      this._inner.set(key, func().pipe(
+        shareReplay(1)
+        ));
     }
 
     this._processing.set(key, this._inner.get(key).pipe(finalize(() => this._processing.delete(key))));

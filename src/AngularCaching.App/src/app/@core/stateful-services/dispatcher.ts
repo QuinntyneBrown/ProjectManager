@@ -14,11 +14,11 @@ export class Dispatcher {
 
   public refreshStream$: Observable<Action> = this._refreshSubject.asObservable();
 
-  public emit(action: Action, refresh: boolean = false) {
+  public emit(action: Action) {
     this._invalidateSubject.next(action);
   }
 
-  public emitRefresh(action: Action, refresh: boolean = false) {
+  public emitRefresh(action: Action) {
     this._refreshSubject.next(action);
   }
 }

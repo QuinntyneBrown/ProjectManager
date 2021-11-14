@@ -1,7 +1,7 @@
 <ng-container *ngIf="vm$ | async as vm">
   <form novalidate autocomplete='off' spellcheck='false' [formGroup]='form'>
     <mat-form-field class="g-form-field">
-      <mat-label>Name</mat-label>
+      <mat-label>Active Project</mat-label>
       <mat-select formControlName="name">
         <mat-option *ngFor="let project of vm.projects" [value]="project.name">
           {{ project.name }}
@@ -9,5 +9,4 @@
       </mat-select>
     </mat-form-field>
   </form>
-
 </ng-container>

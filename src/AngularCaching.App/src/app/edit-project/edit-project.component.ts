@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Project, ProjectService } from '@api';
-import { Destroyable, Dispatcher } from '@core';
-import { CURRENT_USER_PROJECT_CHANGED } from '@core/store';
+import { Project } from '@api';
+import { Destroyable } from '@core';
 import { ProjectStore } from '@core';
-import { map, takeUntil, tap } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-project',
@@ -12,7 +11,7 @@ import { map, takeUntil, tap } from 'rxjs/operators';
   styleUrls: ['./edit-project.component.scss']
 })
 export class EditProjectComponent extends Destroyable {
-  public vm$  = this._currentUserProject
+  public vm$  = this._projectStore
   .currentUserProject()
   .pipe(
     map(project => {
@@ -30,19 +29,15 @@ export class EditProjectComponent extends Destroyable {
   );
 
   constructor(
-    private readonly _currentUserProject: ProjectStore,
-    private readonly _dispatcher: Dispatcher,
-    private readonly _projectService: ProjectService
+    private readonly _projectStore: ProjectStore
   ) {
     super();
   }
 
   public handleSaveClick(project: Project) {
-    this._projectService.update({ project })
+    this._projectStore.update({ project })
     .pipe(
       takeUntil(this._destroyed$),
-      tap(_ => this._dispatcher.emit(CURRENT_USER_PROJECT_CHANGED))
     ).subscribe();
-
   }
 }

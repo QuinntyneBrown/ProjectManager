@@ -1,7 +1,8 @@
-import { Component, ElementRef, forwardRef, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { AbstractControl, ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators } from '@angular/forms';
-import { takeUntil, tap } from 'rxjs/operators';
-import { fromEvent, Subject } from 'rxjs';
+import { Component, forwardRef } from '@angular/core';
+import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { map, takeUntil } from 'rxjs/operators';
+import { Destroyable } from '@core';
+import { ProjectService } from '@api';
 
 @Component({
   selector: 'app-project-select',
@@ -12,49 +13,34 @@ import { fromEvent, Subject } from 'rxjs';
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ProjectSelectComponent),
       multi: true
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => ProjectSelectComponent),
-      multi: true
-    }       
+    }
   ]
 })
-export class ProjectSelectComponent implements ControlValueAccessor,  Validator, OnDestroy  {
-  private readonly _destroyed$: Subject<void> = new Subject();
-  
+export class ProjectSelectComponent extends Destroyable implements ControlValueAccessor  {
+
+  public vm$ = this._projectService
+  .get()
+  .pipe(
+    map(projects => ({ projects }))
+  );
+
   public form = new FormGroup({
     name: new FormControl(null, [Validators.required]),
   });
 
   constructor(
-    private readonly _elementRef: ElementRef
-  ) { }
-  
-  validate(control: AbstractControl): ValidationErrors | null {
-      return this.form.valid ? null
-      : Object.keys(this.form.controls).reduce(
-          (accumulatedErrors, formControlName) => {
-            const errors: ValidationErrors = { ...accumulatedErrors };
-
-            const controlErrors = this.form.controls[formControlName].errors;
-
-            if (controlErrors) {
-              errors[formControlName] = controlErrors;
-            }
-
-            return errors;
-          },
-          {}
-        );
+    private readonly _projectService: ProjectService
+  ) {
+    super();
   }
-    
-  writeValue(obj: any): void {   
+
+  writeValue(obj: any): void {
+
     if(obj == null) {
       this.form.reset();
     }
     else {
-        this.form.patchValue(obj, { emitEvent: false });    
+        this.form.patchValue({ name: obj }, { emitEvent: false });
     }
   }
 
@@ -64,25 +50,9 @@ export class ProjectSelectComponent implements ControlValueAccessor,  Validator,
     .subscribe(fn);
   }
 
-  registerOnTouched(fn: any): void {
-    this._elementRef.nativeElement
-      .querySelectorAll("*")
-      .forEach((element: HTMLElement) => {
-        fromEvent(element, "focus")
-          .pipe(
-            takeUntil(this._destroyed$),
-            tap(x => fn())
-          )
-          .subscribe();
-      });
-  }
+  registerOnTouched(fn: any): void { }
 
   setDisabledState?(isDisabled: boolean): void {
     isDisabled ? this.form.disable() : this.form.enable();
-  }
-
-  public ngOnDestroy() {
-    this._destroyed$.next();
-    this._destroyed$.complete();
   }
 }

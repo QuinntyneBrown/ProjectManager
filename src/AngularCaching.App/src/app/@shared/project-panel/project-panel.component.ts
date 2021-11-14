@@ -5,6 +5,7 @@ import { AuthService } from '@core/services/auth.service';
 import { ToDosByProjectName } from '@core/stateful-services';
 import { CurrentUser } from '@core/stateful-services/queries/current-user';
 import { CurrentUserProject } from '@core/stateful-services/queries/current-user-project';
+import { PromotionsByProjectId } from '@core/stateful-services/queries/promotions-by-project-id';
 import { combineLatest } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
@@ -21,9 +22,12 @@ export class ProjectPanelComponent {
   ])
   .pipe(
     switchMap(([user, project]) => {
-      return this._toDosByProjectName.query(user.currentProjectName)
+      return combineLatest([
+        this._toDosByProjectName.query(user.currentProjectName),
+        this._promotionsByProjectId.query(project.projectId)
+      ])
       .pipe(
-        map(toDos => ({ toDos, user, project }))
+        map(([toDos, promotions]) => ({ toDos, user, project, promotions }))
       )
     })
   );
@@ -33,7 +37,8 @@ export class ProjectPanelComponent {
     private readonly _toDosByProjectName: ToDosByProjectName,
     private readonly _currentUserProject: CurrentUserProject,
     private readonly _authService: AuthService,
-    private readonly _navigationService: NavigationService
+    private readonly _navigationService: NavigationService,
+    private readonly _promotionsByProjectId: PromotionsByProjectId
   ) { }
 
   public logout() {

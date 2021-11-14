@@ -5,5 +5,19 @@
   </a>
   <h1>Edit Project</h1>
 
-  {{ vm.project | json }}
+  <form [formGroup]="vm.form">
+    <app-project-select formControlName="name"></app-project-select>
+
+    <mat-form-field class="g-form-field">
+      <mat-label>Due Date</mat-label>
+      <input matInput formControlName="dueDate">
+    </mat-form-field>
+
+  </form>
+
+  <div class="g-actions">
+    <button mat-stroked-button>
+      Save
+    </button>
+  </div>
 </ng-container>

@@ -15,7 +15,7 @@
     <a [routerLink]="['/','edit-user']">Edit User</a>
   </div>
   <div class="project-panel__footer">
-    <a [routerLink]="['/','promotions']">Promotions</a>
+    <a [routerLink]="['/','promotions']">Promotions ({{ vm.promotions.length }})</a>
     <a (click)="logout()">Logout</a>
   </div>
 </ng-container>

@@ -1,7 +1,13 @@
-<form novalidate autocomplete='off' spellcheck='false' [formGroup]='form'>
-    <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input matInput placeholder='Name'
-        formControlName='name' required>
+<ng-container *ngIf="vm$ | async as vm">
+  <form novalidate autocomplete='off' spellcheck='false' [formGroup]='form'>
+    <mat-form-field class="g-form-field">
+      <mat-label>Name</mat-label>
+      <mat-select formControlName="name">
+        <mat-option *ngFor="let project of vm.projects" [value]="project.name">
+          {{ project.name }}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
-</form>
+  </form>
+
+</ng-container>

@@ -6,15 +6,15 @@ import { Action } from './actions';
   providedIn: "root"
 })
 export class Dispatcher {
-  private readonly _invalidateSubject: Subject<Action> = new Subject();
+  private readonly _invalidateSubject: Subject<Action | Action[]> = new Subject();
 
   private readonly _refreshSubject: Subject<Action> = new Subject();
 
-  public invalidateStream$: Observable<Action> = this._invalidateSubject.asObservable();
+  public invalidateStream$: Observable<Action | Action[]> = this._invalidateSubject.asObservable();
 
   public refreshStream$: Observable<Action> = this._refreshSubject.asObservable();
 
-  public emit(action: Action) {
+  public emit(action: Action | Action[]) {
     this._invalidateSubject.next(action);
   }
 

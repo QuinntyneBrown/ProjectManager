@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavigationService, Dispatcher } from '@core';
 import { AuthService } from '@core/services/auth.service';
-import { ToDoStore, CURRENT_USER_CHANGED } from '@core/store';
+import { ToDoStore, CURRENT_USER_CHANGED, ALL } from '@core/store';
 import { PromotionStore, UserStore, ProjectStore } from '@core';
 import { combineLatest } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -43,6 +43,6 @@ export class ProjectPanelComponent {
   public logout() {
     this._authService.tryToLogout();
     this._navigationService.redirectToLogin();
-    this._dispatcher.emit(CURRENT_USER_CHANGED);
+    this._dispatcher.emit(ALL);
   }
 }

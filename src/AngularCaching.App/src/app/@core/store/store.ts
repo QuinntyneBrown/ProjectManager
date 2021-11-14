@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Logger } from "@core/services/logger";
 import { Observable } from "rxjs";
 import { filter, finalize, shareReplay, startWith, switchMap, tap } from "rxjs/operators";
 import { Dispatcher } from "./dispatcher";
@@ -14,20 +13,27 @@ export class Store {
   private readonly _invalidations: Map<string, string[]> = new Map();
 
   constructor(
-    private readonly _dispatcher: Dispatcher,
-    private readonly _logger: Logger
+    private readonly _dispatcher: Dispatcher
     ) {
     _dispatcher.invalidateStream$
       .pipe(
         tap(action => {
-          this._logger.trace(`${action} action dispatched to the invalidate stream`);
 
-          let keys = this._invalidations.get(action);
+          let actions: string[] = Array.isArray(action) ? action as string[] : [action as string];
 
-          for (var i = 0; i < keys.length; i++) {
-            this._inner.set(keys[i], null);
+          let aggregateKeys = [];
+
+          for(var i = 0; i < actions.length; i++) {
+            aggregateKeys = aggregateKeys.concat(this._invalidations.get(actions[i]));
           }
-          _dispatcher.emitRefresh(action);
+
+          for (var i = 0; i < aggregateKeys.length; i++) {
+            this._inner.set(aggregateKeys[i], null);
+          }
+
+          for(var i = 0; i < actions.length; i++) {
+            _dispatcher.emitRefresh(actions[i]);
+          }
         })
       )
       .subscribe();
@@ -54,10 +60,7 @@ export class Store {
     }
 
     return this._dispatcher.refreshStream$.pipe(
-      tap(x => this._logger.trace(`${x} action dispatched to the refresh stream`)),
-      filter(x => {
-        return (action as string[]).indexOf(x) > -1
-      }),
+      filter(x => (action as string[]).indexOf(x) > -1),
       startWith(action[0]),
       switchMap(_ => this.fromStoreOrService$(key, func))
     );

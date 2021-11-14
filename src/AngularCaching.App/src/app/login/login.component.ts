@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NavigationService } from '@core';
+import { ALL, Dispatcher, NavigationService } from '@core';
 import { Destroyable } from '@core/abstractions';
 import { AuthService } from '@core/services/auth.service';
 import { takeUntil, tap } from 'rxjs/operators';
@@ -19,7 +19,8 @@ export class LoginComponent extends Destroyable {
 
   constructor(
     private readonly _authService: AuthService,
-    private readonly _navigationService: NavigationService
+    private readonly _navigationService: NavigationService,
+    private readonly _dispatcher: Dispatcher
   ) {
     super();
   }
@@ -32,6 +33,7 @@ export class LoginComponent extends Destroyable {
     .pipe(
       takeUntil(this._destroyed$),
       tap(x => {
+        this._dispatcher.emit(ALL);
         this._navigationService.redirectPreLogin();
       }),
     ).subscribe();

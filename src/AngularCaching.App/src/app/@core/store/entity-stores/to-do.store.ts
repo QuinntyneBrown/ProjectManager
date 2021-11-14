@@ -14,7 +14,7 @@ export class ToDoStore {
     private readonly _toDoService: ToDoService
   ) { }
 
-  public toDoById(id:string): Observable<ToDo[]> { return this._store.fromStoreOrServiceWithRefresh$(`TO_DO_BY_ID_${id}`, () => this._toDoService.getById({toDoId: id }), TO_DOS_CHANGED); }
+  public toDoById(id:string): Observable<ToDo[]> { return this._store.fromStoreOrServiceWithRefresh$(`TO_DO_BY_ID_${id}`, () => this._toDoService.getById({toDoId: id }), `TO_DO_BY_ID_${id}`); }
 
   public toDoByProjectName(projectName: string): Observable<ToDo[]> {
     const func = () => this._toDoService.getByProjectName(projectName);

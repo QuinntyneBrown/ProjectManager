@@ -1,5 +1,6 @@
 ﻿using AngularCaching.Api.Core;
 using AngularCaching.Api.Interfaces;
+using AngularCaching.Api.Models;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -37,20 +38,69 @@ namespace AngularCaching.Api.Features
                                    where toDo.ProjectName == project.Name
                                    select toDo).ToListAsync();
 
-                var promotions = _context.Promotions.AsQueryable();
+                var promotions = new HashSet<Promotion>();
 
                 if (project.Name == Constants.Projects.ChristmasShopping)
                 {
-                    promotions = promotions.Where(x => x.Tags.Any(x => x.Name == Constants.PromotionTags.Christmas));
+                    foreach (var p in _context.Promotions.Where(x => x.Tags.Any(x => x.Name == Constants.PromotionTags.Christmas)))
+                    {
+                        promotions.Add(p);
+                    }
                 }
                 else
                 {
-                    promotions = promotions.Where(x => x.Tags.Any(x => x.Name == Constants.PromotionTags.HolidaySeasonToneUp));
+                    foreach (var p in _context.Promotions.Where(x => x.Tags.Any(x => x.Name == Constants.PromotionTags.HolidaySeasonToneUp)))
+                    {
+                        promotions.Add(p);
+                    }
+                }
+
+                if (todos.Where(x => x.Status == "Complete").Count() == 0)
+                {
+                    foreach (var p in _context.Promotions.Where(x => x.Tags.Any(x => x.Name == Constants.PromotionTags.GettingStarted)))
+                    {
+                        promotions.Add(p);
+                    }
+                }
+
+                if (todos.Where(x => x.Status == "Complete").Count() == todos.Count())
+                {
+                    foreach (var p in _context.Promotions.Where(x => x.Tags.Any(x => x.Name == Constants.PromotionTags.Efficient)))
+                    {
+                        promotions.Add(p);
+                    }
+                }
+
+
+                if (todos.SingleOrDefault(x => x.Status != "Complete" && x.Description.Contains("Christmas")) != null)
+                {
+                    foreach (var p in _context.Promotions.Where(x => x.Tags.Any(x => x.Name == Constants.PromotionTags.Christmas)))
+                    {
+                        promotions.Add(p);
+                    }
+                }
+
+                if (todos.SingleOrDefault(x => x.Status != "Complete" && x.Description.Contains("Nike")) != null)
+                {
+                    foreach (var p in _context.Promotions.Where(x => x.Tags.Any(x => x.Name == Constants.PromotionTags.Nike)))
+                    {
+                        promotions.Add(p);
+                    }
+                }
+
+                var totalDays = (project.DueDate - DateTime.UtcNow).TotalDays;
+
+                if (totalDays > 0 && totalDays < 10)
+                {
+                    foreach (var p in _context.Promotions.Where(x => x.Tags.Any(x => x.Name == Constants.PromotionTags.TenDaysAwayFromProjectCompletion)))
+                    {
+                        promotions.Add(p);
+                    }
                 }
 
                 return new()
                 {
-                    Promotions = await promotions.Select(x => x.ToDto()).ToListAsync()
+                    Promotions = promotions.Select(x => x.ToDto()).ToList()
                 };
             }
 

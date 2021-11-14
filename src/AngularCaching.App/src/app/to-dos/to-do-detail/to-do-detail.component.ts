@@ -26,7 +26,7 @@ export class ToDoDetailComponent {
     map(paramMap => paramMap.get("toDoId")),
     switchMap(toDoId => {
       return toDoId != null
-      ? this._toDoById.toDoById(toDoId)
+      ? this._toDoStore.toDoById(toDoId)
       : of({ })
     }),
     map((toDo: ToDo) => {
@@ -42,7 +42,7 @@ export class ToDoDetailComponent {
   )
 
   constructor(
-    private readonly _toDoById: ToDoStore,
+    private readonly _toDoStore: ToDoStore,
     private readonly _toDoService: ToDoService,
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _router: Router,
@@ -61,7 +61,7 @@ export class ToDoDetailComponent {
     obs$
     .pipe(
       tap(_ => {
-        this._dispatcher.emit(TO_DOS_CHANGED);
+        this._dispatcher.emit([`TO_DO_BY_ID_${toDo.toDoId}`, TO_DOS_CHANGED]);
         this._router.navigate(['/']);
       })
     )
@@ -78,5 +78,9 @@ export class ToDoDetailComponent {
       })
     )
     .subscribe();
+  }
+
+  refresh(toDo: ToDo) {
+    this._dispatcher.emit(`TO_DO_BY_ID_${toDo.toDoId}`)
   }
 }

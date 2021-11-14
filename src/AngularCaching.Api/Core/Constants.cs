@@ -28,6 +28,7 @@ namespace AngularCaching.Api.Core
                 InEfficient,
                 TenDaysAwayFromProjectCompletion,
                 GettingStarted,
+                HolidaySeasonToneUp,
                 Nike
             };
         }

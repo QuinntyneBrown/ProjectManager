@@ -3,6 +3,7 @@ import { PromotionService, ToDo } from "@api";
 import { Observable } from "rxjs";
 import { Store } from "@core/store";
 import { CURRENT_USER_PROJECT_CHANGED } from "../actions";
+import { TO_DOS_CHANGED } from "@core";
 
 @Injectable({
   providedIn: "root"
@@ -13,5 +14,5 @@ export class PromotionStore {
     private readonly _promotionService: PromotionService
   ) { }
 
-  public getPromotionsByProjectId(projectId: string): Observable<ToDo[]> { return this._store.fromStoreOrServiceWithRefresh$(`PROMOTIONS_BY_PROJECT_ID_${projectId}`, () => this._promotionService.getByProjectId({ projectId }), CURRENT_USER_PROJECT_CHANGED); }
+  public getPromotionsByProjectId(projectId: string): Observable<ToDo[]> { return this._store.fromStoreOrServiceWithRefresh$(`PROMOTIONS_BY_PROJECT_ID_${projectId}`, () => this._promotionService.getByProjectId({ projectId }), [CURRENT_USER_PROJECT_CHANGED, TO_DOS_CHANGED]); }
 }

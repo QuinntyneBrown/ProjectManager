@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { ToDo } from '@api';
-import { NavigationService } from '@core';
+import { NavigationService, Dispatcher } from '@core';
 import { AuthService } from '@core/services/auth.service';
-import { ToDosByProjectName } from '@core/stateful-services';
-import { CurrentUser } from '@core/stateful-services/queries/current-user';
-import { CurrentUserProject } from '@core/stateful-services/queries/current-user-project';
-import { PromotionsByProjectId } from '@core/stateful-services/queries/promotions-by-project-id';
+import { ToDoStore, CURRENT_USER_CHANGED } from '@core/store';
+import { PromotionStore, UserStore, ProjectStore } from '@core';
 import { combineLatest } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-project-panel',
@@ -17,14 +15,14 @@ import { map, switchMap } from 'rxjs/operators';
 export class ProjectPanelComponent {
 
   public vm$ = combineLatest([
-    this._currentUser.query(),
-    this._currentUserProject.query()
+    this._currentUser.currentUser(),
+    this._currentUserProject.currentUserProject()
   ])
   .pipe(
     switchMap(([user, project]) => {
       return combineLatest([
-        this._toDosByProjectName.query(user.currentProjectName),
-        this._promotionsByProjectId.query(project.projectId)
+        this._toDoStore.toDoByProjectName(user.currentProjectName),
+        this._promotionsByProjectId.getPromotionsByProjectId(project.projectId)
       ])
       .pipe(
         map(([toDos, promotions]) => ({ toDos, user, project, promotions }))
@@ -33,16 +31,18 @@ export class ProjectPanelComponent {
   );
 
   constructor(
-    private readonly _currentUser: CurrentUser,
-    private readonly _toDosByProjectName: ToDosByProjectName,
-    private readonly _currentUserProject: CurrentUserProject,
+    private readonly _currentUser: UserStore,
+    private readonly _toDoStore: ToDoStore,
+    private readonly _currentUserProject: ProjectStore,
     private readonly _authService: AuthService,
     private readonly _navigationService: NavigationService,
-    private readonly _promotionsByProjectId: PromotionsByProjectId
+    private readonly _promotionsByProjectId: PromotionStore,
+    private readonly _dispatcher: Dispatcher
   ) { }
 
   public logout() {
     this._authService.tryToLogout();
     this._navigationService.redirectToLogin();
+    this._dispatcher.emit(CURRENT_USER_CHANGED);
   }
 }

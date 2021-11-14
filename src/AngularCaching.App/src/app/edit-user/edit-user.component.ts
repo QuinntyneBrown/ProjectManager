@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { User, UserService } from '@api';
 import { Destroyable, Dispatcher } from '@core';
-import { CURRENT_USER_CHANGED } from '@core/stateful-services/actions';
-import { CurrentUser } from '@core/stateful-services/queries/current-user';
+import { CURRENT_USER_CHANGED } from '@core/store';
+import { UserStore } from '@core';
 import { BehaviorSubject } from 'rxjs';
 import { map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
@@ -16,7 +16,7 @@ export class EditUserComponent extends Destroyable {
 
   private _refresh$: BehaviorSubject<void> = new BehaviorSubject(null);
 
-  public vm$ = this._currentUser.query()
+  public vm$ = this._currentUser.currentUser()
   .pipe(
     switchMap(user => this._refresh$.pipe(map(_ => user))),
     map(user => {
@@ -45,7 +45,7 @@ export class EditUserComponent extends Destroyable {
   );
 
   constructor(
-    private readonly _currentUser: CurrentUser,
+    private readonly _currentUser: UserStore,
     private readonly _userService: UserService,
     private readonly _dispatcher: Dispatcher
   ) {

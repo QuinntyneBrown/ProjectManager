@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToDo, ToDoService } from '@api';
-import { Dispatcher, ToDoById } from '@core/stateful-services';
-import { TO_DOS_CHANGED } from '@core/stateful-services/actions';
+import { Dispatcher, ToDoStore, TO_DOS_CHANGED } from '@core/store';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
@@ -27,7 +26,7 @@ export class ToDoDetailComponent {
     map(paramMap => paramMap.get("toDoId")),
     switchMap(toDoId => {
       return toDoId != null
-      ? this._toDoById.query(toDoId)
+      ? this._toDoById.toDoById(toDoId)
       : of({ })
     }),
     map((toDo: ToDo) => {
@@ -43,7 +42,7 @@ export class ToDoDetailComponent {
   )
 
   constructor(
-    private readonly _toDoById: ToDoById,
+    private readonly _toDoById: ToDoStore,
     private readonly _toDoService: ToDoService,
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _router: Router,

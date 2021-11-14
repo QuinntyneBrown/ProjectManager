@@ -8,7 +8,7 @@ import { Dispatcher } from "./dispatcher";
 @Injectable({
   providedIn: "root"
 })
-export class Cache {
+export class Store {
   private readonly _inner: Map<string, Observable<any>> = new Map();
   private readonly _processing: Map<string, Observable<any>> = new Map();
   private readonly _invalidations: Map<string, string[]> = new Map();
@@ -33,7 +33,7 @@ export class Cache {
       .subscribe();
   }
 
-  public fromCacheOrService$(key: string, func: { (): Observable<any> }): Observable<any> {
+  public fromStoreOrService$(key: string, func: { (): Observable<any> }): Observable<any> {
     if (this._processing.get(key) != null) return this._processing.get(key);
 
     if (!this._inner.get(key)) {
@@ -45,7 +45,7 @@ export class Cache {
     return this._processing.get(key);
   }
 
-  public fromCacheOrServiceWithRefresh$(key: string, func: any, action: string | string[]) {
+  public fromStoreOrServiceWithRefresh$(key: string, func: any, action: string | string[]) {
 
     action = Array.isArray(action) ? action : [action];
 
@@ -59,7 +59,7 @@ export class Cache {
         return (action as string[]).indexOf(x) > -1
       }),
       startWith(action[0]),
-      switchMap(_ => this.fromCacheOrService$(key, func))
+      switchMap(_ => this.fromStoreOrService$(key, func))
     );
   }
 

@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Project, ProjectService } from '@api';
 import { Destroyable, Dispatcher } from '@core';
-import { CURRENT_USER_PROJECT_CHANGED } from '@core/stateful-services/actions';
-import { CurrentUserProject } from '@core/stateful-services/queries/current-user-project';
+import { CURRENT_USER_PROJECT_CHANGED } from '@core/store';
+import { ProjectStore } from '@core';
 import { map, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
@@ -13,7 +13,7 @@ import { map, takeUntil, tap } from 'rxjs/operators';
 })
 export class EditProjectComponent extends Destroyable {
   public vm$  = this._currentUserProject
-  .query()
+  .currentUserProject()
   .pipe(
     map(project => {
       let form = new FormGroup({
@@ -30,7 +30,7 @@ export class EditProjectComponent extends Destroyable {
   );
 
   constructor(
-    private readonly _currentUserProject: CurrentUserProject,
+    private readonly _currentUserProject: ProjectStore,
     private readonly _dispatcher: Dispatcher,
     private readonly _projectService: ProjectService
   ) {

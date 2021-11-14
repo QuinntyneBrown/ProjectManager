@@ -39,13 +39,11 @@ export class Store {
       .subscribe();
   }
 
-  public fromStoreOrService$(key: string, func: { (): Observable<any> }): Observable<any> {
+  private _fromStoreOrService$<T>(key: string, func: { (): Observable<any> }): Observable<T> {
     if (this._processing.get(key) != null) return this._processing.get(key);
 
     if (!this._inner.get(key)) {
-      this._inner.set(key, func().pipe(
-        shareReplay(1)
-        ));
+      this._inner.set(key, func().pipe(shareReplay(1)));
     }
 
     this._processing.set(key, this._inner.get(key).pipe(finalize(() => this._processing.delete(key))));
@@ -53,22 +51,22 @@ export class Store {
     return this._processing.get(key);
   }
 
-  public fromStoreOrServiceWithRefresh$(key: string, func: any, action: string | string[]) {
+  public fromStoreOrServiceWithRefresh$<T>(key: string, func: any, action: string | string[]): Observable<T> {
 
     action = Array.isArray(action) ? action : [action];
 
     for(var i = 0; i < action.length; i++) {
-      this.register(key,  action[i]);
+      this._register(key,  action[i]);
     }
 
     return this._dispatcher.refreshStream$.pipe(
       filter(x => (action as string[]).indexOf(x) > -1),
       startWith(action[0]),
-      switchMap(_ => this.fromStoreOrService$(key, func))
+      switchMap(_ => this._fromStoreOrService$<T>(key, func))
     );
   }
 
-  public register(key: string, invalidateOn: string) {
+  private _register(key: string, invalidateOn: string) {
     var keys = this._invalidations.get(invalidateOn);
     keys = keys || [];
     if (keys.filter(x => x == key)[0] == null) {

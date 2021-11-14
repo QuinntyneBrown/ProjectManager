@@ -18,6 +18,7 @@ export class ToDoStore {
 
   public toDoByProjectName(projectName: string): Observable<ToDo[]> {
     const func = () => this._toDoService.getByProjectName(projectName);
-    return this._store.fromStoreOrServiceWithRefresh$(`TO_DOS_BY_PROJECT_NAME_${projectName}`, func, [TO_DOS_CHANGED]);
+
+    return this._store.fromStoreOrServiceWithRefresh$<ToDo[]>(`TO_DOS_BY_PROJECT_NAME_${projectName}`, func, [TO_DOS_CHANGED]);
   }
 }

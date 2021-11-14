@@ -1,22 +1,29 @@
 <ng-container *ngIf="vm$ | async as vm">
+
   <a class="g-heading" [routerLink]="['/']">
     <mat-icon>chevron_left</mat-icon>
     <span>To Do's</span>
   </a>
+
   <h1>Edit Project</h1>
 
   <form [formGroup]="vm.form">
-    <app-project-select formControlName="name"></app-project-select>
+    <mat-form-field class="g-form-field">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" readonly>
+    </mat-form-field>
 
     <mat-form-field class="g-form-field">
       <mat-label>Due Date</mat-label>
-      <input matInput formControlName="dueDate">
+      <input matInput [matDatepicker]="picker" formControlName="dueDate">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
   </form>
 
   <div class="g-actions">
-    <button mat-stroked-button>
+    <button mat-stroked-button (click)="handleSaveClick(vm.form.value)">
       Save
     </button>
   </div>

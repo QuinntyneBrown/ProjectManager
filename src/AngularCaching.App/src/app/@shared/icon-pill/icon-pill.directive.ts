@@ -1,14 +1,9 @@
-import { Directive, ElementRef } from '@angular/core';
+import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[appIconPill]'
-})
-export class IconPillDirective {
-
-  constructor(
-    elementRef: ElementRef<HTMLElement>
-  ) {
-    elementRef.nativeElement.classList.add('g-icon-pill')
+  selector: '[appIconPill]',
+  host: {
+    class:'g-icon-pill'
   }
-
-}
+})
+export class IconPillDirective { }

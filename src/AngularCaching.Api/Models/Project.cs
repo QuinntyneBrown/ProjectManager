@@ -30,5 +30,10 @@ namespace AngularCaching.Api.Models
             Name = @event.Name;
             DueDate = @event.DueDate;
         }
+
+        private void When(UpdateDueDate @event)
+        {
+            DueDate = @event.DueDate;
+        }
     }
 }

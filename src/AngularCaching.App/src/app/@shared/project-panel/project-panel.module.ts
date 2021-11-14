@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProjectPanelComponent } from './project-panel.component';
 import { RemainingDaysModule } from '@shared/remaining-days';
 import { RouterModule } from '@angular/router';
+import { ToDoProgressModule } from '@shared/to-do-progress/to-do-progress.module';
 
 
 
@@ -16,6 +17,7 @@ import { RouterModule } from '@angular/router';
   imports: [
     CommonModule,
     RemainingDaysModule,
+    ToDoProgressModule,
     RouterModule
   ]
 })

@@ -1,24 +1,54 @@
 import { Component } from '@angular/core';
-import { UserService } from '@api';
+import { FormControl, Validators } from '@angular/forms';
+import { User, UserService } from '@api';
+import { Destroyable, Dispatcher } from '@core';
+import { CURRENT_USER_PROJECT_CHANGED } from '@core/stateful-services/actions';
 import { CurrentUser } from '@core/stateful-services/queries/current-user';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-user',
   templateUrl: './edit-user.component.html',
   styleUrls: ['./edit-user.component.scss']
 })
-export class EditUserComponent {
+export class EditUserComponent extends Destroyable {
+
+  private _refresh$: BehaviorSubject<void> = new BehaviorSubject(null);
 
   public vm$ = this._currentUser.query()
   .pipe(
-    map(user => ({ user }))
+    switchMap(user => this._refresh$.pipe(map(_ => user))),
+    map(user => {
+      const formControl = new FormControl(user.currentProjectName,[Validators.required]);
+
+      formControl.valueChanges
+      .pipe(
+        takeUntil(this._destroyed$),
+        map(value => value.name),
+        switchMap((currentProjectName)=> {
+          return this._userService.update({
+            user: {
+              userId: user.userId,
+              currentProjectName
+            } as User
+          })
+        }),
+        tap(_ => this._dispatcher.emit(CURRENT_USER_PROJECT_CHANGED))
+      ).subscribe();
+
+      return {
+        user,
+        formControl
+      }
+    })
   );
 
   constructor(
     private readonly _currentUser: CurrentUser,
-    private readonly _userService: UserService
+    private readonly _userService: UserService,
+    private readonly _dispatcher: Dispatcher
   ) {
-
+    super();
   }
 }

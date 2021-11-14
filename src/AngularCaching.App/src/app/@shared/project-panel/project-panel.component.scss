@@ -16,12 +16,16 @@
 
   a,
   a:link,
-  a:visited {
+  a:visited,
+  app-remaining-days,
+  app-to-do-progress {
     cursor: pointer;
     display: block;
     margin-bottom: 30px;
     text-decoration: none;
     color:#000;
+    user-select: none;
+    cursor: pointer;
   }
 
   .project-panel__header,

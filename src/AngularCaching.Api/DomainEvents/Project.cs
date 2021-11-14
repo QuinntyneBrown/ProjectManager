@@ -16,4 +16,14 @@ namespace AngularCaching.Api.DomainEvents
         }
     }
 
+    public class UpdateDueDate : BaseDomainEvent
+    {
+        public DateTime DueDate { get; set; }
+
+        public UpdateDueDate(DateTime dueDate)
+        {
+            DueDate = dueDate;
+        }
+    }
+
 }

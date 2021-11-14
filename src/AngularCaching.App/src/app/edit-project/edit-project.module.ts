@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { EditProjectRoutingModule } from './edit-project-routing.module';
 import { EditProjectComponent } from './edit-project.component';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { EditProjectComponent } from './edit-project.component';
   ],
   imports: [
     CommonModule,
-    EditProjectRoutingModule
+    EditProjectRoutingModule,
+    MatIconModule
   ]
 })
 export class EditProjectModule { }

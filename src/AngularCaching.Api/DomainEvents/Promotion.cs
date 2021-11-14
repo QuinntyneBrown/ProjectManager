@@ -12,4 +12,13 @@ namespace AngularCaching.Api.DomainEvents
             Name = name;
         }
     }
+
+    public class AddPromotionTag : BaseDomainEvent
+    {
+        public string Tag { get; private set; }
+        public AddPromotionTag(string tag)
+        {
+            Tag = tag;
+        }
+    }
 }

@@ -37,9 +37,20 @@ namespace AngularCaching.Api.Features
                                    where toDo.ProjectName == project.Name
                                    select toDo).ToListAsync();
 
+                var promotions = _context.Promotions.AsQueryable();
+
+                if (project.Name == Constants.Projects.ChristmasShopping)
+                {
+                    promotions = promotions.Where(x => x.Tags.Any(x => x.Name == Constants.PromotionTags.Christmas));
+                }
+                else
+                {
+                    promotions = promotions.Where(x => x.Tags.Any(x => x.Name == Constants.PromotionTags.HolidaySeasonToneUp));
+                }
+
                 return new()
                 {
-                    Promotions = await _context.Promotions.Select(x => x.ToDto()).ToListAsync()
+                    Promotions = await promotions.Select(x => x.ToDto()).ToListAsync()
                 };
             }
 

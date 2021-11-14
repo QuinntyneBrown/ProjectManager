@@ -1,4 +1,8 @@
 <ng-container *ngIf="vm$ | async as vm">
+  <a class="g-heading" [routerLink]="['/']">
+    <mat-icon>chevron_left</mat-icon>
+    <span>To Do's</span>
+  </a>
   <h1>Edit Project</h1>
 
   {{ vm.project | json }}

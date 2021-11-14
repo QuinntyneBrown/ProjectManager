@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { PromotionsRoutingModule } from './promotions-routing.module';
 import { PromotionsComponent } from './promotions.component';
+import { MatIconModule } from '@angular/material/icon';
+import { PromotionCardComponent, PromotionCardModule } from '@shared/cards';
 
 
 @NgModule({
@@ -11,6 +13,8 @@ import { PromotionsComponent } from './promotions.component';
   ],
   imports: [
     CommonModule,
+    MatIconModule,
+    PromotionCardModule,
     PromotionsRoutingModule
   ]
 })

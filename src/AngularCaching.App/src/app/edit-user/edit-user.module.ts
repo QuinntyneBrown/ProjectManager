@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { EditUserRoutingModule } from './edit-user-routing.module';
 import { EditUserComponent } from './edit-user.component';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { EditUserComponent } from './edit-user.component';
   ],
   imports: [
     CommonModule,
-    EditUserRoutingModule
+    EditUserRoutingModule,
+    MatIconModule
   ]
 })
 export class EditUserModule { }

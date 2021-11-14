@@ -35,6 +35,13 @@ export class PromotionService implements IPagableService<Promotion> {
       );
   }
 
+  public getByProjectId(options: { projectId: string }): Observable<Promotion[]> {
+    return this._client.get<{ promotions: Promotion[] }>(`${this._baseUrl}api/promotion/project/${options.projectId}`)
+      .pipe(
+        map(x => x.promotions)
+      );
+  }
+
   public remove(options: { promotion: Promotion }): Observable<void> {
     return this._client.delete<void>(`${this._baseUrl}api/promotion/${options.promotion.promotionId}`);
   }

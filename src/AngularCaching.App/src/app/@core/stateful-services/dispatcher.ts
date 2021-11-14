@@ -19,7 +19,6 @@ export class Dispatcher {
   }
 
   public emitRefresh(action: Action, refresh: boolean = false) {
-    console.log("EMIT REFRESH");
     this._refreshSubject.next(action);
   }
 }

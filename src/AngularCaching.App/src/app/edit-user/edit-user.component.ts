@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { User, UserService } from '@api';
-import { Destroyable, Dispatcher } from '@core';
-import { CURRENT_USER_CHANGED } from '@core/store';
+import { User } from '@api';
+import { Destroyable } from '@core';
 import { UserStore } from '@core';
 import { BehaviorSubject } from 'rxjs';
-import { map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-user',
@@ -16,7 +15,7 @@ export class EditUserComponent extends Destroyable {
 
   private _refresh$: BehaviorSubject<void> = new BehaviorSubject(null);
 
-  public vm$ = this._currentUser.currentUser()
+  public vm$ = this._userStore.currentUser()
   .pipe(
     switchMap(user => this._refresh$.pipe(map(_ => user))),
     map(user => {
@@ -27,14 +26,13 @@ export class EditUserComponent extends Destroyable {
         takeUntil(this._destroyed$),
         map(value => value.name),
         switchMap((currentProjectName)=> {
-          return this._userService.update({
+          return this._userStore.update({
             user: {
               userId: user.userId,
               currentProjectName
             } as User
           })
-        }),
-        tap(_ => this._dispatcher.emit(CURRENT_USER_CHANGED))
+        })
       ).subscribe();
 
       return {
@@ -45,9 +43,7 @@ export class EditUserComponent extends Destroyable {
   );
 
   constructor(
-    private readonly _currentUser: UserStore,
-    private readonly _userService: UserService,
-    private readonly _dispatcher: Dispatcher
+    private readonly _userStore: UserStore
   ) {
     super();
   }

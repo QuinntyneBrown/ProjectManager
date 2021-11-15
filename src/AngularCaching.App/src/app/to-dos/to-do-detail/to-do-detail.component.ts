@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToDo, ToDoService } from '@api';
-import { Dispatcher, ToDoStore, TO_DOS_CHANGED } from '@core/store';
+import { ToDo } from '@api';
+import { ToDoStore } from '@core/store';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
@@ -43,25 +43,22 @@ export class ToDoDetailComponent {
 
   constructor(
     private readonly _toDoStore: ToDoStore,
-    private readonly _toDoService: ToDoService,
     private readonly _activatedRoute: ActivatedRoute,
-    private readonly _router: Router,
-    private readonly _dispatcher: Dispatcher
+    private readonly _router: Router
   ) { }
 
   public save(toDo: ToDo) {
     const obs$ = toDo.toDoId != null
-    ? this._toDoService.update({
+    ? this._toDoStore.update({
       toDo
     })
-    : this._toDoService.create({
+    : this._toDoStore.create({
       toDo
     });
 
     obs$
     .pipe(
       tap(_ => {
-        this._dispatcher.emit([`TO_DO_BY_ID_${toDo.toDoId}`, TO_DOS_CHANGED]);
         this._router.navigate(['/']);
       })
     )
@@ -70,17 +67,11 @@ export class ToDoDetailComponent {
 
   public complete(toDo: ToDo) {
     toDo.status = "Complete";
-    this._toDoService.update({ toDo })
+    this._toDoStore.update({ toDo })
     .pipe(
-      tap(_ => {
-        this._dispatcher.emit(TO_DOS_CHANGED);
-        this._router.navigate(['/']);
-      })
+      tap(_ => this._router.navigate(['/']))
     )
     .subscribe();
   }
 
-  refresh(toDo: ToDo) {
-    this._dispatcher.emit(`TO_DO_BY_ID_${toDo.toDoId}`)
-  }
 }

@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ToDo } from '@api';
 
 @Component({
   selector: 'app-to-do-progress',
   templateUrl: './to-do-progress.component.html',
-  styleUrls: ['./to-do-progress.component.scss']
+  styleUrls: ['./to-do-progress.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToDoProgressComponent {
 

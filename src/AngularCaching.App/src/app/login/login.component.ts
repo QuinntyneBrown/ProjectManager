@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavigationService } from '@core';
 import { Destroyable } from '@core/abstractions';
@@ -8,13 +8,13 @@ import { takeUntil, tap } from 'rxjs/operators';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent extends Destroyable {
   public form = new FormGroup({
-    username: new FormControl("Quinn", [Validators.required]),
-    password: new FormControl("ngrx", [Validators.required]),
-    rememberMe: new FormControl(null, [])
+    username: new FormControl("", [Validators.required]),
+    password: new FormControl("", [Validators.required])
   });
 
   constructor(

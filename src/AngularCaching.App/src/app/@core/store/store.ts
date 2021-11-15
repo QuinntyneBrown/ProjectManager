@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { filter, finalize, shareReplay, startWith, switchMap, tap } from "rxjs/operators";
+import { exhaustMap, filter, groupBy, mergeAll, shareReplay, startWith, tap } from "rxjs/operators";
 import { Dispatcher } from "./dispatcher";
 
 
@@ -9,7 +9,6 @@ import { Dispatcher } from "./dispatcher";
 })
 export class Store {
   private readonly _inner: Map<string, Observable<any>> = new Map();
-  private readonly _processing: Map<string, Observable<any>> = new Map();
   private readonly _invalidations: Map<string, string[]> = new Map();
 
   constructor(
@@ -40,15 +39,10 @@ export class Store {
   }
 
   private _fromStoreOrService$<T>(key: string, func: { (): Observable<any> }): Observable<T> {
-    if (this._processing.get(key) != null) return this._processing.get(key);
-
     if (!this._inner.get(key)) {
       this._inner.set(key, func().pipe(shareReplay(1)));
     }
-
-    this._processing.set(key, this._inner.get(key).pipe(finalize(() => this._processing.delete(key))));
-
-    return this._processing.get(key);
+    return this._inner.get(key) as Observable<T>;
   }
 
   public fromStoreOrServiceWithRefresh$<T>(key: string, func: any, action: string | string[]): Observable<T> {
@@ -62,7 +56,10 @@ export class Store {
     return this._dispatcher.refreshStream$.pipe(
       filter(x => (action as string[]).indexOf(x) > -1),
       startWith(action[0]),
-      switchMap(_ => this._fromStoreOrService$<T>(key, func))
+      // really should group by key, exhaustMap and the mergeAll
+      //groupBy(x => key),
+      //mergeAll(),
+      exhaustMap(_ => this._fromStoreOrService$<T>(key, func))
     );
   }
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { User } from '@api';
 import { Destroyable } from '@core';
@@ -9,7 +9,8 @@ import { map, switchMap, takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-edit-user',
   templateUrl: './edit-user.component.html',
-  styleUrls: ['./edit-user.component.scss']
+  styleUrls: ['./edit-user.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditUserComponent extends Destroyable {
 

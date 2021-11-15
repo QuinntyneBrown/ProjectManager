@@ -1,4 +1,4 @@
-import { Component, forwardRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { map, takeUntil } from 'rxjs/operators';
 import { Destroyable, ProjectStore } from '@core';
@@ -14,7 +14,8 @@ import { Destroyable, ProjectStore } from '@core';
       useExisting: forwardRef(() => ProjectSelectComponent),
       multi: true
     }
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectSelectComponent extends Destroyable implements ControlValueAccessor  {
 
@@ -35,7 +36,6 @@ export class ProjectSelectComponent extends Destroyable implements ControlValueA
   }
 
   writeValue(obj: any): void {
-
     if(obj == null) {
       this.form.reset();
     }

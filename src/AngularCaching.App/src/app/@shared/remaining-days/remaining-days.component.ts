@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Project } from '@api';
 
 @Component({
   selector: 'app-remaining-days',
   templateUrl: './remaining-days.component.html',
-  styleUrls: ['./remaining-days.component.scss']
+  styleUrls: ['./remaining-days.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RemainingDaysComponent {
 

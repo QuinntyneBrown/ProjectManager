@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Project } from '@api';
 import { Destroyable } from '@core';
@@ -8,7 +8,8 @@ import { map, takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-edit-project',
   templateUrl: './edit-project.component.html',
-  styleUrls: ['./edit-project.component.scss']
+  styleUrls: ['./edit-project.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditProjectComponent extends Destroyable {
   public vm$  = this._projectStore

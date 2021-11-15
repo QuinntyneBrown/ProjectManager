@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { UserStore, ToDoStore } from '@core';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -7,7 +7,8 @@ import { map, switchMap, tap } from 'rxjs/operators';
 @Component({
   selector: 'app-to-do-list',
   templateUrl: './to-do-list.component.html',
-  styleUrls: ['./to-do-list.component.scss']
+  styleUrls: ['./to-do-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToDoListComponent  {
 

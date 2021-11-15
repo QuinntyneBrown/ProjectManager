@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { PromotionStore, ProjectStore } from '@core';
 import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-promotions',
   templateUrl: './promotions.component.html',
-  styleUrls: ['./promotions.component.scss']
+  styleUrls: ['./promotions.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PromotionsComponent {
 

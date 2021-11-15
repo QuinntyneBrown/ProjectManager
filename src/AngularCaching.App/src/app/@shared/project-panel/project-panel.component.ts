@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { PromotionStore, UserStore, ProjectStore, ToDoStore, NavigationService, AuthStore } from '@core';
 import { combineLatest } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -7,12 +7,13 @@ import { map, switchMap } from 'rxjs/operators';
 @Component({
   selector: 'app-project-panel',
   templateUrl: './project-panel.component.html',
-  styleUrls: ['./project-panel.component.scss']
+  styleUrls: ['./project-panel.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProjectPanelComponent {
 
   public vm$ = combineLatest([
-    this._currentUser.currentUser(),
+    this._userStore.currentUser(),
     this._projectStore.currentUserProject$()
   ])
   .pipe(
@@ -28,7 +29,7 @@ export class ProjectPanelComponent {
   );
 
   constructor(
-    private readonly _currentUser: UserStore,
+    private readonly _userStore: UserStore,
     private readonly _toDoStore: ToDoStore,
     private readonly _projectStore: ProjectStore,
     private readonly _authStore: AuthStore,

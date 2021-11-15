@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToDo } from '@api';
@@ -10,7 +10,8 @@ import { map, switchMap, tap } from 'rxjs/operators';
 @Component({
   selector: 'app-to-do-detail',
   templateUrl: './to-do-detail.component.html',
-  styleUrls: ['./to-do-detail.component.scss']
+  styleUrls: ['./to-do-detail.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToDoDetailComponent {
   public vm$ = this._activatedRoute

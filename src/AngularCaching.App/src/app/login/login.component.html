@@ -7,14 +7,15 @@
   <form novalidate autocomplete='off' spellcheck='false' [formGroup]='form'>
     <mat-form-field class="g-form-field">
       <input  matInput placeholder='Username'
-             class='username'
+             class='login__username'
              formControlName='username' required>
     </mat-form-field>
 
     <mat-form-field class="g-form-field">
       <input cdkFocusInitial matInput
              placeholder='Password'
-             id='password'
+             autocomplete="off"
+             class="login__password"
              formControlName='password'
              type='password'
              required>

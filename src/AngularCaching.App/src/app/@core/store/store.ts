@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
+import { Action } from "@core/store/actions";
 import { Observable } from "rxjs";
-import { exhaustMap, filter, groupBy, mergeAll, shareReplay, startWith, tap } from "rxjs/operators";
+import { exhaustMap, filter, shareReplay, startWith, tap } from "rxjs/operators";
 import { Dispatcher } from "./dispatcher";
 
 
@@ -8,8 +9,8 @@ import { Dispatcher } from "./dispatcher";
   providedIn: "root"
 })
 export class Store {
-  private readonly _inner: Map<string, Observable<any>> = new Map();
-  private readonly _invalidations: Map<string, string[]> = new Map();
+  private readonly _inner: Map<Action, Observable<any>> = new Map();
+  private readonly _actionKeysMap: Map<Action, string[]> = new Map();
 
   constructor(
     private readonly _dispatcher: Dispatcher
@@ -17,28 +18,20 @@ export class Store {
     _dispatcher.invalidateStream$
       .pipe(
         tap(action => {
-
-          let actions: string[] = Array.isArray(action) ? action as string[] : [action as string];
-
-          let aggregateKeys = [];
-
+          const actions: string[] = Array.isArray(action) ? action as string[] : [action as string];
           for(var i = 0; i < actions.length; i++) {
-            aggregateKeys = aggregateKeys.concat(this._invalidations.get(actions[i]));
+            const keys = this._actionKeysMap.get(actions[i]);
+            for(let j = 0; j < keys.length; j++) {
+              this._inner.set(keys[j], null);
+            }
           }
-
-          for (var i = 0; i < aggregateKeys.length; i++) {
-            this._inner.set(aggregateKeys[i], null);
-          }
-
-          for(var i = 0; i < actions.length; i++) {
-            _dispatcher.emitRefresh(actions[i]);
-          }
+          actions.forEach(a => _dispatcher.emitRefresh(a));
         })
       )
       .subscribe();
   }
 
-  private _fromStoreOrService$<T>(key: string, func: { (): Observable<any> }): Observable<T> {
+  private _fromStoreOrService$<T>(key: string, func: { (): Observable<T> }): Observable<T> {
     if (!this._inner.get(key)) {
       this._inner.set(key, func().pipe(shareReplay(1)));
     }
@@ -46,29 +39,21 @@ export class Store {
   }
 
   public fromStoreOrServiceWithRefresh$<T>(key: string, func: any, action: string | string[]): Observable<T> {
-
     action = Array.isArray(action) ? action : [action];
-
-    for(var i = 0; i < action.length; i++) {
-      this._register(key,  action[i]);
-    }
-
+    action.forEach(a => this._register(key,a));
     return this._dispatcher.refreshStream$.pipe(
-      filter(x => (action as string[]).indexOf(x) > -1),
+      filter(x => (action as Action[]).indexOf(x) > -1),
       startWith(action[0]),
-      // really should group by key, exhaustMap and the mergeAll
-      //groupBy(x => key),
-      //mergeAll(),
       exhaustMap(_ => this._fromStoreOrService$<T>(key, func))
     );
   }
 
-  private _register(key: string, invalidateOn: string) {
-    var keys = this._invalidations.get(invalidateOn);
+  private _register(key: string, action: Action) {
+    var keys = this._actionKeysMap.get(action);
     keys = keys || [];
     if (keys.filter(x => x == key)[0] == null) {
       keys.push(key);
     }
-    this._invalidations.set(invalidateOn, keys);
+    this._actionKeysMap.set(action, keys);
   }
 }

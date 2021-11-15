@@ -13,13 +13,6 @@ import { map, switchMap, tap } from 'rxjs/operators';
   styleUrls: ['./to-do-detail.component.scss']
 })
 export class ToDoDetailComponent {
-
-  public form: FormGroup = new FormGroup({
-    toDoId: new FormControl(null, []),
-    description: new FormControl(null, []),
-    status: new FormControl(null, [])
-  })
-
   public vm$ = this._activatedRoute
   .paramMap
   .pipe(
@@ -49,18 +42,12 @@ export class ToDoDetailComponent {
 
   public save(toDo: ToDo) {
     const obs$ = toDo.toDoId != null
-    ? this._toDoStore.update({
-      toDo
-    })
-    : this._toDoStore.create({
-      toDo
-    });
+    ? this._toDoStore.update({ toDo })
+    : this._toDoStore.create({ toDo });
 
     obs$
     .pipe(
-      tap(_ => {
-        this._router.navigate(['/']);
-      })
+      tap(_ => this._router.navigate(['/']))
     )
     .subscribe();
   }

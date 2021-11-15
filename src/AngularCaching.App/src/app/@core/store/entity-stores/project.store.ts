@@ -5,7 +5,7 @@ import { BASE_URL, Dispatcher } from "@core";
 import { Store } from "@core/store";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
-import { CURRENT_USER_CHANGED, CURRENT_USER_PROJECT_CHANGED } from "../actions";
+import { CURRENT_USER_CHANGED, CURRENT_USER_PROJECT_CHANGED, PROJECT_CHANGED } from "../actions";
 
 @Injectable({
   providedIn: "root"
@@ -20,8 +20,13 @@ export class ProjectStore extends ProjectService {
     super(_baseUrl, _httpClient)
   }
 
-  public currentUserProject(): Observable<Project> {
+  public currentUserProject$(): Observable<Project> {
     return this._store.fromStoreOrServiceWithRefresh$("CURRENT_USER_PROJECT", () => this.getCurrentUserProject(), [CURRENT_USER_PROJECT_CHANGED, CURRENT_USER_CHANGED]);
+  }
+
+  public get$(): Observable<Project> {
+    const func = () => this.get();
+    return this._store.fromStoreOrServiceWithRefresh$("PROJECTS", func, [PROJECT_CHANGED]);
   }
 
   public update(options: { project: Project}) {

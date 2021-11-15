@@ -10,7 +10,7 @@ import { map, switchMap } from 'rxjs/operators';
 export class PromotionsComponent {
 
   public vm$ = this._currentUserProject
-  .currentUserProject()
+  .currentUserProject$()
   .pipe(
     switchMap(project => this._promotionsByProjectId.getPromotionsByProjectId(project.projectId)),
     map(promotions => ({ promotions }))

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ALL, Dispatcher, NavigationService } from '@core';
+import { NavigationService } from '@core';
 import { Destroyable } from '@core/abstractions';
-import { AuthService } from '@core/services/auth.service';
+import { AuthStore } from '@core/store/entity-stores/auth.store';
 import { takeUntil, tap } from 'rxjs/operators';
 
 @Component({
@@ -18,22 +18,20 @@ export class LoginComponent extends Destroyable {
   });
 
   constructor(
-    private readonly _authService: AuthService,
+    private readonly _authStore: AuthStore,
     private readonly _navigationService: NavigationService,
-    private readonly _dispatcher: Dispatcher
   ) {
     super();
   }
 
   public tryToLogin(credentials:any) {
-    this._authService.tryToLogin({
+    this._authStore.tryToLogin({
       username: credentials.username,
       password: credentials.password
     })
     .pipe(
       takeUntil(this._destroyed$),
       tap(x => {
-        this._dispatcher.emit(ALL);
         this._navigationService.redirectPreLogin();
       }),
     ).subscribe();

@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
-import { NavigationService, Dispatcher } from '@core';
-import { AuthService } from '@core/services/auth.service';
-import { ToDoStore, CURRENT_USER_CHANGED, ALL } from '@core/store';
-import { PromotionStore, UserStore, ProjectStore } from '@core';
+import { PromotionStore, UserStore, ProjectStore, ToDoStore, NavigationService, AuthStore } from '@core';
 import { combineLatest } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
@@ -16,13 +13,13 @@ export class ProjectPanelComponent {
 
   public vm$ = combineLatest([
     this._currentUser.currentUser(),
-    this._currentUserProject.currentUserProject()
+    this._projectStore.currentUserProject$()
   ])
   .pipe(
     switchMap(([user, project]) => {
       return combineLatest([
         this._toDoStore.toDoByProjectName(user.currentProjectName),
-        this._promotionsByProjectId.getPromotionsByProjectId(project.projectId)
+        this._promotionStore.getPromotionsByProjectId(project.projectId)
       ])
       .pipe(
         map(([toDos, promotions]) => ({ toDos, user, project, promotions }))
@@ -33,16 +30,14 @@ export class ProjectPanelComponent {
   constructor(
     private readonly _currentUser: UserStore,
     private readonly _toDoStore: ToDoStore,
-    private readonly _currentUserProject: ProjectStore,
-    private readonly _authService: AuthService,
+    private readonly _projectStore: ProjectStore,
+    private readonly _authStore: AuthStore,
     private readonly _navigationService: NavigationService,
-    private readonly _promotionsByProjectId: PromotionStore,
-    private readonly _dispatcher: Dispatcher
+    private readonly _promotionStore: PromotionStore,
   ) { }
 
   public logout() {
-    this._authService.tryToLogout();
+    this._authStore.tryToLogout();
     this._navigationService.redirectToLogin();
-    this._dispatcher.emit(ALL);
   }
 }

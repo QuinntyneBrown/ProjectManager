@@ -20,7 +20,10 @@ export class ToDoListComponent  {
   .currentUser()
   .pipe(
     switchMap(user => this._toDoStore.toDoByProjectName(user.currentProjectName)),
-    map(toDos => ({ toDos }))
+    map(toDos => {
+
+      return { toDos };
+    })
   )
 
   constructor(

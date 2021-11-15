@@ -1,8 +1,8 @@
 import { Component, forwardRef } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { map, takeUntil } from 'rxjs/operators';
-import { Destroyable } from '@core';
-import { ProjectService } from '@api';
+import { Destroyable, ProjectStore } from '@core';
+
 
 @Component({
   selector: 'app-project-select',
@@ -18,7 +18,7 @@ import { ProjectService } from '@api';
 })
 export class ProjectSelectComponent extends Destroyable implements ControlValueAccessor  {
 
-  public vm$ = this._projectService
+  public vm$ = this._projectStore
   .get()
   .pipe(
     map(projects => ({ projects }))
@@ -29,7 +29,7 @@ export class ProjectSelectComponent extends Destroyable implements ControlValueA
   });
 
   constructor(
-    private readonly _projectService: ProjectService
+    private readonly _projectStore: ProjectStore
   ) {
     super();
   }

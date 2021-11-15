@@ -24,7 +24,6 @@ export class AuthGuard implements CanActivate {
 
       this._navigationService.lastPath = state.url;
       this._navigationService.redirectToLogin();
-
       return false;
   }
 }

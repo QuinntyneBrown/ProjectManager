@@ -4,7 +4,7 @@ import { ToDo, ToDoService } from "@api";
 import { BASE_URL } from "@core";
 import { Dispatcher, Store } from "@core/store";
 import { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
+import { map, tap } from "rxjs/operators";
 import { TO_DOS_CHANGED } from "../actions";
 
 
@@ -24,7 +24,12 @@ export class ToDoStore extends ToDoService {
   public toDoById(id:string): Observable<ToDo[]> { return this._store.fromStoreOrServiceWithRefresh$(`TO_DO_BY_ID_${id}`, () => this.getById({toDoId: id }), `TO_DO_BY_ID_${id}`); }
 
   public toDoByProjectName(projectName: string): Observable<ToDo[]> {
-    const func = () => this.getByProjectName(projectName);
+    const func = () => this.getByProjectName(projectName).pipe(
+      map(toDos => {
+
+        return toDos;
+      })
+    )
 
     return this._store.fromStoreOrServiceWithRefresh$<ToDo[]>(`TO_DOS_BY_PROJECT_NAME_${projectName}`, func, [TO_DOS_CHANGED]);
   }
@@ -32,7 +37,7 @@ export class ToDoStore extends ToDoService {
   public create(options: { toDo: ToDo }): Observable<{ toDo: ToDo }> {
     return super.create(options)
     .pipe(
-      tap(_ => this._dispatcher.emit([`TO_DO_BY_ID_${options.toDo.toDoId}`, TO_DOS_CHANGED]))
+      tap(_ => this._dispatcher.emit([TO_DOS_CHANGED]))
     )
   }
 

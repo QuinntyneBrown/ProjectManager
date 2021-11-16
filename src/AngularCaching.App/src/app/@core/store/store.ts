@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { exhaustMap, filter, finalize, shareReplay, startWith, switchMap, tap } from "rxjs/operators";
+import { exhaustMap, filter, shareReplay, startWith, tap } from "rxjs/operators";
 import { Dispatcher } from "./dispatcher";
 
 @Injectable({
@@ -8,7 +8,6 @@ import { Dispatcher } from "./dispatcher";
 })
 export class Store {
   private readonly _inner: Map<string, Observable<any>> = new Map();
-  private readonly _processing: Map<string, Observable<any>> = new Map();
   private readonly _invalidations: Map<string, string[]> = new Map();
 
   constructor(private readonly _dispatcher: Dispatcher) {

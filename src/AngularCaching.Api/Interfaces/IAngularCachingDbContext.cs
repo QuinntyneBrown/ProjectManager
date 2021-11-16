@@ -1,7 +1,7 @@
 using AngularCaching.Api.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace AngularCaching.Api.Interfaces
 {
@@ -12,7 +12,9 @@ namespace AngularCaching.Api.Interfaces
         DbSet<Project> Projects { get; }
         DbSet<User> Users { get; }
         DbSet<Promotion> Promotions { get; }
+        DbSet<DashboardCard> DashboardCards { get; }
+        DbSet<Dashboard> Dashboards { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
-
+        
     }
 }

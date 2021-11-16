@@ -14,6 +14,8 @@ namespace AngularCaching.Api.Data
         public DbSet<Project> Projects { get; private set; }
         public DbSet<User> Users { get; private set; }
         public DbSet<Promotion> Promotions { get; private set; }
+        public DbSet<DashboardCard> DashboardCards { get; private set; }
+        public DbSet<Dashboard> Dashboards { get; private set; }
         public AngularCachingDbContext(DbContextOptions options)
             : base(options)
         {

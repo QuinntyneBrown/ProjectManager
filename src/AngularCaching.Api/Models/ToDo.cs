@@ -17,10 +17,7 @@ namespace AngularCaching.Api.Models
             Apply(@event);
         }
 
-        private ToDo()
-        {
-
-        }
+        private ToDo() { }
 
         protected override void EnsureValidState()
         {
@@ -46,9 +43,6 @@ namespace AngularCaching.Api.Models
             Status = @event.Status;
         }
 
-        private void When(DeleteToDo @event)
-        {
-            IsDeleted = true;
-        }
+        private void When(DeleteToDo _) => IsDeleted = true;
     }
 }

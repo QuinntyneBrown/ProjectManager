@@ -20,6 +20,7 @@ const routes: Routes = [
       { path: 'edit-user', loadChildren: () => import('./edit-user/edit-user.module').then(m => m.EditUserModule) }
     ]
   },
+  { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) },
 
 ];
 

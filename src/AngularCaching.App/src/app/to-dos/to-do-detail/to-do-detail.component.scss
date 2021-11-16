@@ -6,12 +6,10 @@
     margin: 0 auto;
   }
 
-  mat-icon[appIconPill] {
-    border-radius: 50%;
-    border: 1px solid #DDD;
-    padding: 5px;
-    cursor: pointer;
-    margin-bottom: 45px;
+  .to-do-detail__actions {
+    height: 50px;
+    display: grid;
+    place-items: center start;
   }
 
   form {

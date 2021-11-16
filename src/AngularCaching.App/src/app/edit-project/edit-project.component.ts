@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Project } from '@api';
-import { Destroyable } from '@core';
-import { ProjectStore } from '@core';
+import { Destroyable, ProjectStore } from '@core';
 import { map, takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -16,7 +15,7 @@ export class EditProjectComponent extends Destroyable {
   .currentUserProject$()
   .pipe(
     map(project => {
-      let form = new FormGroup({
+      const form = new FormGroup({
         projectId: new FormControl(project.projectId,[Validators.required]),
         name: new FormControl(project.name,[Validators.required]),
         dueDate: new FormControl(project.dueDate, [Validators.required])

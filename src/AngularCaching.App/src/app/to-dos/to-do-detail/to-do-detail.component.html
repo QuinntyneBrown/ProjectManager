@@ -3,9 +3,16 @@
   <h2 *ngIf="!vm.form.value.toDoId">Create To Do</h2>
   <h2 *ngIf="vm.form.value.toDoId">Edit To Do</h2>
 
-  <mat-icon appIconPill *ngIf="vm.form.value.toDoId" (click)="complete(vm.form.value)">
-    done
-  </mat-icon>
+  <div class="to-do-detail__actions" *ngIf="vm.form.value.toDoId">
+    <mat-icon class="g-pill" *ngIf="vm.form.value.status != 'Complete'" (click)="complete(vm.form.value)">
+      done
+    </mat-icon>
+
+    <span class="g-pill" *ngIf="vm.form.value.status == 'Complete'">
+      Completed
+    </span>
+  </div>
+
 
   <form [formGroup]="vm.form">
     <mat-form-field class="g-form-field">
@@ -14,7 +21,7 @@
     </mat-form-field>
   </form>
 
-  <button mat-raised-button (click)="save(vm.form.value)">
+  <button class="g-button" (click)="save(vm.form.value)" [disabled]="!vm.form.valid || vm.form.pristine">
     Save
   </button>
 </div>

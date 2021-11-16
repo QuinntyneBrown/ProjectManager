@@ -23,7 +23,7 @@
   </form>
 
   <div>
-    <button mat-stroked-button (click)="tryToLogin(form.value)">
+    <button class="g-button" (click)="tryToLogin(form.value)" [disabled]="!form.valid">
       Login
     </button>
   </div>

@@ -22,7 +22,15 @@ namespace AngularCaching.Api.Controllers
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(CurrentUser.Response), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<CurrentUser.Response>> GetCurrent()
-            => await _mediator.Send(new CurrentUser.Request());
+        {
+            try
+            {
+                return await _mediator.Send(new CurrentUser.Request());
+            }
+            catch { }
+
+            return new UnauthorizedResult();
+        }
 
         [HttpGet("{userId}", Name = "GetUserByIdRoute")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]

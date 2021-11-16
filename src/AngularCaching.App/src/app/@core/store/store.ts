@@ -1,31 +1,35 @@
 import { Injectable } from "@angular/core";
-import { Action } from "@core/store/actions";
 import { Observable } from "rxjs";
-import { exhaustMap, filter, shareReplay, startWith, tap } from "rxjs/operators";
+import { exhaustMap, filter, finalize, shareReplay, startWith, switchMap, tap } from "rxjs/operators";
 import { Dispatcher } from "./dispatcher";
-
 
 @Injectable({
   providedIn: "root"
 })
 export class Store {
-  private readonly _inner: Map<Action, Observable<any>> = new Map();
-  private readonly _actionKeysMap: Map<Action, string[]> = new Map();
+  private readonly _inner: Map<string, Observable<any>> = new Map();
+  private readonly _processing: Map<string, Observable<any>> = new Map();
+  private readonly _invalidations: Map<string, string[]> = new Map();
 
-  constructor(
-    private readonly _dispatcher: Dispatcher
-    ) {
+  constructor(private readonly _dispatcher: Dispatcher) {
     _dispatcher.invalidateStream$
       .pipe(
         tap(action => {
-          const actions: string[] = Array.isArray(action) ? action as string[] : [action as string];
-          for(var i = 0; i < actions.length; i++) {
-            const keys = this._actionKeysMap.get(actions[i]);
-            for(let j = 0; j < keys.length; j++) {
-              this._inner.set(keys[j], null);
-            }
+          let actions: string[] = Array.isArray(action) ? (action as string[]) : [action as string];
+
+          let aggregateKeys = [];
+
+          for (var i = 0; i < actions.length; i++) {
+            aggregateKeys = aggregateKeys.concat(this._invalidations.get(actions[i]));
           }
-          actions.forEach(a => _dispatcher.emitRefresh(a));
+
+          for (var i = 0; i < aggregateKeys.length; i++) {
+            this._inner.set(aggregateKeys[i], null);
+          }
+
+          for (var i = 0; i < actions.length; i++) {
+            _dispatcher.emitRefresh(actions[i]);
+          }
         })
       )
       .subscribe();
@@ -38,22 +42,26 @@ export class Store {
     return this._inner.get(key) as Observable<T>;
   }
 
-  public fromStoreOrServiceWithRefresh$<T>(key: string, func: any, action: string | string[]): Observable<T> {
+  public fromStoreOrServiceWithRefresh$<T>(key: string, func: any, action: string | string[] = []): Observable<T> {
     action = Array.isArray(action) ? action : [action];
-    action.forEach(a => this._register(key,a));
+
+    for (var i = 0; i < action.length; i++) {
+      this._register(key, action[i]);
+    }
+
     return this._dispatcher.refreshStream$.pipe(
-      filter(x => (action as Action[]).indexOf(x) > -1),
+      filter(x => (action as string[]).indexOf(x) > -1),
       startWith(action[0]),
       exhaustMap(_ => this._fromStoreOrService$<T>(key, func))
     );
   }
 
-  private _register(key: string, action: Action) {
-    var keys = this._actionKeysMap.get(action);
+  private _register(key: string, invalidateOn: string) {
+    var keys = this._invalidations.get(invalidateOn);
     keys = keys || [];
     if (keys.filter(x => x == key)[0] == null) {
       keys.push(key);
     }
-    this._actionKeysMap.set(action, keys);
+    this._invalidations.set(invalidateOn, keys);
   }
 }

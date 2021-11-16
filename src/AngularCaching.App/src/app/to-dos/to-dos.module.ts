@@ -7,9 +7,7 @@ import { ToDoDetailComponent } from './to-do-detail/to-do-detail.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { IconPillModule } from '@shared/icon-pill/icon-pill.module';
 
 
 @NgModule({
@@ -24,9 +22,7 @@ import { IconPillModule } from '@shared/icon-pill/icon-pill.module';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    IconPillModule
+    MatIconModule
   ]
 })
 export class ToDosModule { }

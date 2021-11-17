@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { guid } from "@core/utilities/guid";
 import { Observable } from "rxjs";
 import { exhaustMap, filter, shareReplay, startWith, tap } from "rxjs/operators";
 import { Dispatcher } from "./dispatcher";
@@ -9,10 +10,17 @@ import { Dispatcher } from "./dispatcher";
 export class Store {
   private readonly _inner: Map<string, Observable<any>> = new Map();
   private readonly _invalidations: Map<string, string[]> = new Map();
+  private readonly _id = guid();
 
   constructor(private readonly _dispatcher: Dispatcher) {
-    _dispatcher.invalidateStream$
+    _dispatcher.actions$
       .pipe(
+        filter(x => {
+          if(!Array.isArray(x) && x.indexOf(this._id) > -1) {
+            return false;
+          }
+          return true;
+        }),
         tap(action => {
           let actions: string[] = Array.isArray(action) ? (action as string[]) : [action as string];
 
@@ -27,7 +35,7 @@ export class Store {
           }
 
           for (var i = 0; i < actions.length; i++) {
-            _dispatcher.emitRefresh(actions[i]);
+            _dispatcher.emit(`${actions[i]}:${this._id}`);
           }
         })
       )
@@ -48,8 +56,10 @@ export class Store {
       this._register(key, action[i]);
     }
 
-    return this._dispatcher.refreshStream$.pipe(
-      filter(x => (action as string[]).indexOf(x) > -1),
+    return this._dispatcher.actions$.pipe(
+      filter((x:string) => {
+        return !Array.isArray(x) && (action as string[]).map(j => `${j}:${this._id}`).indexOf(x) > -1;
+      }),
       startWith(action[0]),
       exhaustMap(_ => this._fromStoreOrService$<T>(key, func))
     );

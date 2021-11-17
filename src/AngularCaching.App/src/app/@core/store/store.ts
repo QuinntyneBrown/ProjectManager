@@ -1,17 +1,8 @@
 import { Observable, Subject } from "rxjs";
 import { exhaustMap, filter, shareReplay, startWith, tap } from "rxjs/operators";
+import { v4 as uuidv4 } from 'uuid';
 
 export type Action = string;
-
-export function guid() {
-  function s4() {
-      return Math.floor((1 + Math.random()) * 0x10000)
-          .toString(16)
-          .substring(1);
-  }
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-      s4() + '-' + s4() + s4() + s4();
-}
 
 const dispatcher: Subject<Action | Action[]> = new Subject();
 
@@ -21,7 +12,7 @@ export const store =  <T extends AnyConstructor<object>>(base : T) =>
 class Store extends base {
   private readonly _inner: Map<string, Observable<any>> = new Map();
   private readonly _invalidations: Map<string, string[]> = new Map();
-  private readonly _id = guid();
+  private readonly _id = uuidv4();
 
   public refresh(action: Action | Action[]) {
     dispatcher.next(action);
@@ -60,7 +51,7 @@ class Store extends base {
 
   public from$<T>(func: any, action: string | string[] = []): Observable<T> {
     if(Array.isArray(action) && action.length ==0) {
-      action.push(guid())
+      action.push(uuidv4())
     }
     const actions = Array.isArray(action) ? action : [action];
     const key = actions[0];

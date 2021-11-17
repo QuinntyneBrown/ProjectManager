@@ -19,17 +19,13 @@ export class Store {
         filter(x => !this._isRefreshAction(x)),
         tap(action => {
           let actions: string[] = Array.isArray(action) ? (action as string[]) : [action as string];
-
           for (var i = 0; i < actions.length; i++) {
             const keys = this._invalidations.get(actions[i]);
             for(let j = 0; j < keys.length; j++) {
               this._inner.set(keys[j], null);
             }
           }
-
-          for (var i = 0; i < actions.length; i++) {
-            _dispatcher.emit(`${actions[i]}:${this._id}`);
-          }
+          actions.forEach(a => _dispatcher.emit(`${a}:${this._id}`))
         })
       )
       .subscribe();
@@ -47,16 +43,10 @@ export class Store {
   }
 
   public fromStoreOrServiceWithRefresh$<T>(key: string, func: any, action: string | string[] = []): Observable<T> {
-    action = Array.isArray(action) ? action : [action];
-
-    for (var i = 0; i < action.length; i++) {
-      this._register(key, action[i]);
-    }
-
+    let actions = Array.isArray(action) ? action : [action];
+    actions.forEach(a => this._register(key,a));
     return this._dispatcher.actions$.pipe(
-      filter((x:string) => {
-        return this._isRefreshAction(x) && (action as string[]).map(j => `${j}:${this._id}`).indexOf(x) > -1;
-      }),
+      filter((x:string) => this._isRefreshAction(x) && actions.map(j => `${j}:${this._id}`).indexOf(x) > -1),
       startWith(action[0]),
       exhaustMap(_ => this._fromStoreOrService$<T>(key, func))
     );

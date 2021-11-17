@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { guid } from "@core/utilities/guid";
 import { Observable } from "rxjs";
 import { exhaustMap, filter, shareReplay, startWith, tap } from "rxjs/operators";
+import { Action } from "./actions";
 import { Dispatcher } from "./dispatcher";
 
 @Injectable({
@@ -15,23 +16,15 @@ export class Store {
   constructor(private readonly _dispatcher: Dispatcher) {
     _dispatcher.actions$
       .pipe(
-        filter(x => {
-          if(!Array.isArray(x) && x.indexOf(this._id) > -1) {
-            return false;
-          }
-          return true;
-        }),
+        filter(x => !this._isRefreshAction(x)),
         tap(action => {
           let actions: string[] = Array.isArray(action) ? (action as string[]) : [action as string];
 
-          let aggregateKeys = [];
-
           for (var i = 0; i < actions.length; i++) {
-            aggregateKeys = aggregateKeys.concat(this._invalidations.get(actions[i]));
-          }
-
-          for (var i = 0; i < aggregateKeys.length; i++) {
-            this._inner.set(aggregateKeys[i], null);
+            const keys = this._invalidations.get(actions[i]);
+            for(let j = 0; j < keys.length; j++) {
+              this._inner.set(keys[j], null);
+            }
           }
 
           for (var i = 0; i < actions.length; i++) {
@@ -40,6 +33,10 @@ export class Store {
         })
       )
       .subscribe();
+  }
+
+  private _isRefreshAction(action:Action[] | Action):boolean {
+    return !Array.isArray(action) && action.indexOf(this._id) > -1
   }
 
   private _fromStoreOrService$<T>(key: string, func: { (): Observable<T> }): Observable<T> {
@@ -58,19 +55,19 @@ export class Store {
 
     return this._dispatcher.actions$.pipe(
       filter((x:string) => {
-        return !Array.isArray(x) && (action as string[]).map(j => `${j}:${this._id}`).indexOf(x) > -1;
+        return this._isRefreshAction(x) && (action as string[]).map(j => `${j}:${this._id}`).indexOf(x) > -1;
       }),
       startWith(action[0]),
       exhaustMap(_ => this._fromStoreOrService$<T>(key, func))
     );
   }
 
-  private _register(key: string, invalidateOn: string) {
-    var keys = this._invalidations.get(invalidateOn);
+  private _register(key: string, action: Action) {
+    var keys = this._invalidations.get(action);
     keys = keys || [];
     if (keys.filter(x => x == key)[0] == null) {
       keys.push(key);
     }
-    this._invalidations.set(invalidateOn, keys);
+    this._invalidations.set(action, keys);
   }
 }

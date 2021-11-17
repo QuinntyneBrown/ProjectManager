@@ -18,7 +18,7 @@ export class Store {
       .pipe(
         filter(x => !this._isRefreshAction(x)),
         tap(action => {
-          let actions: string[] = Array.isArray(action) ? (action as string[]) : [action as string];
+          let actions: Action[] = Array.isArray(action) ? (action as Action[]) : [action as Action];
           for (var i = 0; i < actions.length; i++) {
             const keys = this._invalidations.get(actions[i]);
             for(let j = 0; j < keys.length; j++) {

@@ -1,9 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { Project, ProjectService } from "@api";
-import { BASE_URL, storeMixin } from "@core";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
+import { storeMixin } from "../store";
+import { BASE_URL } from "@core/constants";
+
 
 @Injectable({
   providedIn: "root"
@@ -16,12 +18,12 @@ export class ProjectStore extends storeMixin(ProjectService) {
     super(_baseUrl, _httpClient)
   }
 
-  public currentUserProject$(): Observable<Project> {
-    return super.from$(() => this.getCurrentUserProject(), ["CURRENT_USER_PROJECT", "CURRENT_USER"]);
+  public getCurrentUserProject(): Observable<Project> {
+    return super.from$(() => super.getCurrentUserProject(), ["CURRENT_USER_PROJECT", "CURRENT_USER"]);
   }
 
-  public get$(): Observable<Project> {
-    return super.from$(() => this.get(), ["PROJECTS"]);
+  public get(): Observable<Project[]> {
+    return super.from$(() => super.get(), ["PROJECTS"]);
   }
 
   public update(options: { project: Project}) {

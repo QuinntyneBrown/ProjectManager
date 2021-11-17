@@ -2,8 +2,9 @@ import { Inject, Injectable } from "@angular/core";
 import { User, UserService } from "@api";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { BASE_URL, storeMixin } from "@core";
 import { tap } from "rxjs/operators";
+import { storeMixin } from "../store";
+import { BASE_URL } from "@core/constants";
 
 @Injectable({
   providedIn: "root"
@@ -16,7 +17,7 @@ export class UserStore extends storeMixin(UserService) {
     super(_baseUrl, _httpClient)
   }
 
-  public currentUser(): Observable<User> {
+  public getCurrent(): Observable<User> {
     return super.from$(() => super.getCurrent(), "CURRENT_USER");
   }
 

@@ -16,7 +16,7 @@ export class EditUserComponent extends Destroyable {
 
   private _refresh$: BehaviorSubject<void> = new BehaviorSubject(null);
 
-  public vm$ = this._userStore.currentUser()
+  public vm$ = this._userStore.getCurrent()
   .pipe(
     switchMap(user => this._refresh$.pipe(map(_ => user))),
     map(user => {

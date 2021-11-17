@@ -10,16 +10,16 @@ import { map, switchMap } from 'rxjs/operators';
 })
 export class PromotionsComponent {
 
-  public vm$ = this._currentUserProject
-  .currentUserProject$()
+  public vm$ = this._projectStore
+  .getCurrentUserProject()
   .pipe(
-    switchMap(project => this._promotionsByProjectId.getPromotionsByProjectId(project.projectId)),
+    switchMap(project => this._promotionStore.getPromotionsByProjectId(project.projectId)),
     map(promotions => ({ promotions }))
   );
 
   constructor(
-    private readonly _currentUserProject: ProjectStore,
-    private readonly _promotionsByProjectId: PromotionStore
+    private readonly _projectStore: ProjectStore,
+    private readonly _promotionStore: PromotionStore
   ) {
 
   }

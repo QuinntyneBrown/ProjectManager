@@ -1,7 +1,8 @@
 import { Inject, Injectable } from "@angular/core";
 import { PromotionService, ToDo } from "@api";
 import { Observable } from "rxjs";
-import { BASE_URL, storeMixin } from "@core";
+import { storeMixin } from "../store";
+import { BASE_URL } from "@core/constants";
 import { HttpClient } from "@angular/common/http";
 
 @Injectable({

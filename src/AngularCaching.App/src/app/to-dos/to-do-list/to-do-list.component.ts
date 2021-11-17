@@ -18,7 +18,7 @@ export class ToDoListComponent  {
   })
 
   public vm$ = this._userStore
-  .currentUser()
+  .getCurrent()
   .pipe(
     switchMap(user => this._toDoStore.toDoByProjectName(user.currentProjectName)),
     map(toDos => {

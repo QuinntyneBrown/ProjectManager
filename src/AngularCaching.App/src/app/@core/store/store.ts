@@ -29,17 +29,13 @@ class Store extends base {
 
   constructor(...args: any[]) {
     super(...args);
-    this.subscribeToDispatcher();
-  }
-
-  public subscribeToDispatcher() {
     dispatcher
     .pipe(
       filter(x => !this._isRefreshAction(x)),
       tap(action => {
         let actions: Action[] = Array.isArray(action) ? (action as Action[]) : [action as Action];
         for (var i = 0; i < actions.length; i++) {
-          const keys = this._invalidations.get(actions[i]);
+          const keys = this._invalidations.get(actions[i]) || [];
           for(let j = 0; j < keys.length; j++) {
             this._inner.set(keys[j], null);
           }
@@ -49,6 +45,7 @@ class Store extends base {
     )
     .subscribe();
   }
+
 
   private _isRefreshAction(action:Action[] | Action):boolean {
     return !Array.isArray(action) && action.indexOf(this._id) > -1

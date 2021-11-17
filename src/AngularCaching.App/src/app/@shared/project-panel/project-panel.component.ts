@@ -13,8 +13,8 @@ import { map, switchMap } from 'rxjs/operators';
 export class ProjectPanelComponent {
 
   public vm$ = combineLatest([
-    this._userStore.currentUser(),
-    this._projectStore.currentUserProject$()
+    this._userStore.getCurrent(),
+    this._projectStore.getCurrentUserProject()
   ])
   .pipe(
     switchMap(([user, project]) => {

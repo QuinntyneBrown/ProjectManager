@@ -1,9 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { ToDo, ToDoService } from "@api";
-import { BASE_URL, storeMixin } from "@core";
+import { storeMixin } from "../store";
 import { Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
+import { BASE_URL } from "@core/constants";
 
 
 @Injectable({
@@ -17,7 +18,7 @@ export class ToDoStore extends storeMixin(ToDoService) {
     super(_baseUrl, _httpClient)
   }
 
-  public toDoById(id:string): Observable<ToDo[]> { return super.from$(() => this.getById({toDoId: id }), `TO_DO_BY_ID_${id}`); }
+  public toDoById(id:string): Observable<ToDo[]> { return super.from$(() => super.getById({toDoId: id }), `TO_DO_BY_ID_${id}`); }
 
   public toDoByProjectName(projectName: string): Observable<ToDo[]> {
     const func = () => super.getByProjectName(projectName).pipe(

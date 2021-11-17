@@ -12,7 +12,7 @@ import { map, takeUntil } from 'rxjs/operators';
 })
 export class EditProjectComponent extends Destroyable {
   public vm$  = this._projectStore
-  .currentUserProject$()
+  .getCurrentUserProject()
   .pipe(
     map(project => {
       const form = new FormGroup({

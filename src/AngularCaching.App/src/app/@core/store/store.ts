@@ -35,20 +35,24 @@ export class Store {
     return !Array.isArray(action) && action.indexOf(this._id) > -1
   }
 
-  private _fromStoreOrService$<T>(key: string, func: { (): Observable<T> }): Observable<T> {
+  private _from<T>(key: string, func: { (): Observable<T> }): Observable<T> {
     if (!this._inner.get(key)) {
       this._inner.set(key, func().pipe(shareReplay(1)));
     }
     return this._inner.get(key) as Observable<T>;
   }
 
-  public fromStoreOrServiceWithRefresh$<T>(key: string, func: any, action: string | string[] = []): Observable<T> {
-    let actions = Array.isArray(action) ? action : [action];
+  public from$<T>(func: any, action: string | string[] = []): Observable<T> {
+    if(Array.isArray(action) && action.length ==0) {
+      action.push(guid())
+    }
+    const actions = Array.isArray(action) ? action : [action];
+    const key = actions[0];
     actions.forEach(a => this._register(key,a));
     return this._dispatcher.actions$.pipe(
       filter((x:string) => this._isRefreshAction(x) && actions.map(j => `${j}:${this._id}`).indexOf(x) > -1),
       startWith(action[0]),
-      exhaustMap(_ => this._fromStoreOrService$<T>(key, func))
+      exhaustMap(_ => this._from<T>(key, func))
     );
   }
 

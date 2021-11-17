@@ -1,7 +1,7 @@
 import { Inject, Injectable } from "@angular/core";
 import { User, UserService } from "@api";
 import { Observable } from "rxjs";
-import { CURRENT_USER_CHANGED } from "../actions";
+import { CURRENT_USER as CURRENT_USER } from "../actions";
 import { Dispatcher, Store } from "@core/store";
 import { HttpClient } from "@angular/common/http";
 import { BASE_URL } from "@core";
@@ -21,13 +21,13 @@ export class UserStore extends UserService {
   }
 
   public currentUser(): Observable<User> {
-    return this._store.fromStoreOrServiceWithRefresh$("CURRENT_USER", () => this.getCurrent(), CURRENT_USER_CHANGED);
+    return this._store.from$(() => this.getCurrent(), CURRENT_USER);
   }
 
   public update (options: { user: User }): Observable<{ user: User}> {
     return super.update(options)
     .pipe(
-      tap(_ => this._dispatcher.emit(CURRENT_USER_CHANGED))
+      tap(_ => this._dispatcher.emit(CURRENT_USER))
     );
   }
 }

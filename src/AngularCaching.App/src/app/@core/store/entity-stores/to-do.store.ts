@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { ToDo, ToDoService } from "@api";
-import { storeMixin } from "../store";
+import { store } from "../store";
 import { Observable } from "rxjs";
 import { map, tap } from "rxjs/operators";
 import { BASE_URL } from "@core/constants";
@@ -10,7 +10,7 @@ import { BASE_URL } from "@core/constants";
 @Injectable({
   providedIn: "root"
 })
-export class ToDoStore extends storeMixin(ToDoService) {
+export class ToDoStore extends store(ToDoService) {
   constructor(
     @Inject(BASE_URL) _baseUrl:string,
     _httpClient: HttpClient

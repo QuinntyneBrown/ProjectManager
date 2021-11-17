@@ -1,14 +1,14 @@
 import { Inject, Injectable } from "@angular/core";
 import { PromotionService, ToDo } from "@api";
 import { Observable } from "rxjs";
-import { storeMixin } from "../store";
+import { store } from "../store";
 import { BASE_URL } from "@core/constants";
 import { HttpClient } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root"
 })
-export class PromotionStore extends storeMixin(PromotionService) {
+export class PromotionStore extends store(PromotionService) {
   constructor(
     @Inject(BASE_URL) _baseUrl:string,
     _httpClient: HttpClient

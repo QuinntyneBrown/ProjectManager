@@ -3,14 +3,14 @@ import { Inject, Injectable } from "@angular/core";
 import { Project, ProjectService } from "@api";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
-import { storeMixin } from "../store";
+import { store } from "../store";
 import { BASE_URL } from "@core/constants";
 
 
 @Injectable({
   providedIn: "root"
 })
-export class ProjectStore extends storeMixin(ProjectService) {
+export class ProjectStore extends store(ProjectService) {
   constructor(
     @Inject(BASE_URL) _baseUrl:string,
     _httpClient: HttpClient

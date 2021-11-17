@@ -17,7 +17,7 @@ const dispatcher: Subject<Action | Action[]> = new Subject();
 
 export type AnyConstructor<A = object> = new (...input: any[]) => A
 
-export const storeMixin =  <T extends AnyConstructor<object>>(base : T) =>
+export const store =  <T extends AnyConstructor<object>>(base : T) =>
 class Store extends base {
   private readonly _inner: Map<string, Observable<any>> = new Map();
   private readonly _invalidations: Map<string, string[]> = new Map();

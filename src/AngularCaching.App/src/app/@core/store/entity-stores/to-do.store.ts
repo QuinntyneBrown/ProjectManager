@@ -18,7 +18,7 @@ export class ToDoStore extends store(ToDoService) {
     super(_baseUrl, _httpClient)
   }
 
-  public toDoById(id:string): Observable<ToDo[]> { return super.from$(() => super.getById({toDoId: id }), `TO_DO_BY_ID_${id}`); }
+  public toDoById(id:string): Observable<ToDo> { return super.from$(() => super.getById({toDoId: id }), `TO_DO_BY_ID_${id}`); }
 
   public toDoByProjectName(projectName: string): Observable<ToDo[]> {
     const func = () => super.getByProjectName(projectName).pipe(

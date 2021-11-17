@@ -6,7 +6,7 @@ export type Action = string;
 
 const dispatcher: Subject<Action | Action[]> = new Subject();
 
-export type AnyConstructor<A = object> = new (...input: any[]) => A
+export type AnyConstructor<A = object> = new (...args: any[]) => A
 
 export const store =  <T extends AnyConstructor<object>>(base : T) =>
 class Store extends base {
@@ -49,7 +49,7 @@ class Store extends base {
     return this._inner.get(key) as Observable<T>;
   }
 
-  public from$<T>(func: any, action: string | string[] = []): Observable<T> {
+  public from$<T>(func: {(): Observable<T>}, action: Action | Action[] = []): Observable<T> {
     if(Array.isArray(action) && action.length ==0) {
       action.push(uuidv4())
     }

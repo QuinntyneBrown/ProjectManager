@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@angular/core";
-import { PromotionService, ToDo } from "@api";
+import { Promotion, PromotionService, ToDo } from "@api";
 import { Observable } from "rxjs";
 import { store } from "../store";
 import { BASE_URL } from "@core/constants";
@@ -17,5 +17,5 @@ export class PromotionStore extends store(PromotionService) {
   }
 
 
-  public getPromotionsByProjectId(projectId: string): Observable<ToDo[]> { return super.from$(() => super.getByProjectId({ projectId }), [`PROMOTIONS_BY_PROJECT_ID_${projectId}`, "CURRENT_USER_PROJECT", "TO_DOS"]); }
+  public getPromotionsByProjectId(projectId: string): Observable<Promotion[]> { return super.from$(() => super.getByProjectId({ projectId }), [`PROMOTIONS_BY_PROJECT_ID_${projectId}`, "CURRENT_USER_PROJECT", "TO_DOS"]); }
 }

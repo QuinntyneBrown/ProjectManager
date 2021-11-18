@@ -14,7 +14,7 @@ class Store extends base {
   private readonly _invalidations: Map<string, string[]> = new Map();
   private readonly _id = uuidv4();
 
-  public refresh(action: Action | Action[]) { dispatcher.next(action); }
+  protected refresh(action: Action | Action[]) { dispatcher.next(action); }
 
   constructor(...args: any[]) {
     super(...args);
@@ -34,7 +34,6 @@ class Store extends base {
     )
     .subscribe();
   }
-
 
   private _isRefreshAction(action:Action[] | Action):boolean {
     return !Array.isArray(action) && action.indexOf(this._id) > -1
@@ -70,7 +69,7 @@ class Store extends base {
     this._invalidations.set(action, keys);
   }
 
-  protected withRefresh<T>(observable: Observable<T>, actions:string | string[]): Observable<T> {
+  protected withRefresh<T>(observable: Observable<T>, actions:Action | Action[]): Observable<T> {
     return observable.pipe(
       tap(_ => this.refresh(actions))
     );

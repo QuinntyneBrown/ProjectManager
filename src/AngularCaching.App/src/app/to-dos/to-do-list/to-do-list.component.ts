@@ -20,11 +20,8 @@ export class ToDoListComponent  {
   public vm$ = this._userStore
   .getCurrent()
   .pipe(
-    switchMap(user => this._toDoStore.toDoByProjectName(user.currentProjectName)),
-    map(toDos => {
-
-      return { toDos };
-    })
+    switchMap(user => this._toDoStore.toDosByProjectName(user.currentProjectName)),
+    map(toDos => ({ toDos }))
   )
 
   constructor(

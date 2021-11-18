@@ -3,7 +3,7 @@ import { Inject, Injectable } from "@angular/core";
 import { ToDo, ToDoService } from "@api";
 import { store } from "../store";
 import { Observable } from "rxjs";
-import { map, tap } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { BASE_URL } from "@core/constants";
 
 
@@ -20,27 +20,22 @@ export class ToDoStore extends store(ToDoService) {
 
   public toDoById(id:string): Observable<ToDo> { return super.from$(() => super.getById({toDoId: id }), `TO_DO_BY_ID_${id}`); }
 
-  public toDoByProjectName(projectName: string): Observable<ToDo[]> {
+  public toDosByProjectName(projectName: string): Observable<ToDo[]> {
     const func = () => super.getByProjectName(projectName).pipe(
-      map(toDos => {
-        return toDos;
-      })
+      map(toDos => toDos)
     )
-
     return super.from$<ToDo[]>(func, [`TO_DOS_BY_PROJECT_NAME_${projectName}`, "TO_DOS"]);
   }
 
   public create(options: { toDo: ToDo }): Observable<{ toDo: ToDo }> {
-    return super.create(options)
-    .pipe(
-      tap(_ => super.refresh(["TO_DOS"]))
-    )
+    return super.withRefresh(super.create(options),["TO_DOS"]);
   }
 
   public update(options: { toDo: ToDo }): Observable<{ toDo: ToDo }> {
-    return super.update(options)
-    .pipe(
-      tap(_ => super.refresh([`TO_DO_BY_ID_${options.toDo.toDoId}`, "TO_DOS"]))
-    )
+    return super.withRefresh(super.update(options),[`TO_DO_BY_ID_${options.toDo.toDoId}`, "TO_DOS"]);
+  }
+
+  public delete(options: { toDo: ToDo }): Observable<void> {
+    return super.withRefresh(super.remove(options),["TO_DOS"]);
   }
 }

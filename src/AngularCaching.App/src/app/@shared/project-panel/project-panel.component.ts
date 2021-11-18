@@ -19,7 +19,7 @@ export class ProjectPanelComponent {
   .pipe(
     switchMap(([user, project]) => {
       return combineLatest([
-        this._toDoStore.toDoByProjectName(user.currentProjectName),
+        this._toDoStore.toDosByProjectName(user.currentProjectName),
         this._promotionStore.getPromotionsByProjectId(project.projectId)
       ])
       .pipe(

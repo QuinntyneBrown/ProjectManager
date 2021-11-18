@@ -2,7 +2,6 @@ import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { Project, ProjectService } from "@api";
 import { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
 import { store } from "../store";
 import { BASE_URL } from "@core/constants";
 
@@ -27,9 +26,6 @@ export class ProjectStore extends store(ProjectService) {
   }
 
   public update(options: { project: Project}) {
-    return super.update(options)
-    .pipe(
-      tap(_ => super.refresh("CURRENT_USER_PROJECT"))
-    );
+    return super.withRefresh(super.update(options),["CURRENT_USER_PROJECT"]);
   }
 }

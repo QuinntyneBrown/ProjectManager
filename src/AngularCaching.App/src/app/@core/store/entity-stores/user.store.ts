@@ -2,7 +2,6 @@ import { Inject, Injectable } from "@angular/core";
 import { User, UserService } from "@api";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { tap } from "rxjs/operators";
 import { store } from "../store";
 import { BASE_URL } from "@core/constants";
 
@@ -22,9 +21,6 @@ export class UserStore extends store(UserService) {
   }
 
   public update (options: { user: User }): Observable<{ user: User}> {
-    return super.update(options)
-    .pipe(
-      tap(_ => super.refresh("CURRENT_USER"))
-    );
+    return super.withRefresh(super.update(options),["CURRENT_USER"]);
   }
 }

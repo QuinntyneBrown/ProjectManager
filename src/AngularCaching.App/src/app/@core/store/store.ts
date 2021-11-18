@@ -14,9 +14,7 @@ class Store extends base {
   private readonly _invalidations: Map<string, string[]> = new Map();
   private readonly _id = uuidv4();
 
-  public refresh(action: Action | Action[]) {
-    dispatcher.next(action);
-  }
+  public refresh(action: Action | Action[]) { dispatcher.next(action); }
 
   constructor(...args: any[]) {
     super(...args);
@@ -50,7 +48,7 @@ class Store extends base {
   }
 
   public from$<T>(func: {(): Observable<T>}, action: Action | Action[] = []): Observable<T> {
-    if(Array.isArray(action) && action.length ==0) {
+    if(Array.isArray(action) && action.length == 0) {
       action.push(uuidv4())
     }
     const actions = Array.isArray(action) ? action : [action];
@@ -70,5 +68,11 @@ class Store extends base {
       keys.push(key);
     }
     this._invalidations.set(action, keys);
+  }
+
+  protected withRefresh<T>(observable: Observable<T>, actions:string | string[]): Observable<T> {
+    return observable.pipe(
+      tap(_ => this.refresh(actions))
+    );
   }
 }

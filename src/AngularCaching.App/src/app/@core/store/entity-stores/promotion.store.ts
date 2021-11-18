@@ -16,6 +16,5 @@ export class PromotionStore extends store(PromotionService) {
     super(_baseUrl, _httpClient)
   }
 
-
   public getPromotionsByProjectId(projectId: string): Observable<Promotion[]> { return super.from$(() => super.getByProjectId({ projectId }), [`PROMOTIONS_BY_PROJECT_ID_${projectId}`, "CURRENT_USER_PROJECT", "TO_DOS"]); }
 }

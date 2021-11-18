@@ -32,18 +32,5 @@ namespace AngularCaching.Api.Core
                 Nike
             };
         }
-
-        public static class Projects
-        {
-            public const string ChristmasShopping = "Christmas Shopping";
-            public const string HolidaySeasonToneUp = "Holiday Season Tone Up";
-
-            public static List<string> All = new()
-            {
-                ChristmasShopping,
-                HolidaySeasonToneUp
-            };
-        }
-
     }
 }

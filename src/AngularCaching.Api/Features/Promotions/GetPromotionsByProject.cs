@@ -40,14 +40,15 @@ namespace AngularCaching.Api.Features
 
                 var promotions = new HashSet<Promotion>();
 
-                if (project.Name == Constants.Projects.ChristmasShopping)
+                if (project.Name.Contains("Christmas"))
                 {
                     foreach (var p in _context.Promotions.Where(x => x.Tags.Any(x => x.Name == Constants.PromotionTags.Christmas)))
                     {
                         promotions.Add(p);
                     }
                 }
-                else
+
+                if (project.Name.Contains("Tone Up"))
                 {
                     foreach (var p in _context.Promotions.Where(x => x.Tags.Any(x => x.Name == Constants.PromotionTags.HolidaySeasonToneUp)))
                     {

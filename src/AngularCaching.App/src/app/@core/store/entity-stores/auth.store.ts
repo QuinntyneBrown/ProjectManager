@@ -1,14 +1,17 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
-import { BASE_URL, LocalStorageService } from "@core";
+import { BASE_URL } from "@core/constants";
 import { AuthService } from "@core/services/auth.service";
-import { tap } from "rxjs/operators";
+import { LocalStorageService } from "@core/services/local-storage.service";
+import { of } from "rxjs";
+import { LogoutAction } from "../actions";
+import { store } from "../store";
 
 
 @Injectable({
   providedIn:"root"
 })
-export class AuthStore extends AuthService {
+export class AuthStore extends store(AuthService) {
   constructor(
     localStorageService: LocalStorageService,
     @Inject(BASE_URL) _baseUrl:string,
@@ -18,7 +21,8 @@ export class AuthStore extends AuthService {
   }
 
   public tryToLogout() {
-    super.tryToLogout();
+    this.withRefresh(of(super.tryToLogout()),[LogoutAction])
+      .subscribe();
   }
 
   public tryToLogin(options: { username: string, password: string }) {

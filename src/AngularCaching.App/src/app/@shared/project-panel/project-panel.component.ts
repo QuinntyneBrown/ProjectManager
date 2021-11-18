@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { PromotionStore, UserStore, ProjectStore, ToDoStore, NavigationService, AuthStore } from '@core';
+import { PromotionStore, UserStore, ProjectStore, ToDoStore, NavigationService, AuthStore, Destroyable } from '@core';
 import { combineLatest } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
@@ -10,7 +10,7 @@ import { map, switchMap } from 'rxjs/operators';
   styleUrls: ['./project-panel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProjectPanelComponent {
+export class ProjectPanelComponent extends Destroyable {
 
   public vm$ = combineLatest([
     this._userStore.getCurrent(),
@@ -35,7 +35,9 @@ export class ProjectPanelComponent {
     private readonly _authStore: AuthStore,
     private readonly _navigationService: NavigationService,
     private readonly _promotionStore: PromotionStore,
-  ) { }
+  ) {
+    super();
+  }
 
   public logout() {
     this._authStore.tryToLogout();

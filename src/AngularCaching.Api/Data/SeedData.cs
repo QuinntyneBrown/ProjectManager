@@ -3,37 +3,35 @@ using AngularCaching.Api.DomainEvents;
 using AngularCaching.Api.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AngularCaching.Api.Data
 {
     public static class SeedData
     {
-
-
         public static void Seed(AngularCachingDbContext context)
         {
 
             context.AddRange(
-                new Project(new(Constants.Projects.ChristmasShopping, new DateTime(2021, 12, 24))),
-                new Project(new(Constants.Projects.HolidaySeasonToneUp, new DateTime(2021, 12, 10)))
+                new Project(new("Christmas Shopping", new DateTime(2021, 12, 24))),
+                new Project(new("Holiday Season Tone Up", new DateTime(2021, 12, 10)))
                 );
 
-            context.Add(new User(new(Constants.Projects.ChristmasShopping, "Quinn", "ngrx", new PasswordHasher())));
+            context.SaveChanges();
 
-            context.AddRange(
-                new ToDo(new(Constants.Projects.ChristmasShopping, "Diamond Earings for Wife")),
-                new ToDo(new(Constants.Projects.ChristmasShopping, "Nike Shoes for Daughter")),
-                new ToDo(new(Constants.Projects.ChristmasShopping, "Drone for Teenage Son")),
-                new ToDo(new(Constants.Projects.ChristmasShopping, "Stocking Stuffers")),
-                new ToDo(new(Constants.Projects.ChristmasShopping, "Batteries, batteries, batteries"))
-                );
+            context.Add(new User(new(context.Projects.First().Name, "Quinn", "ngrx", new PasswordHasher())));
 
-            context.AddRange(
-                new ToDo(new(Constants.Projects.HolidaySeasonToneUp, "Weight Training")),
-                new ToDo(new(Constants.Projects.HolidaySeasonToneUp, "Jogging")),
-                new ToDo(new(Constants.Projects.HolidaySeasonToneUp, "Yoga")),
-                new ToDo(new(Constants.Projects.HolidaySeasonToneUp, "Push ups")),
-                new ToDo(new(Constants.Projects.HolidaySeasonToneUp, "Sit ups"))
+            context.ToDos.AddRange(
+                new(new(context.Projects.First().Name, "Diamond Earings for Wife")),
+                new(new(context.Projects.First().Name, "Nike Shoes for Daughter")),
+                new(new(context.Projects.First().Name, "Drone for Teenage Son")),
+                new(new(context.Projects.First().Name, "Stocking Stuffers")),
+                new(new(context.Projects.First().Name, "Batteries, batteries, batteries")),
+                new(new(context.Projects.AsEnumerable().ElementAt(1).Name, "Weight Training")),
+                new(new(context.Projects.AsEnumerable().ElementAt(1).Name, "Jogging")),
+                new(new(context.Projects.AsEnumerable().ElementAt(1).Name, "Yoga")),
+                new(new(context.Projects.AsEnumerable().ElementAt(1).Name, "Push ups")),
+                new(new(context.Projects.AsEnumerable().ElementAt(1).Name, "Sit ups"))
                 );
 
             context.SaveChanges();
@@ -47,8 +45,8 @@ namespace AngularCaching.Api.Data
                     case Constants.PromotionTags.Christmas:
                         promotions = new()
                         {
-                            new Promotion(new("Boxing Sale: Electronics")),
-                            new Promotion(new("Christmas Tree Sale"))
+                            new(new("Boxing Sale: Electronics")),
+                            new(new("Christmas Tree Sale"))
                         };
 
                         break;
@@ -56,8 +54,8 @@ namespace AngularCaching.Api.Data
                     case Constants.PromotionTags.HolidaySeasonToneUp:
                         promotions = new()
                         {
-                            new Promotion(new("Bench Press Sale")),
-                            new Promotion(new("Santa Claus Shuffle Run"))
+                            new(new("Bench Press Sale")),
+                            new(new("Santa Claus Shuffle Run"))
                         };
 
                         break;
@@ -65,15 +63,15 @@ namespace AngularCaching.Api.Data
                     case Constants.PromotionTags.Efficient:
                         promotions = new()
                         {
-                            new Promotion(new("Book: How to achieve Excellence")),
+                            new(new("Book: How to achieve Excellence")),
                         };
                         break;
 
                     case Constants.PromotionTags.InEfficient:
                         promotions = new()
                         {
-                            new Promotion(new("Book: Seven Habits of Highly Effective People")),
-                            new Promotion(new("Book: Good to Great"))
+                            new(new("Book: Seven Habits of Highly Effective People")),
+                            new(new("Book: Good to Great"))
                         };
 
                         break;
@@ -81,22 +79,22 @@ namespace AngularCaching.Api.Data
                     case Constants.PromotionTags.TenDaysAwayFromProjectCompletion:
                         promotions = new()
                         {
-                            new Promotion(new("Dream Vacations: Jamaica")),
+                            new(new("Dream Vacations: Jamaica")),
                         };
                         break;
 
                     case Constants.PromotionTags.GettingStarted:
                         promotions = new()
                         {
-                            new Promotion(new("Wedding Planner")),
-                            new Promotion(new("Bootcamp to complete Projects on Time")),
+                            new(new("Wedding Planner")),
+                            new(new("Bootcamp to complete Projects on Time")),
                         };
                         break;
 
                     case Constants.PromotionTags.Nike:
                         promotions = new()
                         {
-                            new Promotion(new("Nike Dixie Mall Outlet Sale"))
+                            new(new("Nike Dixie Mall Outlet Sale"))
                         };
                         break;
                 }
@@ -109,8 +107,6 @@ namespace AngularCaching.Api.Data
 
                 context.SaveChanges();
             }
-
-
         }
     }
 }

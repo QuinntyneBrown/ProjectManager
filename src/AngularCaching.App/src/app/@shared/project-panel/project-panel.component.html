@@ -4,18 +4,20 @@
     <h1 class="g-brand" [routerLink]="['/']">
       Angular State
     </h1>
-
     <div>
       <app-remaining-days [project]="vm.project"></app-remaining-days>
       <app-to-do-progress [toDos]="vm.toDos"></app-to-do-progress>
     </div>
   </div>
+
   <div class="project-panel__container">
-    <a [routerLink]="['/','edit-project']">Edit Project</a>
+    <a [routerLink]="['/','edit-project']">{{ vm.project.name }}</a>
     <a [routerLink]="['/','edit-user']">Edit User</a>
   </div>
+
   <div class="project-panel__footer">
     <a [routerLink]="['/','promotions']">Promotions ({{ vm.promotions.length }})</a>
     <button (click)="logout()" class="g-button">Logout</button>
   </div>
+
 </ng-container>

@@ -59,7 +59,7 @@ class Store extends base {
     return this._cacheKeyObservableMap.get(key) as Observable<T>;
   }
 
-  public from$<T>(func: {(): Observable<T>}, actionOrActions: Action | Action[] = []): Observable<T> {
+  protected from$<T>(func: {(): Observable<T>}, actionOrActions: Action | Action[] = []): Observable<T> {
     if(Array.isArray(actionOrActions) && actionOrActions.length == 0) {
       actionOrActions.push(uuidv4())
     }

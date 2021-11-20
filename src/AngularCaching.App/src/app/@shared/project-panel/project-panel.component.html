@@ -11,8 +11,8 @@
   </div>
 
   <div class="project-panel__container">
-    <a [routerLink]="['/','edit-project']">{{ vm.project.name }}</a>
-    <a [routerLink]="['/','edit-user']">Edit User</a>
+    <a [routerLink]="['/','projects','edit','current']">{{ vm.project.name }}</a>
+    <a [routerLink]="['/','users','edit','current']">Edit User</a>
   </div>
 
   <div class="project-panel__footer">

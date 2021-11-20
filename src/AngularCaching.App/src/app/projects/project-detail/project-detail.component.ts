@@ -5,12 +5,12 @@ import { Destroyable, ProjectStore } from '@core';
 import { map, takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-edit-project',
-  templateUrl: './edit-project.component.html',
-  styleUrls: ['./edit-project.component.scss'],
+  selector: 'app-project-detail',
+  templateUrl: './project-detail.component.html',
+  styleUrls: ['./project-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditProjectComponent extends Destroyable {
+export class ProjectDetailComponent extends Destroyable {
   public vm$  = this._projectStore
   .getCurrentUserProject()
   .pipe(
@@ -20,7 +20,6 @@ export class EditProjectComponent extends Destroyable {
         name: new FormControl(project.name,[Validators.required]),
         dueDate: new FormControl(project.dueDate, [Validators.required])
       });
-
       return {
         project,
         form

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Project } from '@api';
 import { PromotionStore, UserStore, ProjectStore, ToDoStore, NavigationService, AuthStore, Destroyable } from '@core';
 import { combineLatest } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -27,6 +28,7 @@ export class ProjectPanelComponent extends Destroyable {
       )
     })
   );
+
 
   constructor(
     private readonly _userStore: UserStore,

@@ -16,11 +16,13 @@ const routes: Routes = [
         loadChildren: () => import('./to-dos/to-dos.module').then(m => m.ToDosModule)
       },
       { path: 'promotions', loadChildren: () => import('./promotions/promotions.module').then(m => m.PromotionsModule) },
-      { path: 'edit-project', loadChildren: () => import('./edit-project/edit-project.module').then(m => m.EditProjectModule) },
-      { path: 'edit-user', loadChildren: () => import('./edit-user/edit-user.module').then(m => m.EditUserModule) }
+      { path: 'users/edit/current', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
+      { path: 'projects/edit/current', loadChildren: () => import('./projects/projects.module').then(m => m.ProjectsModule) },
     ]
   },
   { path: 'dashboard', loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule) },
+
+
 
 ];
 

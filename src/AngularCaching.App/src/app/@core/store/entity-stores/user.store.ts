@@ -17,7 +17,7 @@ export class UserStore extends store(UserService) {
   }
 
   public getCurrent(): Observable<User> {
-    return super.from$(() => super.getCurrent(), "CURRENT_USER");
+    return super.from$(() => super.getCurrent(), ["CURRENT_USER"]);
   }
 
   public update (options: { user: User }): Observable<{ user: User}> {

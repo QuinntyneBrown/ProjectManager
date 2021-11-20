@@ -1,22 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EditProjectRoutingModule } from './edit-project-routing.module';
-import { EditProjectComponent } from './edit-project.component';
-import { MatIconModule } from '@angular/material/icon';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { ProjectsRoutingModule } from './projects-routing.module';
+import { ProjectDetailComponent } from './project-detail/project-detail.component';
 import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 
+
 @NgModule({
   declarations: [
-    EditProjectComponent
+    ProjectDetailComponent
   ],
   imports: [
     CommonModule,
-    EditProjectRoutingModule,
+    ProjectsRoutingModule,
     MatIconModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -26,4 +27,4 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatDatepickerModule
   ]
 })
-export class EditProjectModule { }
+export class ProjectsModule { }

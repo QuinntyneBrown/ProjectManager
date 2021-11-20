@@ -7,12 +7,12 @@ import { BehaviorSubject } from 'rxjs';
 import { map, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-edit-user',
-  templateUrl: './edit-user.component.html',
-  styleUrls: ['./edit-user.component.scss'],
+  selector: 'app-user-detail',
+  templateUrl: './user-detail.component.html',
+  styleUrls: ['./user-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditUserComponent extends Destroyable {
+export class UserDetailComponent extends Destroyable {
 
   private _refresh$: BehaviorSubject<void> = new BehaviorSubject(null);
 

@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ProjectStore, UserStore } from '@core';
-import { combineLatest } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { AnalyticsService } from '@core/third-party/analytics.services';
 
 @Component({
   selector: 'app-root',
@@ -11,18 +9,8 @@ import { tap } from 'rxjs/operators';
 })
 export class AppComponent {
   constructor(
-    _projectStore: ProjectStore,
-    _userStore: UserStore,
+    _analyticsService: AnalyticsService
   ) {
-    combineLatest([
-      _projectStore.getCurrentUserProject(),
-      _userStore.getCurrent()
-    ])
-    .pipe(
-      tap(x => {
-        // push data to analytics platform
-        console.log(x);
-      })
-    ).subscribe();
+
   }
 }

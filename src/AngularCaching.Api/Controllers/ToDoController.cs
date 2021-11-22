@@ -42,6 +42,7 @@ namespace AngularCaching.Api.Controllers
         public async Task<ActionResult<GetToDosByProjectName.Response>> GetByProjectName([FromRoute] GetToDosByProjectName.Request request)
             => await _mediator.Send(request);
 
+        [AllowAnonymous]
         [HttpGet(Name = "GetToDosRoute")]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
@@ -49,6 +50,7 @@ namespace AngularCaching.Api.Controllers
         public async Task<ActionResult<GetToDos.Response>> Get()
             => await _mediator.Send(new GetToDos.Request());
 
+        [AllowAnonymous]
         [HttpPost(Name = "CreateToDoRoute")]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
@@ -63,6 +65,7 @@ namespace AngularCaching.Api.Controllers
         public async Task<ActionResult<GetToDosPage.Response>> Page([FromRoute] GetToDosPage.Request request)
             => await _mediator.Send(request);
 
+        [AllowAnonymous]
         [HttpPut(Name = "UpdateToDoRoute")]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]

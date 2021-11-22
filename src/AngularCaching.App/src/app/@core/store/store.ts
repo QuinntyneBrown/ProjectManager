@@ -6,10 +6,15 @@ import { Action, LogoutAction, StateChangedAction } from "./actions";
 
 const dispatcher: Subject<Action | Action[]> = new Subject();
 
+type CacheKey = string;
+
 export const store =  <T extends AnyConstructor<object>>(base : T) =>
 class extends base {
-  private readonly _cacheKeyObservableMap: Map<string, Observable<any>> = new Map();
-  private readonly _actionCacheKeysMap: Map<Action, string[]> = new Map();
+
+  private readonly _cacheKeyObservableMap: Map<CacheKey, Observable<any>> = new Map();
+
+  private readonly _actionCacheKeysMap: Map<Action, CacheKey[]> = new Map();
+
   private readonly _id = uuidv4();
 
   constructor(...args: any[]) {
@@ -72,43 +77,45 @@ class extends base {
     return actions.map(j => this._toRefreshAction(j)).indexOf(refreshAction) > -1
   }
 
-  private _from<T>(key: string, func: { (): Observable<T> }): Observable<T> {
-    if (!this._cacheKeyObservableMap.get(key)) {
-
-      const obs$ = func().pipe(shareReplay(1));
-
-      this._cacheKeyObservableMap.set(key, obs$);
-    }
-
-    dispatcher.next(this._toStateChangedAction(key));
-
-    return this._cacheKeyObservableMap.get(key);
-  }
-
-  protected from$<T>(func: {(): Observable<T>}, actionOrActions: Action | Action[] = []): Observable<T> {
+  protected from$<T>(observableFactory: {(): Observable<T>}, actionOrActions: Action | Action[] = []): Observable<T> {
 
     const actions = this._toActionArray(actionOrActions);
-
-    actions.push(LogoutAction);
 
     const cacheKey = actions[0];
 
     actions.forEach(action => this._insertActionCacheKeyMapEntry(action, cacheKey));
 
     return dispatcher.pipe(
-      filter((action:Action) => this._isRefreshAction(action) && this._anyActionsMappableTo(actions, action)),
+      filter((action:Action) => this._isRefreshAction(action)),
+      filter((action: Action) => this._anyActionsMappableTo(actions, action)),
       startWith(true),
-      exhaustMap(_ => this._from<T>(cacheKey, func))
+      exhaustMap(_ => this._from<T>(cacheKey, observableFactory))
     );
+
   }
 
-  private _insertActionCacheKeyMapEntry(action: Action, key: string) {
-    var cacheKey = this._actionCacheKeysMap.get(action);
-    cacheKey = cacheKey || [];
-    if (cacheKey.filter(x => x == key)[0] == null) {
-      cacheKey.push(key);
+  private _insertActionCacheKeyMapEntry(action: Action, cacheKey: CacheKey) {
+    var cacheKeys = this._actionCacheKeysMap.get(action);
+    cacheKeys = cacheKeys || [];
+    if (cacheKeys.filter(x => x == cacheKey)[0] == null) {
+      cacheKeys.push(cacheKey);
     }
-    this._actionCacheKeysMap.set(action, cacheKey);
+    this._actionCacheKeysMap.set(action, cacheKeys);
+  }
+
+  private _from<T>(cacheKey: CacheKey, observableFactory: { (): Observable<T> }): Observable<T> {
+
+    if (!this._cacheKeyObservableMap.get(cacheKey)) {
+
+      const obs$ = observableFactory().pipe(shareReplay({ bufferSize: 1, refCount: true }));
+
+      this._cacheKeyObservableMap.set(cacheKey, obs$);
+    }
+
+    dispatcher.next(this._toStateChangedAction(cacheKey as Action));
+
+    return this._cacheKeyObservableMap.get(cacheKey);
+
   }
 
   protected withRefresh<T>(observable: Observable<T>, actions:Action | Action[]): Observable<T> {

@@ -3,7 +3,7 @@ import { Inject, Injectable } from "@angular/core";
 import { BASE_URL } from "@core/constants";
 import { AuthService } from "@core/services/auth.service";
 import { LocalStorageService } from "@core/services/local-storage.service";
-import { of } from "rxjs";
+import { Observable, of } from "rxjs";
 import { LogoutAction } from "../actions";
 import { store } from "../store";
 
@@ -25,7 +25,7 @@ export class AuthStore extends store(AuthService) {
       .subscribe();
   }
 
-  public tryToLogin(options: { username: string, password: string }) {
+  public tryToLogin(options: { username: string, password: string }): Observable<any> {
     return super.tryToLogin(options);
   }
 }

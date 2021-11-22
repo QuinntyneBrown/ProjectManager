@@ -16,7 +16,7 @@ namespace AngularCaching.Api.Features
                 Sequence = storedEvent.Sequence,
                 Data = storedEvent.Data,
                 DotNetType = storedEvent.DotNetType,
-                CreatedOn = storedEvent.CreatedOn,
+                CreatedOn = $"{storedEvent.CreatedOn}",
                 Version = storedEvent.Version,
                 CorrelationId = storedEvent.CorrelationId
             };

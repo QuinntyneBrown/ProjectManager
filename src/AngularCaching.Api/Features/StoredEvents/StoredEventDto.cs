@@ -12,7 +12,7 @@ namespace AngularCaching.Api.Features
         public int Sequence { get; set; }
         public string Data { get; set; }
         public string DotNetType { get; set; }
-        public DateTime CreatedOn { get; set; }
+        public string CreatedOn { get; set; }
         public int Version { get; set; }
         public Guid CorrelationId { get; set; }
     }

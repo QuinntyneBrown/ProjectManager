@@ -28,10 +28,11 @@ namespace AngularCaching.Api.Features
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
             {
-                return new Response()
+                return new()
                 {
                     StoredEvents = _context.StoredEvents
-                    .Where(x => x.CreatedOn > request.Since)
+                    .Where(x => (x.CreatedOn - request.Since > TimeSpan.FromSeconds(1)))
+                    .OrderBy(x => x.CreatedOn)
                     .Select(x => x.ToDto()).ToList()
                 };
             }

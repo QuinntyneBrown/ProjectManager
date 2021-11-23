@@ -1,16 +1,16 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { ToDo, ToDoService } from "@api";
-import { store } from "../store";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { BASE_URL } from "@core/constants";
+import { queryStore } from "@quinntyne/query-store";
 
 
 @Injectable({
   providedIn: "root"
 })
-export class ToDoStore extends store(ToDoService) {
+export class ToDoStore extends queryStore(ToDoService) {
   constructor(
     @Inject(BASE_URL) _baseUrl:string,
     _httpClient: HttpClient

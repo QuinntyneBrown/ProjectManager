@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToDo } from '@api';
-import { ToDoStore, UserStore } from '@core/store';
+import { ToDoStore, UserStore } from '@core';
 import { combineLatest, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 

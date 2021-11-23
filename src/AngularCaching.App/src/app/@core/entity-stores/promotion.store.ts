@@ -1,14 +1,14 @@
 import { Inject, Injectable } from "@angular/core";
 import { Promotion, PromotionService, ToDo } from "@api";
 import { Observable } from "rxjs";
-import { store } from "../store";
 import { BASE_URL } from "@core/constants";
 import { HttpClient } from "@angular/common/http";
+import { queryStore } from "@quinntyne/query-store";
 
 @Injectable({
   providedIn: "root"
 })
-export class PromotionStore extends store(PromotionService) {
+export class PromotionStore extends queryStore(PromotionService) {
   constructor(
     @Inject(BASE_URL) _baseUrl:string,
     _httpClient: HttpClient

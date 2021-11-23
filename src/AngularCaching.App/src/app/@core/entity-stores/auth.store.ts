@@ -3,15 +3,15 @@ import { Inject, Injectable } from "@angular/core";
 import { BASE_URL } from "@core/constants";
 import { AuthService } from "@core/services/auth.service";
 import { LocalStorageService } from "@core/services/local-storage.service";
+import { queryStore } from "@quinntyne/query-store";
 import { Observable, of } from "rxjs";
-import { LogoutAction } from "../actions";
-import { store } from "../store";
+
 
 
 @Injectable({
   providedIn:"root"
 })
-export class AuthStore extends store(AuthService) {
+export class AuthStore extends queryStore(AuthService) {
   constructor(
     localStorageService: LocalStorageService,
     @Inject(BASE_URL) _baseUrl:string,
@@ -21,7 +21,7 @@ export class AuthStore extends store(AuthService) {
   }
 
   public tryToLogout() {
-    this.withRefresh(of(super.tryToLogout()),[LogoutAction])
+    this.withRefresh(of(super.tryToLogout()),[])
       .subscribe();
   }
 

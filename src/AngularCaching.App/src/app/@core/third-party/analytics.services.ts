@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Project } from "@api/models/project";
-import { ProjectStore } from "@core/store/entity-stores/project.store";
+import { ProjectStore } from "@core/entity-stores/project.store";
 import { map, tap } from "rxjs/operators";
 
 @Injectable({

@@ -2,13 +2,13 @@ import { Inject, Injectable } from "@angular/core";
 import { User, UserService } from "@api";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { store } from "../store";
 import { BASE_URL } from "@core/constants";
+import { queryStore } from "@quinntyne/query-store";
 
 @Injectable({
   providedIn: "root"
 })
-export class UserStore extends store(UserService) {
+export class UserStore extends queryStore(UserService) {
   constructor(
     @Inject(BASE_URL) _baseUrl:string,
     _httpClient: HttpClient

@@ -27,4 +27,7 @@ export class AuthStore extends ComponentStore<AuthStoreState> implements IAuthSt
     return this.tryToLogin(options);
   }
 
+  selectByCacheKey<T>(cacheKey: string): Observable<T> {
+    throw new Error("Method not implemented.");
+  }
 }

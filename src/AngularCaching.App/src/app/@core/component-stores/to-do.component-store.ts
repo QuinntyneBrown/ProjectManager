@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { ToDo, ToDoService } from "@api";
 import { IToDoStore } from "@core/abstractions/stores";
 import { ComponentStore } from "@ngrx/component-store";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { first, mergeMap, shareReplay, switchMap, switchMapTo, tap } from "rxjs/operators";
 
 interface ToDoStoreState {
@@ -11,7 +11,7 @@ interface ToDoStoreState {
   toDo?: Readonly<ToDo>
 }
 
-@Injectable({ providedIn: "root"})
+@Injectable()
 export class ToDoStore extends ComponentStore<ToDoStoreState> implements IToDoStore {
 
   private readonly _refreshSubject: BehaviorSubject<void> = new BehaviorSubject(null);
@@ -77,13 +77,6 @@ export class ToDoStore extends ComponentStore<ToDoStoreState> implements IToDoSt
     )
   }
 
-  private readonly fetchToDo = this.effect<void>(
-    obs$ => obs$.pipe(
-        switchMapTo(this.select(state => state.toDoById)),
-        mergeMap(toDoId => this._toDoService.getById({ toDoId })),
-        tap((toDo:ToDo) => this.setEntity(toDo)),
-        ));
-
   constructor(
     private readonly _toDoService: ToDoService
   ) {
@@ -98,11 +91,9 @@ export class ToDoStore extends ComponentStore<ToDoStoreState> implements IToDoSt
     this.updater<Readonly<string>>(
         (state, toDoById) => ({...state, toDoById}));
 
-  private readonly setEntity =
-    this.updater<Readonly<ToDo>>(
-        (state, toDo) => ({...state, toDo}));
-
-  private readonly setEntities =
-    this.updater<Readonly<ToDo>>(
-        (state, toDo) => ({...state, toDo}));
+  selectByCacheKey<T>(cacheKey: string): Observable<T> {
+    throw new Error("Method not implemented.");
+  }
 }
+
+

@@ -16,6 +16,10 @@ export class ProjectStore extends queryStore(ProjectService) implements IProject
     super(_baseUrl, _httpClient)
   }
 
+  public selectByCacheKey<T>(cacheKey: string): Observable<T> {
+    return this.select(cacheKey);
+  }
+
   public getCurrentUserProject(): Observable<Project> {
     return super.from$(() => super.getCurrentUserProject(), ["CURRENT_USER_PROJECT", "CURRENT_USER"]);
   }

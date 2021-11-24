@@ -9,7 +9,7 @@ export const TO_DO_STORE = new InjectionToken("TO_DO_STORE");
 export const USER_STORE = new InjectionToken("USER_STORE");
 
 export interface IQueryStore {
-  select<T>(cacheKey: string): Observable<T>;
+  selectByCacheKey<T>(cacheKey: string): Observable<T>;
 }
 
 export interface IAuthStore extends IQueryStore {
@@ -24,7 +24,7 @@ export interface IProjectStore extends IQueryStore {
 }
 
 export interface IPromotionStore extends IQueryStore {
-  getPromotionsByProjectId(projectId: string): Observable<Promotion[]>;
+  getPromotionsByProjectId(options: { projectId: string }): Observable<Promotion[]>;
 }
 export interface IUserStore extends IQueryStore {
   getCurrent(): Observable<User>;

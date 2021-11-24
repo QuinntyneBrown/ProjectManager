@@ -27,4 +27,8 @@ export class AuthStore extends queryStore(AuthService) implements IAuthStore {
   public tryToLogin(options: { username: string, password: string }): Observable<any> {
     return super.tryToLogin(options);
   }
+
+  public selectByCacheKey<T>(cacheKey: string): Observable<T> {
+    return this.select(cacheKey);
+  }
 }

@@ -11,12 +11,6 @@ export class AnalyticsService {
   constructor(
     @Inject(PROJECT_STORE) _projectStore: IProjectStore
   ) {
-    _projectStore.select<Project>('CURRENT_USER_PROJECT')
-    .pipe(
-      map(x => x?.name),
-      tap(name => {
-        console.log(name);
-      })
-    ).subscribe();
+
   }
 }

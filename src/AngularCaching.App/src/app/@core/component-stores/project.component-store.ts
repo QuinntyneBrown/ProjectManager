@@ -32,4 +32,7 @@ export class ProjectStore extends ComponentStore<IProjectStoreState> implements 
     throw new Error("Method not implemented.");
   }
 
+  selectByCacheKey<T>(cacheKey: string): Observable<T> {
+    throw new Error("Method not implemented.");
+  }
 }

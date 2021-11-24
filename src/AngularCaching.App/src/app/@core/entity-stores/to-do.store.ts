@@ -17,6 +17,10 @@ export class ToDoStore extends queryStore(ToDoService) implements IToDoStore {
     super(_baseUrl, _httpClient)
   }
 
+  public selectByCacheKey<T>(cacheKey: string): Observable<T> {
+    return this.select(cacheKey);
+  }
+
   public getToDoById(options: { toDoId: string }): Observable<ToDo> { return super.from$(() => super.getById({toDoId: options.toDoId }), `TO_DO_BY_ID_${options.toDoId}`); }
 
   public getToDosByProjectName(options: { projectName: string }): Observable<ToDo[]> {

@@ -21,7 +21,7 @@ export class ProjectPanelComponent extends Destroyable {
     switchMap(([user, project]) => {
       return combineLatest([
         this._toDoStore.getToDosByProjectName({ projectName: user.currentProjectName}),
-        this._promotionStore.getPromotionsByProjectId(project.projectId)
+        this._promotionStore.getPromotionsByProjectId({ projectId: project.projectId})
       ])
       .pipe(
         map(([toDos, promotions]) => ({ toDos, user, project, promotions }))

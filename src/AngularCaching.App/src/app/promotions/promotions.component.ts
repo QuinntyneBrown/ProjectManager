@@ -13,7 +13,7 @@ export class PromotionsComponent {
   public vm$ = this._projectStore
   .getCurrentUserProject()
   .pipe(
-    switchMap(project => this._promotionStore.getPromotionsByProjectId(project.projectId)),
+    switchMap(project => this._promotionStore.getPromotionsByProjectId({ projectId: project.projectId})),
     map(promotions => ({ promotions }))
   );
 

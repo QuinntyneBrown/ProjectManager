@@ -1,9 +1,0 @@
-<ng-container *ngIf="vm$ | async as vm">
-  <a class="g-heading" [routerLink]="['/']">
-    <mat-icon>chevron_left</mat-icon>
-    <span>Back</span>
-  </a>
-  <h1>Edit User</h1>
-
-  <app-project-select [formControl]="vm.formControl"></app-project-select>
-</ng-container>

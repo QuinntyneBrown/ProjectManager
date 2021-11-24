@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ToDo } from '@api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BASE_URL, EntityPage, IPagableService } from '@core';
+import { baseUrl, EntityPage, IPagableService } from '@core';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class ToDoService implements IPagableService<ToDo> {
   uniqueIdentifierName: string = "toDoId";
 
   constructor(
-    @Inject(BASE_URL) private readonly _baseUrl: string,
+    @Inject(baseUrl) private readonly _baseUrl: string,
     private readonly _client: HttpClient
   ) { }
 
@@ -23,13 +23,6 @@ export class ToDoService implements IPagableService<ToDo> {
 
   public get(): Observable<ToDo[]> {
     return this._client.get<{ toDos: ToDo[] }>(`${this._baseUrl}api/toDo`)
-      .pipe(
-        map(x => x.toDos)
-      );
-  }
-
-  public getByProjectName(name: string): Observable<ToDo[]> {
-    return this._client.get<{ toDos: ToDo[] }>(`${this._baseUrl}api/toDo/project/${name}`)
       .pipe(
         map(x => x.toDos)
       );
@@ -49,7 +42,7 @@ export class ToDoService implements IPagableService<ToDo> {
   public create(options: { toDo: ToDo }): Observable<{ toDo: ToDo }> {
     return this._client.post<{ toDo: ToDo }>(`${this._baseUrl}api/toDo`, { toDo: options.toDo });
   }
-
+  
   public update(options: { toDo: ToDo }): Observable<{ toDo: ToDo }> {
     return this._client.put<{ toDo: ToDo }>(`${this._baseUrl}api/toDo`, { toDo: options.toDo });
   }

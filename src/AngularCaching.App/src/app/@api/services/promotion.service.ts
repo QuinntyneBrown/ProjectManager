@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Promotion } from '@api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BASE_URL, EntityPage, IPagableService } from '@core';
+import { baseUrl, EntityPage, IPagableService } from '@core';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class PromotionService implements IPagableService<Promotion> {
   uniqueIdentifierName: string = "promotionId";
 
   constructor(
-    @Inject(BASE_URL) private readonly _baseUrl: string,
+    @Inject(baseUrl) private readonly _baseUrl: string,
     private readonly _client: HttpClient
   ) { }
 
@@ -35,13 +35,6 @@ export class PromotionService implements IPagableService<Promotion> {
       );
   }
 
-  public getByProjectId(options: { projectId: string }): Observable<Promotion[]> {
-    return this._client.get<{ promotions: Promotion[] }>(`${this._baseUrl}api/promotion/project/${options.projectId}`)
-      .pipe(
-        map(x => x.promotions)
-      );
-  }
-
   public remove(options: { promotion: Promotion }): Observable<void> {
     return this._client.delete<void>(`${this._baseUrl}api/promotion/${options.promotion.promotionId}`);
   }
@@ -49,7 +42,7 @@ export class PromotionService implements IPagableService<Promotion> {
   public create(options: { promotion: Promotion }): Observable<{ promotion: Promotion }> {
     return this._client.post<{ promotion: Promotion }>(`${this._baseUrl}api/promotion`, { promotion: options.promotion });
   }
-
+  
   public update(options: { promotion: Promotion }): Observable<{ promotion: Promotion }> {
     return this._client.put<{ promotion: Promotion }>(`${this._baseUrl}api/promotion`, { promotion: options.promotion });
   }

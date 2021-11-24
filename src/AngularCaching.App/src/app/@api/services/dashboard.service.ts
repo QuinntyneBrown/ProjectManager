@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Dashboard } from '@api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BASE_URL, EntityPage, IPagableService } from '@core';
+import { baseUrl, EntityPage, IPagableService } from '@core';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class DashboardService implements IPagableService<Dashboard> {
   uniqueIdentifierName: string = "dashboardId";
 
   constructor(
-    @Inject(BASE_URL) private readonly _baseUrl: string,
+    @Inject(baseUrl) private readonly _baseUrl: string,
     private readonly _client: HttpClient
   ) { }
 
@@ -42,7 +42,7 @@ export class DashboardService implements IPagableService<Dashboard> {
   public create(options: { dashboard: Dashboard }): Observable<{ dashboard: Dashboard }> {
     return this._client.post<{ dashboard: Dashboard }>(`${this._baseUrl}api/dashboard`, { dashboard: options.dashboard });
   }
-
+  
   public update(options: { dashboard: Dashboard }): Observable<{ dashboard: Dashboard }> {
     return this._client.put<{ dashboard: Dashboard }>(`${this._baseUrl}api/dashboard`, { dashboard: options.dashboard });
   }

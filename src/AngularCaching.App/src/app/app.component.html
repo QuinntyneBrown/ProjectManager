@@ -1,1 +1,19 @@
-<router-outlet></router-outlet>
+<ng-container *ngIf="vm$ | async as vm">
+
+  <div>
+    {{ vm | json }}
+  </div>
+
+  <app-to-do-list></app-to-do-list>
+
+</ng-container>
+
+<ng-container *ngIf="vm$ | async as vm">
+
+  <div>
+    {{ vm | json }}
+  </div>
+
+  <app-to-do-list></app-to-do-list>
+
+</ng-container>

@@ -1,9 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Project, User } from '@api';
+import { User } from '@api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { BASE_URL, EntityPage, IPagableService } from '@core';
+import { baseUrl, EntityPage, IPagableService } from '@core';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class UserService implements IPagableService<User> {
   uniqueIdentifierName: string = "userId";
 
   constructor(
-    @Inject(BASE_URL) private readonly _baseUrl: string,
+    @Inject(baseUrl) private readonly _baseUrl: string,
     private readonly _client: HttpClient
   ) { }
 
@@ -25,13 +25,6 @@ export class UserService implements IPagableService<User> {
     return this._client.get<{ users: User[] }>(`${this._baseUrl}api/user`)
       .pipe(
         map(x => x.users)
-      );
-  }
-
-  public getCurrent(): Observable<User> {
-    return this._client.get<{ user: User }>(`${this._baseUrl}api/user/current`)
-      .pipe(
-        map(x => x.user)
       );
   }
 

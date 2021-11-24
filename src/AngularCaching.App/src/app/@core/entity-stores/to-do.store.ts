@@ -5,12 +5,11 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { BASE_URL } from "@core/constants";
 import { queryStore } from "@quinntyne/query-store";
+import { IToDoStore } from "@core/abstractions/stores";
 
 
-@Injectable({
-  providedIn: "root"
-})
-export class ToDoStore extends queryStore(ToDoService) {
+@Injectable()
+export class ToDoStore extends queryStore(ToDoService) implements IToDoStore {
   constructor(
     @Inject(BASE_URL) _baseUrl:string,
     _httpClient: HttpClient
@@ -18,13 +17,13 @@ export class ToDoStore extends queryStore(ToDoService) {
     super(_baseUrl, _httpClient)
   }
 
-  public toDoById(id:string): Observable<ToDo> { return super.from$(() => super.getById({toDoId: id }), `TO_DO_BY_ID_${id}`); }
+  public getToDoById(options: { toDoId: string }): Observable<ToDo> { return super.from$(() => super.getById({toDoId: options.toDoId }), `TO_DO_BY_ID_${options.toDoId}`); }
 
-  public toDosByProjectName(projectName: string): Observable<ToDo[]> {
-    const func = () => super.getByProjectName(projectName).pipe(
+  public getToDosByProjectName(options: { projectName: string }): Observable<ToDo[]> {
+    const func = () => super.getByProjectName(options.projectName).pipe(
       map(toDos => toDos)
     )
-    return super.from$<ToDo[]>(func, [`TO_DOS_BY_PROJECT_NAME_${projectName}`, "TO_DOS"]);
+    return super.from$<ToDo[]>(func, [`TO_DOS_BY_PROJECT_NAME_${options.projectName}`, "TO_DOS"]);
   }
 
   public create(options: { toDo: ToDo }): Observable<{ toDo: ToDo }> {

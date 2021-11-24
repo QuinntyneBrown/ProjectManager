@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Project } from '@api';
-import { PromotionStore, UserStore, ProjectStore, ToDoStore, NavigationService, AuthStore, Destroyable } from '@core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { NavigationService, Destroyable } from '@core';
+import { AUTH_STORE, IAuthStore, IProjectStore, IPromotionStore, IToDoStore, IUserStore, PROJECT_STORE, PROMOTION_STORE, TO_DO_STORE, USER_STORE } from '@core/abstractions/stores';
 import { combineLatest } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
@@ -20,7 +20,7 @@ export class ProjectPanelComponent extends Destroyable {
   .pipe(
     switchMap(([user, project]) => {
       return combineLatest([
-        this._toDoStore.toDosByProjectName(user.currentProjectName),
+        this._toDoStore.getToDosByProjectName({ projectName: user.currentProjectName}),
         this._promotionStore.getPromotionsByProjectId(project.projectId)
       ])
       .pipe(
@@ -29,16 +29,16 @@ export class ProjectPanelComponent extends Destroyable {
     })
   );
 
-
   constructor(
-    private readonly _userStore: UserStore,
-    private readonly _toDoStore: ToDoStore,
-    private readonly _projectStore: ProjectStore,
-    private readonly _authStore: AuthStore,
+    @Inject(USER_STORE) private readonly _userStore: IUserStore,
+    @Inject(TO_DO_STORE) private readonly _toDoStore: IToDoStore,
+    @Inject(PROJECT_STORE) private readonly _projectStore: IProjectStore,
+    @Inject(AUTH_STORE) private readonly _authStore: IAuthStore,
     private readonly _navigationService: NavigationService,
-    private readonly _promotionStore: PromotionStore,
+    @Inject(PROMOTION_STORE) private readonly _promotionStore: IPromotionStore
   ) {
     super();
+
   }
 
   public logout() {

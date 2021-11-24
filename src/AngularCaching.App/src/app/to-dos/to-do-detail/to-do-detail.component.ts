@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToDo } from '@api';
 import { ToDoStore, UserStore } from '@core';
+import { IToDoStore, IUserStore, TO_DO_STORE, USER_STORE } from '@core/abstractions/stores';
 import { combineLatest, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
@@ -19,7 +20,7 @@ export class ToDoDetailComponent {
   .pipe(
     map(paramMap => paramMap.get("toDoId")),
     switchMap(toDoId => combineLatest([
-      toDoId != null ? this._toDoStore.toDoById(toDoId) : of({ } as ToDo),
+      toDoId != null ? this._toDoStore.getToDoById({ toDoId: toDoId }) : of({ } as ToDo),
       this._userStore.getCurrent()
     ])),
     map(([toDo, user]) => {
@@ -34,8 +35,8 @@ export class ToDoDetailComponent {
   )
 
   constructor(
-    private readonly _toDoStore: ToDoStore,
-    private readonly _userStore: UserStore,
+    @Inject(TO_DO_STORE) private readonly _toDoStore: IToDoStore,
+    @Inject(USER_STORE) private readonly _userStore: IUserStore,
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _router: Router
   ) { }

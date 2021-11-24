@@ -1,5 +1,6 @@
-import { Injectable } from "@angular/core";
+import { Inject, Injectable } from "@angular/core";
 import { Project } from "@api/models/project";
+import { IProjectStore, PROJECT_STORE } from "@core/abstractions/stores";
 import { ProjectStore } from "@core/entity-stores/project.store";
 import { map, tap } from "rxjs/operators";
 
@@ -8,7 +9,7 @@ import { map, tap } from "rxjs/operators";
 })
 export class AnalyticsService {
   constructor(
-    _projectStore: ProjectStore
+    @Inject(PROJECT_STORE) _projectStore: IProjectStore
   ) {
     _projectStore.select<Project>('CURRENT_USER_PROJECT')
     .pipe(

@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { User } from '@api';
 import { Destroyable } from '@core';
-import { UserStore } from '@core';
+import { IUserStore, USER_STORE } from '@core/abstractions/stores';
 import { BehaviorSubject } from 'rxjs';
 import { map, switchMap, takeUntil } from 'rxjs/operators';
 
@@ -44,7 +44,7 @@ export class UserDetailComponent extends Destroyable {
   );
 
   constructor(
-    private readonly _userStore: UserStore
+    @Inject(USER_STORE) private readonly _userStore: IUserStore
   ) {
     super();
   }

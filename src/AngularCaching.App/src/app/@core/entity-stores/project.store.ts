@@ -4,12 +4,11 @@ import { Project, ProjectService } from "@api";
 import { Observable } from "rxjs";
 import { BASE_URL } from "@core/constants";
 import { queryStore } from "@quinntyne/query-store";
+import { IProjectStore } from "@core/abstractions/stores";
 
 
-@Injectable({
-  providedIn: "root"
-})
-export class ProjectStore extends queryStore(ProjectService) {
+@Injectable()
+export class ProjectStore extends queryStore(ProjectService) implements IProjectStore {
   constructor(
     @Inject(BASE_URL) _baseUrl:string,
     _httpClient: HttpClient
@@ -21,7 +20,7 @@ export class ProjectStore extends queryStore(ProjectService) {
     return super.from$(() => super.getCurrentUserProject(), ["CURRENT_USER_PROJECT", "CURRENT_USER"]);
   }
 
-  public get(): Observable<Project[]> {
+  public getProjects(): Observable<Project[]> {
     return super.from$(() => super.get(), ["PROJECTS"]);
   }
 

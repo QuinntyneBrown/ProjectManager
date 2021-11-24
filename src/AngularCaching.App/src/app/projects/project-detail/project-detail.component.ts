@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Project } from '@api';
 import { Destroyable, ProjectStore } from '@core';
+import { IProjectStore, PROJECT_STORE } from '@core/abstractions/stores';
 import { map, takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -28,7 +29,7 @@ export class ProjectDetailComponent extends Destroyable {
   );
 
   constructor(
-    private readonly _projectStore: ProjectStore
+    @Inject(PROJECT_STORE) private readonly _projectStore: IProjectStore
   ) {
     super();
   }

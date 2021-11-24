@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
+import { IAuthStore } from "@core/abstractions/stores";
 import { BASE_URL } from "@core/constants";
 import { AuthService } from "@core/services/auth.service";
 import { LocalStorageService } from "@core/services/local-storage.service";
@@ -8,10 +9,8 @@ import { Observable, of } from "rxjs";
 
 
 
-@Injectable({
-  providedIn:"root"
-})
-export class AuthStore extends queryStore(AuthService) {
+@Injectable()
+export class AuthStore extends queryStore(AuthService) implements IAuthStore {
   constructor(
     localStorageService: LocalStorageService,
     @Inject(BASE_URL) _baseUrl:string,

@@ -5,9 +5,7 @@ import { HttpClient } from "@angular/common/http";
 import { BASE_URL } from "@core/constants";
 import { queryStore } from "@quinntyne/query-store";
 
-@Injectable({
-  providedIn: "root"
-})
+@Injectable()
 export class UserStore extends queryStore(UserService) {
   constructor(
     @Inject(BASE_URL) _baseUrl:string,
@@ -21,6 +19,6 @@ export class UserStore extends queryStore(UserService) {
   }
 
   public update (options: { user: User }): Observable<{ user: User}> {
-    return super.withRefresh(super.update(options),["CURRENT_USER"]);
+    return super.withRefresh(super.update(options), ["CURRENT_USER"]);
   }
 }

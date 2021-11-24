@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { LayoutModule } from '@shared/layout/layout.module';
 import { ConsoleLogger } from '@core/services/console-logger';
 import { environment } from 'src/environments/environment';
+import { EntityStoresModule } from '@core/entity-stores/entity-stores.module';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { environment } from 'src/environments/environment';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    LayoutModule
+    LayoutModule,
+    EntityStoresModule
   ],
   providers: [
     {

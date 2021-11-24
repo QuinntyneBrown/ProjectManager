@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, forwardRef, Inject } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { map, takeUntil } from 'rxjs/operators';
 import { Destroyable, ProjectStore } from '@core';
+import { IProjectStore, PROJECT_STORE } from '@core/abstractions/stores';
 
 
 @Component({
@@ -20,7 +21,7 @@ import { Destroyable, ProjectStore } from '@core';
 export class ProjectSelectComponent extends Destroyable implements ControlValueAccessor  {
 
   public vm$ = this._projectStore
-  .get()
+  .getProjects()
   .pipe(
     map(projects => ({ projects }))
   );
@@ -30,7 +31,7 @@ export class ProjectSelectComponent extends Destroyable implements ControlValueA
   });
 
   constructor(
-    private readonly _projectStore: ProjectStore
+    @Inject(PROJECT_STORE) private readonly _projectStore: IProjectStore
   ) {
     super();
   }

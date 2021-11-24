@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { UserStore, ToDoStore } from '@core';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { IToDoStore, IUserStore, TO_DO_STORE, USER_STORE } from '@core/abstractions/stores';
+import { map, switchMap } from 'rxjs/operators';
 
 
 @Component({
@@ -20,12 +20,12 @@ export class ToDoListComponent  {
   public vm$ = this._userStore
   .getCurrent()
   .pipe(
-    switchMap(user => this._toDoStore.toDosByProjectName(user.currentProjectName)),
+    switchMap(user => this._toDoStore.getToDosByProjectName({ projectName: user.currentProjectName})),
     map(toDos => ({ toDos }))
   )
 
   constructor(
-    private readonly _toDoStore: ToDoStore,
-    private readonly _userStore: UserStore
+    @Inject(TO_DO_STORE) private readonly _toDoStore: IToDoStore,
+    @Inject(USER_STORE) private readonly _userStore: IUserStore
   ) { }
 }

@@ -8,12 +8,14 @@
 
 </ng-container>
 
-<ng-container *ngIf="vm$ | async as vm">
+<ng-container *ngIf="vm$1 | async as vm">
 
   <div>
     {{ vm | json }}
   </div>
 
   <app-to-do-list></app-to-do-list>
+
+
 
 </ng-container>

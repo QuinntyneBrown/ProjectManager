@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AngularCaching.Api.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     [ApiController]
     [Route("api/[controller]")]
     public class ToDoController

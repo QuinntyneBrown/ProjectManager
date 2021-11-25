@@ -1,32 +1,9 @@
 import { Injectable } from "@angular/core";
 import { ToDo, ToDoService } from "@api";
+import { switchMapByKey } from "@core/abstractions/switch-map-by-key";
 import { ComponentStore } from "@ngrx/component-store";
-import { EMPTY, Observable, of, OperatorFunction } from "rxjs";
-import { catchError, first, groupBy, ignoreElements, map, mergeAll, mergeMap, shareReplay, switchMap, tap, timeoutWith } from "rxjs/operators";
-
-function switchMapByKey<T, V>(
-  keySelector: (item: T) => number | string,
-  mapFn: (item: T) => Observable<V>
-): OperatorFunction<T, V> {
-  return observable$ =>
-    observable$.pipe(
-      groupBy(
-        keySelector,
-        item => item,
-        itemsByGroup$ =>
-          itemsByGroup$.pipe(
-            timeoutWith(15000, EMPTY),
-            ignoreElements()
-          )
-      ),
-      map((itemGroup$: Observable<T>) => itemGroup$.pipe(switchMap(mapFn))),
-      mergeAll()
-    );
-}
-
-export function isNonNull<T>(value: T): value is NonNullable<T> {
-  return value !== null && value !== undefined;
-}
+import { EMPTY, of } from "rxjs";
+import { catchError, first, mergeMap, shareReplay, switchMap, tap } from "rxjs/operators";
 
 export interface ToDoStoreState {
   toDos?: ToDo[],
@@ -44,11 +21,27 @@ export class ToDoStore extends ComponentStore<ToDoStoreState> {
     super({ })
   }
 
+  public getToDos() {
+    return of(undefined)
+    .pipe(
+      tap(_ => this._getToDos()),
+      switchMap(_ => this.select(x => x.toDos))
+    )
+  }
+
+  public getToDoById(toDoId: string) {
+    return of(undefined)
+    .pipe(
+      tap(_ => this._getToDoById(toDoId)),
+      switchMap(_ => this.select(x => x.toDo))
+    );
+  }
+
   private readonly _getToDos = this.effect<void>(trigger$ =>
     trigger$.pipe(
       switchMap(_ => this.select(x => x.toDos).pipe(first())
       .pipe(
-        switchMap(toDos =>{
+        switchMap(toDos => {
           if(toDos === undefined) {
             return this._toDoService.get()
             .pipe(
@@ -60,17 +53,6 @@ export class ToDoStore extends ComponentStore<ToDoStoreState> {
       )),
       shareReplay(1)
     ));
-
-  public getToDos() {
-    this._getToDos();
-    return this.select(x => x.toDos);
-  }
-
-  public getToDoById(toDoId: string) {
-    this._getToDoById(toDoId);
-    return this.select(x => x.toDo);
-  }
-
 
   private _getToDoById = this.effect<string>(toDoId$ =>
     toDoId$.pipe(
@@ -86,7 +68,6 @@ export class ToDoStore extends ComponentStore<ToDoStoreState> {
               tap((toDo:ToDo) => this.setState((state) => ({ ...state, toDo })))
             )
           }),
-
         );
       }),
       shareReplay(1)
@@ -126,7 +107,7 @@ export class ToDoStore extends ComponentStore<ToDoStoreState> {
     })
   ));
 
-  readonly deleteToDo = this.effect<ToDo>(todo$ => todo$.pipe(
+  readonly removeToDo = this.effect<ToDo>(todo$ => todo$.pipe(
     mergeMap(toDo => {
       return this._toDoService.remove({ toDo })
       .pipe(

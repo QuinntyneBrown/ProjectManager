@@ -1,7 +1,3 @@
-using ProjectManager.Api.Core;
-using ProjectManager.Api.Data;
-using ProjectManager.Api.Extensions;
-using ProjectManager.Api.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using ProjectManager.Api.Core;
+using ProjectManager.Api.Data;
+using ProjectManager.Api.Extensions;
+using ProjectManager.Api.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -27,8 +27,8 @@ namespace ProjectManager.Api
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "Angular Caching",
-                    Description = "Investigating State Management Implementations",
+                    Title = "Project Manager",
+                    Description = "Example App using NgRx Component Store",
                     TermsOfService = new Uri("https://example.com/terms"),
                     Contact = new OpenApiContact
                     {

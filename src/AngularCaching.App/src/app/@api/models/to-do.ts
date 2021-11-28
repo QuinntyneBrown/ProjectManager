@@ -3,4 +3,5 @@ export type ToDo = {
     description: string,
     status: string,
     isDeleted: boolean,
+    projectName: string
 };

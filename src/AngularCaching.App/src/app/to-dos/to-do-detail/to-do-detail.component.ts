@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToDo } from '@api';
-import { ToDoStore } from '@core/store';
-import { of } from 'rxjs';
+import { ToDoStore, UserStore } from '@core';
+import { BehaviorSubject, combineLatest, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
 
@@ -14,52 +14,47 @@ import { map, switchMap, tap } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToDoDetailComponent {
+
+  private readonly _refresh$: BehaviorSubject<void> = new BehaviorSubject(null);
+
   public vm$ = this._activatedRoute
   .paramMap
   .pipe(
     map(paramMap => paramMap.get("toDoId")),
-    switchMap(toDoId => {
-      return toDoId != null
-      ? this._toDoStore.toDoById(toDoId)
-      : of({ })
-    }),
-    map((toDo: ToDo) => {
+    switchMap(toDoId => this._refresh$.pipe(map(_ => toDoId))),
+    switchMap(toDoId => combineLatest([
+      toDoId != null ? this._toDoStore.toDoById(toDoId) : of({ } as ToDo),
+      this._userStore.getCurrent()
+    ])),
+    map(([toDo, user]) => {
       const form: FormGroup = new FormGroup({
         toDoId: new FormControl(toDo.toDoId, []),
+        projectName: new FormControl(toDo.projectName || user.currentProjectName,[Validators.required]),
         description: new FormControl(toDo.description, []),
         status: new FormControl(toDo.status,[])
       });
-      return {
-        form
-      }
+      return { form }
     })
   )
 
   constructor(
     private readonly _toDoStore: ToDoStore,
+    private readonly _userStore: UserStore,
     private readonly _activatedRoute: ActivatedRoute,
     private readonly _router: Router
   ) { }
 
   public save(toDo: ToDo) {
     const obs$ = toDo.toDoId != null
-    ? this._toDoStore.update({ toDo })
-    : this._toDoStore.create({ toDo });
-
-    obs$
-    .pipe(
-      tap(_ => this._router.navigate(['/']))
-    )
-    .subscribe();
+    ? this._toDoStore.update( toDo )
+    : this._toDoStore.create( toDo );
+    this._refresh$.next();
+    this._router.navigate(['/']);
   }
 
   public complete(toDo: ToDo) {
     toDo.status = "Complete";
-    this._toDoStore.update({ toDo })
-    .pipe(
-      tap(_ => this._router.navigate(['/']))
-    )
-    .subscribe();
+    this._toDoStore.update(toDo);
+    this._router.navigate(['/']);
   }
-
 }

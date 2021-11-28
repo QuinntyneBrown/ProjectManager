@@ -12,6 +12,6 @@ export class ToDoProgressComponent {
   @Input() public toDos!: ToDo[];
 
   get completed() {
-    return this.toDos.filter(x => x.status == 'Complete').length;
+    return this.toDos?.filter(x => x.status == 'Complete')?.length;
   }
 }

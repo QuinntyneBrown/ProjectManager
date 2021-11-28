@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { PromotionStore, UserStore, ProjectStore, ToDoStore, NavigationService, AuthStore } from '@core';
-import { UserComponentStore } from '@core/store/component-stores/user.component-store';
 import { combineLatest } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -29,11 +28,10 @@ export class ProjectPanelComponent {
     })
   );
 
-  public user$ = this._userComponentStore.currentUser$;
+  public user$ = this._userStore.select(x => x.currentUser.username);
 
   constructor(
     private readonly _userStore: UserStore,
-    private readonly _userComponentStore: UserComponentStore,
     private readonly _toDoStore: ToDoStore,
     private readonly _projectStore: ProjectStore,
     private readonly _authStore: AuthStore,

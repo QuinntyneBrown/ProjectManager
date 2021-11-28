@@ -1,2 +1,2 @@
-export * from './entity-stores';
+export * from './component-stores';
 export * from './store';

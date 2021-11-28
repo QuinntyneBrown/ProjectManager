@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Project } from '@api';
-import { Destroyable, ProjectStore } from '@core';
-import { map, takeUntil } from 'rxjs/operators';
+import { Destroyable, ProjectStore, UserStore } from '@core';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-project',
@@ -11,9 +11,11 @@ import { map, takeUntil } from 'rxjs/operators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditProjectComponent extends Destroyable {
-  public vm$  = this._projectStore
-  .getCurrentUserProject()
+  public vm$  = this._userStore
+  .select(x => x.currentUser)
   .pipe(
+    // get by project name
+    switchMap(_ => this._projectStore.getCurrentUserProject()),
     map(project => {
       const form = new FormGroup({
         projectId: new FormControl(project.projectId,[Validators.required]),
@@ -29,15 +31,13 @@ export class EditProjectComponent extends Destroyable {
   );
 
   constructor(
-    private readonly _projectStore: ProjectStore
+    private readonly _projectStore: ProjectStore,
+    private readonly _userStore: UserStore
   ) {
     super();
   }
 
   public handleSaveClick(project: Project) {
-    this._projectStore.update({ project })
-    .pipe(
-      takeUntil(this._destroyed$),
-    ).subscribe();
+    this._projectStore.updateProject(project);
   }
 }

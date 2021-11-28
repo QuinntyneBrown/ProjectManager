@@ -4,7 +4,7 @@ import { User } from '@api';
 import { Destroyable } from '@core';
 import { UserStore } from '@core';
 import { BehaviorSubject } from 'rxjs';
-import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { map, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-user',
@@ -26,13 +26,13 @@ export class EditUserComponent extends Destroyable {
       .pipe(
         takeUntil(this._destroyed$),
         map(value => value.name),
-        switchMap((currentProjectName)=> {
-          return this._userStore.update({
-            user: {
-              userId: user.userId,
-              currentProjectName
-            } as User
-          })
+        tap((currentProjectName)=> {
+
+          this._userStore.update({
+            userId: user.userId,
+            currentProjectName
+          } as User);
+
         })
       ).subscribe();
 

@@ -15,7 +15,7 @@
     <a [routerLink]="['/','edit-user']">Edit User</a>
   </div>
   <div class="project-panel__footer">
-    <a [routerLink]="['/','promotions']">Promotions ({{ vm.promotions.length }})</a>
+    <a [routerLink]="['/','promotions']">Promotions ({{ vm.promotions?.length }})</a>
     <button (click)="logout()" class="g-button">Logout</button>
 
     <div>

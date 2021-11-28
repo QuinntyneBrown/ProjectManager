@@ -20,7 +20,7 @@ import { Destroyable, ProjectStore } from '@core';
 export class ProjectSelectComponent extends Destroyable implements ControlValueAccessor  {
 
   public vm$ = this._projectStore
-  .get()
+  .getProjects()
   .pipe(
     map(projects => ({ projects }))
   );

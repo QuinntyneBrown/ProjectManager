@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace AngularCaching.Api.Interfaces
+namespace ProjectManager.Api.Interfaces
 {
     public interface IEvent : INotification
     {

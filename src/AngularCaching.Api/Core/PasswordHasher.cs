@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
 
-namespace AngularCaching.Api.Core
+namespace ProjectManager.Api.Core
 {
     public interface IPasswordHasher
     {

@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "AngularCaching.Api": {
+    "ProjectManager.Api": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

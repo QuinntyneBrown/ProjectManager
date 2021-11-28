@@ -1,10 +1,10 @@
-using AngularCaching.Api.Core;
-using AngularCaching.Api.DomainEvents;
+using ProjectManager.Api.Core;
+using ProjectManager.Api.DomainEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AngularCaching.Api.Models
+namespace ProjectManager.Api.Models
 {
     public class Promotion : AggregateRoot
     {

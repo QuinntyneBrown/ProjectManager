@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace AngularCaching.Api.Models
+namespace ProjectManager.Api.Models
 {
     [Owned]
     public class PromotionTag

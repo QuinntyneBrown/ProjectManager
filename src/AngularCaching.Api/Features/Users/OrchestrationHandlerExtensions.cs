@@ -1,9 +1,9 @@
-﻿using AngularCaching.Api.DomainEvents;
-using AngularCaching.Api.Interfaces;
+﻿using ProjectManager.Api.DomainEvents;
+using ProjectManager.Api.Interfaces;
 using System;
 using System.Threading.Tasks;
 
-namespace AngularCaching.Api.Features.Users
+namespace ProjectManager.Api.Features.Users
 {
     public static class OrchestrationHandlerExtensions
     {

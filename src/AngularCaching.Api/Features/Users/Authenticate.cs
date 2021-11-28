@@ -1,7 +1,7 @@
-using AngularCaching.Api.Core;
-using AngularCaching.Api.DomainEvents;
-using AngularCaching.Api.Interfaces;
-using AngularCaching.Api.Models;
+using ProjectManager.Api.Core;
+using ProjectManager.Api.DomainEvents;
+using ProjectManager.Api.Interfaces;
+using ProjectManager.Api.Models;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +9,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AngularCaching.Api.Features
+namespace ProjectManager.Api.Features
 {
     public class Authenticate
     {
@@ -28,12 +28,12 @@ namespace AngularCaching.Api.Features
 
         public class Handler : IRequestHandler<Request, Response>
         {
-            private readonly IAngularCachingDbContext _context;
+            private readonly IProjectManagerDbContext _context;
             private readonly IPasswordHasher _passwordHasher;
             private readonly ITokenBuilder _tokenBuilder;
             private readonly IOrchestrationHandler _orchestrationHandler;
 
-            public Handler(IAngularCachingDbContext context, IPasswordHasher passwordHasher, ITokenBuilder tokenBuilder, IOrchestrationHandler orchestrationHandler)
+            public Handler(IProjectManagerDbContext context, IPasswordHasher passwordHasher, ITokenBuilder tokenBuilder, IOrchestrationHandler orchestrationHandler)
             {
                 _context = context;
                 _passwordHasher = passwordHasher;

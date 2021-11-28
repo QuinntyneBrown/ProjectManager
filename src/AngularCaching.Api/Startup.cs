@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AngularCaching.Api
+namespace ProjectManager.Api
 {
     public class Startup
     {
@@ -38,7 +38,7 @@ namespace AngularCaching.Api
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "AngularCaching.Api.Api");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProjectManager.Api.Api");
                 c.RoutePrefix = string.Empty;
             });
         }

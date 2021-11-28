@@ -1,7 +1,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace AngularCaching.Api.Features
+namespace ProjectManager.Api.Features
 {
     public class DashboardCardDto
     {

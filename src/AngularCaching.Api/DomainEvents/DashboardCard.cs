@@ -1,8 +1,8 @@
-using AngularCaching.Api.Core;
+using ProjectManager.Api.Core;
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace AngularCaching.Api.DomainEvents
+namespace ProjectManager.Api.DomainEvents
 {
     public class CreateDashboardCard : BaseDomainEvent
     {

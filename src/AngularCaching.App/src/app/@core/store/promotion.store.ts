@@ -26,7 +26,8 @@ export class PromotionStore extends ComponentStore<PromotionStoreState> {
     return of(undefined)
     .pipe(
       tap(_ => this._getPromotionsByProjectId(projectId)),
-      switchMap(_ => this.select(x => x.promotionsByProjectId))
+      switchMap(_ => this.select(x => x.promotionsByProjectId)),
+      shareReplay(1)
     );
   }
 
@@ -41,9 +42,8 @@ export class PromotionStore extends ComponentStore<PromotionStoreState> {
             .pipe(
               tap((promotionsByProjectId:Promotion[]) => this.setState((state) => ({ ...state, promotionsByProjectId })))
             )
-          }),
+          })
         );
-      }),
-      shareReplay(1)
+      })
     ));
 }

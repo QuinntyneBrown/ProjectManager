@@ -1,9 +1,9 @@
-﻿using AngularCaching.Api.Core;
-using AngularCaching.Api.Models;
+﻿using ProjectManager.Api.Core;
+using ProjectManager.Api.Models;
 using System;
 using System.Security.Cryptography;
 
-namespace AngularCaching.Api.DomainEvents
+namespace ProjectManager.Api.DomainEvents
 {
     public class CreateUser : BaseDomainEvent
     {

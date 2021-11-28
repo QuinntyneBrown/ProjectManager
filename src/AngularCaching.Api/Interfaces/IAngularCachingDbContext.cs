@@ -1,11 +1,11 @@
-using AngularCaching.Api.Models;
+using ProjectManager.Api.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace AngularCaching.Api.Interfaces
+namespace ProjectManager.Api.Interfaces
 {
-    public interface IAngularCachingDbContext
+    public interface IProjectManagerDbContext
     {
         DbSet<ToDo> ToDos { get; }
         DbSet<StoredEvent> StoredEvents { get; }

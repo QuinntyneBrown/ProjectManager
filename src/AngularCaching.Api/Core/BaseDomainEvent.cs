@@ -1,8 +1,8 @@
-﻿using AngularCaching.Api.Interfaces;
+﻿using ProjectManager.Api.Interfaces;
 using System;
 using System.Collections.Generic;
 
-namespace AngularCaching.Api.Core
+namespace ProjectManager.Api.Core
 {
     public class BaseDomainEvent : IEvent
     {

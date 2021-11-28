@@ -1,11 +1,11 @@
-﻿using AngularCaching.Api.Interfaces;
-using AngularCaching.Api.Models;
+﻿using ProjectManager.Api.Interfaces;
+using ProjectManager.Api.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using static Newtonsoft.Json.JsonConvert;
 
-namespace AngularCaching.Api.Core
+namespace ProjectManager.Api.Core
 {
     public abstract class AggregateRoot : IAggregateRoot
     {

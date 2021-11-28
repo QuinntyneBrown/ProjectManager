@@ -1,6 +1,6 @@
-﻿using AngularCaching.Api.Core;
-using AngularCaching.Api.Interfaces;
-using AngularCaching.Api.Models;
+﻿using ProjectManager.Api.Core;
+using ProjectManager.Api.Interfaces;
+using ProjectManager.Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AngularCaching.Api.Features
+namespace ProjectManager.Api.Features
 {
     public class CurrentUser
     {
@@ -21,10 +21,10 @@ namespace AngularCaching.Api.Features
 
         public class Handler : IRequestHandler<Request, Response>
         {
-            private readonly IAngularCachingDbContext _context;
+            private readonly IProjectManagerDbContext _context;
             private readonly IHttpContextAccessor _httpContextAccessor;
 
-            public Handler(IAngularCachingDbContext context, IHttpContextAccessor httpContextAccessor)
+            public Handler(IProjectManagerDbContext context, IHttpContextAccessor httpContextAccessor)
             {
                 _context = context;
                 _httpContextAccessor = httpContextAccessor;

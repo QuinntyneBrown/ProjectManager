@@ -1,11 +1,11 @@
-using AngularCaching.Api.Core;
-using AngularCaching.Api.Interfaces;
+using ProjectManager.Api.Core;
+using ProjectManager.Api.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AngularCaching.Api.Features
+namespace ProjectManager.Api.Features
 {
     public class GetProjectByName
     {
@@ -21,9 +21,9 @@ namespace AngularCaching.Api.Features
 
         public class Handler : IRequestHandler<Request, Response>
         {
-            private readonly IAngularCachingDbContext _context;
+            private readonly IProjectManagerDbContext _context;
 
-            public Handler(IAngularCachingDbContext context)
+            public Handler(IProjectManagerDbContext context)
                 => _context = context;
 
             public async Task<Response> Handle(Request request, CancellationToken cancellationToken)

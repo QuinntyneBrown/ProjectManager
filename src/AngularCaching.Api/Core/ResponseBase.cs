@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace AngularCaching.Api.Core
+namespace ProjectManager.Api.Core
 {
     public class ResponseBase
     {

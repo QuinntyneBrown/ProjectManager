@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7B1B5534-7FBD-4EC2-841B-8CFA5D876D8D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AngularCaching.Api", "src\AngularCaching.Api\AngularCaching.Api.csproj", "{3D587074-9DB5-4EA9-AD5B-3B84F12DC2B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManager.Api", "src\AngularCaching.Api\ProjectManager.Api.csproj", "{3D587074-9DB5-4EA9-AD5B-3B84F12DC2B9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CDCF899F-D8AE-4139-87E5-B3FA08F6889E}"
 	ProjectSection(SolutionItems) = preProject

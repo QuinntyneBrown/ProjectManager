@@ -1,16 +1,16 @@
-using AngularCaching.Api.Core;
-using AngularCaching.Api.DomainEvents;
-using AngularCaching.Api.Models;
+using ProjectManager.Api.Core;
+using ProjectManager.Api.DomainEvents;
+using ProjectManager.Api.Models;
 using System;
 using System.Collections.Generic;
 
-namespace AngularCaching.Api.Data
+namespace ProjectManager.Api.Data
 {
     public static class SeedData
     {
 
 
-        public static void Seed(AngularCachingDbContext context)
+        public static void Seed(ProjectManagerDbContext context)
         {
 
             context.AddRange(

@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace AngularCaching.Api.Core
+namespace ProjectManager.Api.Core
 {
     public interface ITokenProvider
     {

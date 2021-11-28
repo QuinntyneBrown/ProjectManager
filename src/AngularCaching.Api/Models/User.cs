@@ -1,8 +1,8 @@
-using AngularCaching.Api.Core;
-using AngularCaching.Api.DomainEvents;
+using ProjectManager.Api.Core;
+using ProjectManager.Api.DomainEvents;
 using System;
 
-namespace AngularCaching.Api.Models
+namespace ProjectManager.Api.Models
 {
     public class User : AggregateRoot
     {

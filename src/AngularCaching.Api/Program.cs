@@ -1,4 +1,4 @@
-using AngularCaching.Api.Data;
+using ProjectManager.Api.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
 
-namespace AngularCaching.Api
+namespace ProjectManager.Api
 {
     public class Program
     {
@@ -26,7 +26,7 @@ namespace AngularCaching.Api
 
             using (var scope = services.CreateScope())
             {
-                var context = scope.ServiceProvider.GetRequiredService<AngularCachingDbContext>();
+                var context = scope.ServiceProvider.GetRequiredService<ProjectManagerDbContext>();
 
                 SeedData.Seed(context);
             }

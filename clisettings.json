@@ -1,18 +1,18 @@
 {
   "projects": null,
-  "path": "C:\\Projects\\AngularCaching",
+  "path": "C:\\Projects\\ProjectManager",
   "solutionName": null,
   "rootNamespace": null,
-  "domainNamespace": "AngularCaching.Api",
-  "applicationNamespace": "AngularCaching.Api",
-  "infrastructureNamespace": "AngularCaching.Api",
-  "apiNamespace": "AngularCaching.Api",
-  "domainDirectory": "C:\\Projects\\AngularCaching\\src\\AngularCaching.Api",
-  "applicationDirectory": "C:\\Projects\\AngularCaching\\src\\AngularCaching.Api",
-  "infrastructureDirectory": "C:\\Projects\\AngularCaching\\src\\AngularCaching.Api",
-  "apiDirectory": "C:\\Projects\\AngularCaching\\src\\AngularCaching.Api",
+  "domainNamespace": "ProjectManager.Api",
+  "applicationNamespace": "ProjectManager.Api",
+  "infrastructureNamespace": "ProjectManager.Api",
+  "apiNamespace": "ProjectManager.Api",
+  "domainDirectory": "C:\\Projects\\ProjectManager\\src\\ProjectManager.Api",
+  "applicationDirectory": "C:\\Projects\\ProjectManager\\src\\ProjectManager.Api",
+  "infrastructureDirectory": "C:\\Projects\\ProjectManager\\src\\ProjectManager.Api",
+  "apiDirectory": "C:\\Projects\\ProjectManager\\src\\ProjectManager.Api",
   "appDirectories": [
-    "C:\\Projects\\AngularCaching\\src\\AngularCaching.App"
+    "C:\\Projects\\ProjectManager\\src\\ProjectManager.App"
   ],
   "buildingBlocksCoreNamespace": "BuildingBlocks.Core",
   "buildingBlocksEventStoreNamespace": "BuildingBlocks.EventStore",
@@ -24,7 +24,7 @@
   "entityIdDataType": null,
   "sourceFolder": "src",
   "testFolder": null,
-  "dbContext": "AngularCachingDbContext",
+  "dbContext": "ProjectManagerDbContext",
   "eventSourcing": false,
   "resources": [
     "ToDo",

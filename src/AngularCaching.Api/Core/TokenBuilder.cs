@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 
-namespace AngularCaching.Api.Core
+namespace ProjectManager.Api.Core
 {
     public interface ITokenBuilder
     {

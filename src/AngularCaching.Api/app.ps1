@@ -1,1 +1,1 @@
-﻿code ..\AngularCaching.App
+﻿code ..\ProjectManager.App

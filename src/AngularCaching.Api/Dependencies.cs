@@ -1,7 +1,7 @@
-using AngularCaching.Api.Core;
-using AngularCaching.Api.Data;
-using AngularCaching.Api.Extensions;
-using AngularCaching.Api.Interfaces;
+using ProjectManager.Api.Core;
+using ProjectManager.Api.Data;
+using ProjectManager.Api.Extensions;
+using ProjectManager.Api.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +16,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AngularCaching.Api
+namespace ProjectManager.Api
 {
     public static class Dependencies
     {
@@ -57,9 +57,9 @@ namespace AngularCaching.Api
 
             services.AddHttpContextAccessor();
 
-            services.AddMediatR(typeof(IAngularCachingDbContext));
+            services.AddMediatR(typeof(IProjectManagerDbContext));
 
-            services.AddTransient<IAngularCachingDbContext, AngularCachingDbContext>();
+            services.AddTransient<IProjectManagerDbContext, ProjectManagerDbContext>();
 
             services.AddScoped<IOrchestrationHandler, OrchestrationHandler>();
 
@@ -100,9 +100,9 @@ namespace AngularCaching.Api
             });
 
 
-            services.AddDbContext<AngularCachingDbContext>(options =>
+            services.AddDbContext<ProjectManagerDbContext>(options =>
             {
-                options.UseInMemoryDatabase(nameof(AngularCaching.Api))
+                options.UseInMemoryDatabase(nameof(ProjectManager.Api))
                 .LogTo(Console.WriteLine)
                 .EnableSensitiveDataLogging();
             });

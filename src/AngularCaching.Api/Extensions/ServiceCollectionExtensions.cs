@@ -1,4 +1,4 @@
-using AngularCaching.Api.Behaviors;
+using ProjectManager.Api.Behaviors;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace AngularCaching.Api.Extensions
+namespace ProjectManager.Api.Extensions
 {
     public static class ServiceCollectionExtensions
     {

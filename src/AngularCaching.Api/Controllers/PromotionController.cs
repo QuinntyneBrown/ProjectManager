@@ -1,10 +1,10 @@
-using AngularCaching.Api.Features;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ProjectManager.Api.Features;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace AngularCaching.Api.Controllers
+namespace ProjectManager.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

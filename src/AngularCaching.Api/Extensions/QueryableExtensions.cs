@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using static System.Linq.Expressions.Expression;
 
-namespace AngularCaching.Api.Extensions
+namespace ProjectManager.Api.Extensions
 {
     public static class IQueryableExtensions
     {

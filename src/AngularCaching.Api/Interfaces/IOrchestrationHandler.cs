@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace AngularCaching.Api.Interfaces
+namespace ProjectManager.Api.Interfaces
 {
     public interface IOrchestrationHandler
     {

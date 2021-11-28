@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AngularCaching.Api.Core;
+using ProjectManager.Api.Core;
 
-namespace AngularCaching.Api.Behaviors
+namespace ProjectManager.Api.Behaviors
 {
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>

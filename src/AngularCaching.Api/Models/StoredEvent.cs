@@ -1,6 +1,6 @@
 using System;
 
-namespace AngularCaching.Api.Models
+namespace ProjectManager.Api.Models
 {
     public class StoredEvent
     {

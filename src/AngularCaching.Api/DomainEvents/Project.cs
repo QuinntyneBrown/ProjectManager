@@ -1,7 +1,7 @@
-﻿using AngularCaching.Api.Core;
+﻿using ProjectManager.Api.Core;
 using System;
 
-namespace AngularCaching.Api.DomainEvents
+namespace ProjectManager.Api.DomainEvents
 {
     public class CreateProject : BaseDomainEvent
     {

@@ -1,7 +1,7 @@
 using System;
-using AngularCaching.Api.Models;
+using ProjectManager.Api.Models;
 
-namespace AngularCaching.Api.Features
+namespace ProjectManager.Api.Features
 {
     public static class DashboardExtensions
     {

@@ -1,13 +1,13 @@
-using AngularCaching.Api.Core;
-using AngularCaching.Api.Interfaces;
-using AngularCaching.Api.Models;
+using ProjectManager.Api.Core;
+using ProjectManager.Api.Interfaces;
+using ProjectManager.Api.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AngularCaching.Api.Data
+namespace ProjectManager.Api.Data
 {
-    public class AngularCachingDbContext : DbContext, IAngularCachingDbContext
+    public class ProjectManagerDbContext : DbContext, IProjectManagerDbContext
     {
         public DbSet<ToDo> ToDos { get; private set; }
         public DbSet<StoredEvent> StoredEvents { get; private set; }
@@ -16,7 +16,7 @@ namespace AngularCaching.Api.Data
         public DbSet<Promotion> Promotions { get; private set; }
         public DbSet<DashboardCard> DashboardCards { get; private set; }
         public DbSet<Dashboard> Dashboards { get; private set; }
-        public AngularCachingDbContext(DbContextOptions options)
+        public ProjectManagerDbContext(DbContextOptions options)
             : base(options)
         {
             SavingChanges += DbContext_SavingChanges;
@@ -44,7 +44,7 @@ namespace AngularCaching.Api.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AngularCachingDbContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProjectManagerDbContext).Assembly);
         }
 
         public override void Dispose()

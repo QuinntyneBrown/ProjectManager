@@ -1,12 +1,12 @@
-﻿using AngularCaching.Api.Core;
-using AngularCaching.Api.DomainEvents;
-using AngularCaching.Api.Interfaces;
+﻿using ProjectManager.Api.Core;
+using ProjectManager.Api.DomainEvents;
+using ProjectManager.Api.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AngularCaching.Api.Features
+namespace ProjectManager.Api.Features
 {
     public class GetProjectByCurrentUser
     {
@@ -19,10 +19,10 @@ namespace AngularCaching.Api.Features
 
         public class Handler : IRequestHandler<Request, Response>
         {
-            private readonly IAngularCachingDbContext _context;
+            private readonly IProjectManagerDbContext _context;
             private readonly IOrchestrationHandler _orchestrationHandler;
 
-            public Handler(IAngularCachingDbContext context, IOrchestrationHandler orchestrationHandler)
+            public Handler(IProjectManagerDbContext context, IOrchestrationHandler orchestrationHandler)
             {
                 _context = context;
                 _orchestrationHandler = orchestrationHandler;

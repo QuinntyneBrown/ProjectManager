@@ -15,7 +15,7 @@ export class EditProjectComponent extends Destroyable {
   .select(x => x.currentUser)
   .pipe(
     // get by project name
-    switchMap(_ => this._projectStore.getCurrentUserProject()),
+    switchMap(currentUser => this._projectStore.getProjectByName(currentUser.currentProjectName)),
     map(project => {
       const form = new FormGroup({
         projectId: new FormControl(project.projectId,[Validators.required]),

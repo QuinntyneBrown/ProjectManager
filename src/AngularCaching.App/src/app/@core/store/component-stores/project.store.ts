@@ -1,13 +1,14 @@
 import { Injectable } from "@angular/core";
 import { Project, ProjectService } from "@api";
 import { switchMapByKey } from "@core/abstractions/switch-map-by-key";
+import { isNonNull } from "@core/utilities/is-non-null";
 import { ComponentStore } from "@ngrx/component-store";
 import { EMPTY, of } from "rxjs";
-import { catchError, first, mergeMap, shareReplay, switchMap, tap } from "rxjs/operators";
+import { catchError, filter, first, mergeMap, shareReplay, switchMap, tap } from "rxjs/operators";
 
 export interface ProjectStoreState {
   projects?: Project[],
-  currentUserProject?: Project
+  project?: Project
 }
 
 @Injectable({
@@ -21,19 +22,39 @@ export class ProjectStore extends ComponentStore<ProjectStoreState> {
     super({ })
   }
 
+  public getProjectByName(name: string) {
+    return of(undefined)
+    .pipe(
+      tap(_ => this._getProjectByName(name)),
+      switchMap(_ => this.select(x => x.project).pipe(filter(isNonNull))
+      )
+    );
+  }
+
+  private _getProjectByName = this.effect<string>(name$ =>
+    name$.pipe(
+      switchMapByKey(name => name, name => {
+        return this.select(x => x.project).pipe(first())
+        .pipe(
+          switchMap(project => {
+            if(project?.name == name) {
+              return of(name);
+            }
+            return this._projectService.getByName({ name })
+            .pipe(
+              tap((project:Project) => this.setState((state) => ({ ...state, project })))
+            )
+          }),
+        );
+      }),
+      shareReplay(1)
+    ))
+
   public getProjects() {
     return of(undefined)
     .pipe(
       tap(_ => this._getProjects()),
       switchMap(_ => this.select(x => x.projects))
-    )
-  }
-
-  public getCurrentUserProject() {
-    return of(undefined)
-    .pipe(
-      tap(_ => this._getCurrentUserProject()),
-      switchMap(_ => this.select(x => x.currentUserProject))
     )
   }
 
@@ -54,30 +75,13 @@ export class ProjectStore extends ComponentStore<ProjectStoreState> {
       shareReplay(1)
     ));
 
-  private readonly _getCurrentUserProject = this.effect<void>(trigger$ =>
-    trigger$.pipe(
-      switchMap(_ => this.select(x => x.currentUserProject).pipe(first())
-      .pipe(
-        switchMap(currentUserProject => {
-          if(currentUserProject === undefined) {
-            return this._projectService.getCurrentUserProject()
-            .pipe(
-              tap(project => this.setState((state) => ({...state, currentUserProject: project }))),
-            );
-          }
-          return of(currentUserProject);
-        }),
-      )),
-      //shareReplay(1)
-    ));
-
   readonly updateProject = this.effect<Project>(project$ => project$.pipe(
     mergeMap(project => {
       return this._projectService.update({ project })
       .pipe(
         tap({
           next: ({ project }) => {
-            this.setState((state) => ({...state, currentUserProject: project }))
+            this.setState((state) => ({...state, project: project }))
           },
           error: () => {
 

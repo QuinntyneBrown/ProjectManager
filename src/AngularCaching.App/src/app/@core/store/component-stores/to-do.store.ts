@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { ToDo, ToDoService } from "@api";
 import { switchMapByKey } from "@core/abstractions/switch-map-by-key";
+import { isNonNull } from "@core/utilities/is-non-null";
 import { ComponentStore } from "@ngrx/component-store";
 import { EMPTY, merge, of, Subject } from "rxjs";
-import { catchError, first, mergeMap, shareReplay, switchMap, tap } from "rxjs/operators";
+import { catchError, filter, first, mergeMap, shareReplay, switchMap, tap } from "rxjs/operators";
 
 export interface ToDoStoreState {
   toDosByProjectName: ToDo[],
@@ -20,14 +21,14 @@ export class ToDoStore extends ComponentStore<ToDoStoreState> {
   constructor(
     private readonly _toDoService: ToDoService
   ) {
-    super({ toDosByProjectName: [], toDo: {} as ToDo })
+    super({ toDosByProjectName: null, toDo: {} as ToDo })
   }
 
   public toDoByProjectName(projectName: string) {
     return merge(of(undefined),this._refresh$)
     .pipe(
       tap(_ => this._getByProjectName(projectName)),
-      switchMap(_ => this.select(x => x.toDosByProjectName))
+      switchMap(_ => this.select(x => x.toDosByProjectName).pipe(filter(isNonNull)))
     )
   }
 

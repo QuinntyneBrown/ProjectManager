@@ -34,6 +34,23 @@ namespace AngularCaching.Api.Controllers
             return response;
         }
 
+        [HttpGet("name/{name}", Name = "GetProjectByNameRoute")]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(GetProjectById.Response), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<GetProjectByName.Response>> GetByName([FromRoute] GetProjectByName.Request request)
+        {
+            var response = await _mediator.Send(request);
+
+            if (response.Project == null)
+            {
+                return new NotFoundObjectResult(request.Name);
+            }
+
+            return response;
+        }
+
         [HttpGet("user/current", Name = "GetProjectByCurrentUserRoute")]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]

@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { Promotion, PromotionService } from "@api";
+import { ToDoStore } from "@core";
 import { switchMapByKey } from "@core/abstractions/switch-map-by-key";
 import { ComponentStore } from "@ngrx/component-store";
 import { of } from "rxjs";
-import { first, shareReplay, switchMap, tap } from "rxjs/operators";
+import { first, map, shareReplay, switchMap, tap } from "rxjs/operators";
 
 export interface PromotionStoreState {
   promotionsByProjectId: Promotion[],
@@ -15,7 +16,8 @@ export interface PromotionStoreState {
 export class PromotionStore extends ComponentStore<PromotionStoreState> {
 
   constructor(
-    private readonly _promotionService: PromotionService
+    private readonly _promotionService: PromotionService,
+    private readonly _toDoStore: ToDoStore
   ) {
     super({ promotionsByProjectId: [] })
   }
@@ -30,6 +32,7 @@ export class PromotionStore extends ComponentStore<PromotionStoreState> {
 
   private _getPromotionsByProjectId = this.effect<string>(promotionId$ =>
     promotionId$.pipe(
+      switchMap(x => this._toDoStore.select(x => x.toDosByProjectName).pipe(map(_ => x))),
       switchMapByKey(projectId => projectId, projectId => {
         return this.select(x => x.promotionsByProjectId).pipe(first())
         .pipe(

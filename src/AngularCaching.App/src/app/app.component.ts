@@ -15,7 +15,6 @@ export class AppComponent {
     _userStore: UserStore,
   ) {
     combineLatest([
-      _projectStore.getCurrentUserProject(),
       _userStore.getCurrent()
     ])
     .pipe(

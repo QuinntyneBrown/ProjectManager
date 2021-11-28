@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Project, User } from '@api';
 import { PromotionStore, UserStore, ProjectStore, ToDoStore, NavigationService, AuthStore } from '@core';
+import { isNonNull } from '@core/utilities/is-non-null';
 import { combineLatest } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -12,11 +14,16 @@ import { map, switchMap, tap } from 'rxjs/operators';
 })
 export class ProjectPanelComponent {
 
-  public vm$ = combineLatest([
-    this._userStore.getCurrent(),
-    this._projectStore.getCurrentUserProject()
-  ])
+  public vm$ = this._userStore.getCurrent()
   .pipe(
+    switchMap(user => {
+      return this._projectStore.getProjectByName(user.currentProjectName)
+      .pipe(
+        map(project => {
+          return [user, project] as [User, Project]
+        })
+      )
+    }),
     switchMap(([user, project]) => {
       return combineLatest([
         this._toDoStore.toDoByProjectName(user.currentProjectName),

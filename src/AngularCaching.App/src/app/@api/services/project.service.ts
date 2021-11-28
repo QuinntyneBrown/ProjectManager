@@ -42,6 +42,13 @@ export class ProjectService implements IPagableService<Project> {
       );
   }
 
+  public getByName(options: { name: string }): Observable<Project> {
+    return this._client.get<{ project: Project }>(`${this._baseUrl}api/project/name/${options.name}`)
+      .pipe(
+        map(x => x.project)
+      );
+  }
+
   public remove(options: { project: Project }): Observable<void> {
     return this._client.delete<void>(`${this._baseUrl}api/project/${options.project.projectId}`);
   }

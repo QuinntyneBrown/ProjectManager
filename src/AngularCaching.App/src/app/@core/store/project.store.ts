@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Project, ProjectService } from "@api";
 import { switchMapByKey } from "@core/abstractions/switch-map-by-key";
-import { isNonNull } from "@core/utilities/is-non-null";
+import { isNonNull } from '@core/abstractions/is-non-null';
 import { ComponentStore } from "@ngrx/component-store";
 import { EMPTY, of } from "rxjs";
 import { catchError, filter, first, mergeMap, shareReplay, switchMap, tap } from "rxjs/operators";

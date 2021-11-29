@@ -24,37 +24,15 @@ export class ToDoStore extends ComponentStore<ToDoStoreState> {
     super({ toDosByProjectName: null, toDo: {} as ToDo })
   }
 
-  public toDoByProjectName(projectName: string) {
-    return merge(of(undefined),this._refresh$)
-    .pipe(
-      tap(_ => this._getByProjectName(projectName)),
-      switchMap(_ => this.select(x => x.toDosByProjectName).pipe(filter(isNonNull)))
-    )
-  }
-
   public toDoById(toDoId: string) {
     return of(undefined)
     .pipe(
       tap(_ => this._getToDoById(toDoId)),
-      switchMap(_ => this.select(x => x.toDo))
+      switchMap(_ => this.select(x => x.toDo)),
+      filter(isNonNull),
+      shareReplay(1)
     );
   }
-
-  private _getByProjectName = this.effect<string>(projectName$ =>
-    projectName$.pipe(
-      switchMapByKey(projectName => projectName, projectName => {
-        return this.select(x => x.toDosByProjectName).pipe(first())
-        .pipe(
-          switchMap(toDos => {
-            return this._toDoService.getByProjectName(projectName)
-            .pipe(
-              tap((toDosByProjectName:ToDo[]) => this.setState((state) => ({ ...state, toDosByProjectName })))
-            )
-          }),
-        );
-      }),
-      shareReplay(1)
-    ))
 
   private _getToDoById = this.effect<string>(toDoId$ =>
     toDoId$.pipe(
@@ -71,8 +49,32 @@ export class ToDoStore extends ComponentStore<ToDoStoreState> {
             )
           }),
         );
-      }),
+      })
+    ))
+
+  public toDoByProjectName(projectName: string) {
+    return merge(of(undefined),this._refresh$)
+    .pipe(
+      tap(_ => this._getByProjectName(projectName)),
+      switchMap(_ => this.select(x => x.toDosByProjectName)),
+      filter(isNonNull),
       shareReplay(1)
+    )
+  }
+
+  private _getByProjectName = this.effect<string>(projectName$ =>
+    projectName$.pipe(
+      switchMapByKey(projectName => projectName, projectName => {
+        return this.select(x => x.toDosByProjectName).pipe(first())
+        .pipe(
+          switchMap(toDos => {
+            return this._toDoService.getByProjectName(projectName)
+            .pipe(
+              tap((toDosByProjectName:ToDo[]) => this.setState((state) => ({ ...state, toDosByProjectName })))
+            )
+          }),
+        );
+      })
     ))
 
   readonly create = this.effect<ToDo>(toDo$ => toDo$.pipe(

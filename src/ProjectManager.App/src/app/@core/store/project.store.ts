@@ -85,6 +85,9 @@ export class ProjectStore extends ComponentStore<ProjectStoreState> {
           },
           error: () => {
 
+          },
+          complete: () => {
+
           }
         }),
         catchError(() => EMPTY)

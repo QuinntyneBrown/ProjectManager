@@ -29,9 +29,7 @@ export class LoginComponent extends Destroyable  {
     })
     .pipe(
       takeUntil(this._destroyed$),
-      tap(x => {
-        this._navigationService.redirectPreLogin();
-      }),
+      tap(x => this._navigationService.redirectPreLogin()),
     ).subscribe();
   }
 }

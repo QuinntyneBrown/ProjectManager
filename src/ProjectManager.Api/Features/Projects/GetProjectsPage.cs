@@ -13,43 +13,40 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProjectManager.Api.Features;
 
-public class GetProjectsPage
-{
-    public class Request : IRequest<Response>
-    {
-        public int PageSize { get; set; }
-        public int Index { get; set; }
-    }
+ public class GetProjectsPageRequest : IRequest<GetProjectsPageResponse>
+ {
+     public int PageSize { get; set; }
+     public int Index { get; set; }
+ }
 
-    public class Response : ResponseBase
-    {
-        public int Length { get; set; }
-        public List<ProjectDto> Entities { get; set; }
-    }
+ public class GetProjectsPageResponse : ResponseBase
+ {
+     public int Length { get; set; }
+     public List<ProjectDto> Entities { get; set; }
+ }
 
-    public class Handler : IRequestHandler<Request, Response>
-    {
-        private readonly IProjectManagerDbContext _context;
+ public class GetProjectsPageHandler : IRequestHandler<GetProjectsPageRequest, GetProjectsPageResponse>
+ {
+     private readonly IProjectManagerDbContext _context;
 
-        public Handler(IProjectManagerDbContext context)
-            => _context = context;
+     public GetProjectsPageHandler(IProjectManagerDbContext context)
+         => _context = context;
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-        {
-            var query = from project in _context.Projects
-                        select project;
+     public async Task<GetProjectsPageResponse> Handle(GetProjectsPageRequest request, CancellationToken cancellationToken)
+     {
+         var query = from project in _context.Projects
+                     select project;
 
-            var length = await _context.Projects.CountAsync();
+         var length = await _context.Projects.CountAsync();
 
-            var projects = await query.Page(request.Index, request.PageSize)
-                .Select(x => x.ToDto()).ToListAsync();
+         var projects = await query.Page(request.Index, request.PageSize)
+             .Select(x => x.ToDto()).ToListAsync();
 
-            return new()
-            {
-                Length = length,
-                Entities = projects
-            };
-        }
+         return new()
+         {
+             Length = length,
+             Entities = projects
+         };
+     }
 
-    }
-}
+ }

@@ -11,29 +11,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProjectManager.Api.Features;
 
-public class GetDashboards
-{
-    public class Request : IRequest<Response> { }
+ public class GetDashboardsRequest : IRequest<GetDashboardsResponse> { }
 
-    public class Response : ResponseBase
-    {
-        public List<DashboardDto> Dashboards { get; set; }
-    }
+ public class GetDashboardsResponse : ResponseBase
+ {
+     public List<DashboardDto> Dashboards { get; set; }
+ }
 
-    public class Handler : IRequestHandler<Request, Response>
-    {
-        private readonly IProjectManagerDbContext _context;
+ public class GetDashboardsHandler : IRequestHandler<GetDashboardsRequest, GetDashboardsResponse>
+ {
+     private readonly IProjectManagerDbContext _context;
 
-        public Handler(IProjectManagerDbContext context)
-            => _context = context;
+     public GetDashboardsHandler(IProjectManagerDbContext context)
+         => _context = context;
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-        {
-            return new()
-            {
-                Dashboards = await _context.Dashboards.Select(x => x.ToDto()).ToListAsync()
-            };
-        }
+     public async Task<GetDashboardsResponse> Handle(GetDashboardsRequest request, CancellationToken cancellationToken)
+     {
+         return new()
+         {
+             Dashboards = await _context.Dashboards.Select(x => x.ToDto()).ToListAsync()
+         };
+     }
 
-    }
-}
+ }

@@ -9,48 +9,45 @@ using System.Threading.Tasks;
 
 namespace ProjectManager.Api.Features;
 
-public class UpdateDashboardCardSettings
-{
-    public class Validator : AbstractValidator<Request>
-    {
-        public Validator()
-        {
-            RuleFor(request => request.DashboardCard).NotNull();
-            RuleFor(request => request.DashboardCard).SetValidator(new DashboardCardValidator());
-        }
+ public class UpdateDashboardCardSettingsValidator : AbstractValidator<UpdateDashboardCardSettingsRequest>
+ {
+     public UpdateDashboardCardSettingsValidator()
+     {
+         RuleFor(request => request.DashboardCard).NotNull();
+         RuleFor(request => request.DashboardCard).SetValidator(new DashboardCardValidator());
+     }
 
-    }
+ }
 
-    public class Request : IRequest<Response>
-    {
-        public DashboardCardDto DashboardCard { get; set; }
-    }
+ public class UpdateDashboardCardSettingsRequest : IRequest<UpdateDashboardCardSettingsResponse>
+ {
+     public DashboardCardDto DashboardCard { get; set; }
+ }
 
-    public class Response : ResponseBase
-    {
-        public DashboardCardDto DashboardCard { get; set; }
-    }
+ public class UpdateDashboardCardSettingsResponse : ResponseBase
+ {
+     public DashboardCardDto DashboardCard { get; set; }
+ }
 
-    public class Handler : IRequestHandler<Request, Response>
-    {
-        private readonly IProjectManagerDbContext _context;
+ public class UpdateDashboardCardSettingsHandler : IRequestHandler<UpdateDashboardCardSettingsRequest, UpdateDashboardCardSettingsResponse>
+ {
+     private readonly IProjectManagerDbContext _context;
 
-        public Handler(IProjectManagerDbContext context)
-            => _context = context;
+     public UpdateDashboardCardSettingsHandler(IProjectManagerDbContext context)
+         => _context = context;
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-        {
-            var dashboardCard = await _context.DashboardCards.SingleAsync(x => x.DashboardCardId == request.DashboardCard.DashboardCardId);
+     public async Task<UpdateDashboardCardSettingsResponse> Handle(UpdateDashboardCardSettingsRequest request, CancellationToken cancellationToken)
+     {
+         var dashboardCard = await _context.DashboardCards.SingleAsync(x => x.DashboardCardId == request.DashboardCard.DashboardCardId);
 
-            dashboardCard.Apply(new DomainEvents.UpdateDashboardCardSettings(request.DashboardCard.Settings));
+         dashboardCard.Apply(new DomainEvents.UpdateDashboardCardSettings(request.DashboardCard.Settings));
 
-            await _context.SaveChangesAsync(cancellationToken);
+         await _context.SaveChangesAsync(cancellationToken);
 
-            return new Response()
-            {
-                DashboardCard = dashboardCard.ToDto()
-            };
-        }
+         return new UpdateDashboardCardSettingsResponse()
+         {
+             DashboardCard = dashboardCard.ToDto()
+         };
+     }
 
-    }
-}
+ }

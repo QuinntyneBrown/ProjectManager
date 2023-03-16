@@ -8,32 +8,29 @@ using System.Threading.Tasks;
 
 namespace ProjectManager.Api.Features;
 
-public class GetProjectByName
-{
-    public class Request : IRequest<Response>
-    {
-        public string Name { get; set; }
-    }
+ public class GetProjectByNameRequest : IRequest<GetProjectByNameResponse>
+ {
+     public string Name { get; set; }
+ }
 
-    public class Response : ResponseBase
-    {
-        public ProjectDto Project { get; set; }
-    }
+ public class GetProjectByNameResponse : ResponseBase
+ {
+     public ProjectDto Project { get; set; }
+ }
 
-    public class Handler : IRequestHandler<Request, Response>
-    {
-        private readonly IProjectManagerDbContext _context;
+ public class GetProjectByNameHandler : IRequestHandler<GetProjectByNameRequest, GetProjectByNameResponse>
+ {
+     private readonly IProjectManagerDbContext _context;
 
-        public Handler(IProjectManagerDbContext context)
-            => _context = context;
+     public GetProjectByNameHandler(IProjectManagerDbContext context)
+         => _context = context;
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-        {
-            return new()
-            {
-                Project = (await _context.Projects.SingleOrDefaultAsync(x => x.Name == request.Name)).ToDto()
-            };
-        }
+     public async Task<GetProjectByNameResponse> Handle(GetProjectByNameRequest request, CancellationToken cancellationToken)
+     {
+         return new()
+         {
+             Project = (await _context.Projects.SingleOrDefaultAsync(x => x.Name == request.Name)).ToDto()
+         };
+     }
 
-    }
-}
+ }

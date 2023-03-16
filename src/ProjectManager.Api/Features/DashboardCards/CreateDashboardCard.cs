@@ -9,46 +9,43 @@ using System.Threading.Tasks;
 
 namespace ProjectManager.Api.Features;
 
-public class CreateDashboardCard
-{
-    public class Validator : AbstractValidator<Request>
-    {
-        public Validator()
-        {
-            RuleFor(request => request.DashboardCard).NotNull();
-            RuleFor(request => request.DashboardCard).SetValidator(new DashboardCardValidator());
-        }
-    }
+ public class CreateDashboardCardValidator : AbstractValidator<CreateDashboardCardRequest>
+ {
+     public CreateDashboardCardValidator()
+     {
+         RuleFor(request => request.DashboardCard).NotNull();
+         RuleFor(request => request.DashboardCard).SetValidator(new DashboardCardValidator());
+     }
+ }
 
-    public class Request : IRequest<Response>
-    {
-        public DashboardCardDto DashboardCard { get; set; }
-    }
+ public class CreateDashboardCardRequest : IRequest<CreateDashboardCardResponse>
+ {
+     public DashboardCardDto DashboardCard { get; set; }
+ }
 
-    public class Response : ResponseBase
-    {
-        public DashboardCardDto DashboardCard { get; set; }
-    }
+ public class CreateDashboardCardResponse : ResponseBase
+ {
+     public DashboardCardDto DashboardCard { get; set; }
+ }
 
-    public class Handler : IRequestHandler<Request, Response>
-    {
-        private readonly IProjectManagerDbContext _context;
+ public class CreateDashboardCardHandler : IRequestHandler<CreateDashboardCardRequest, CreateDashboardCardResponse>
+ {
+     private readonly IProjectManagerDbContext _context;
 
-        public Handler(IProjectManagerDbContext context)
-            => _context = context;
+     public CreateDashboardCardHandler(IProjectManagerDbContext context)
+         => _context = context;
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-        {
-            var dashboardCard = new DashboardCard(new DomainEvents.CreateDashboardCard(request.DashboardCard.CardType, request.DashboardCard.Dashboard, request.DashboardCard.Settings));
+     public async Task<CreateDashboardCardResponse> Handle(CreateDashboardCardRequest request, CancellationToken cancellationToken)
+     {
+         var dashboardCard = new DashboardCard(new DomainEvents.CreateDashboardCard(request.DashboardCard.CardType, request.DashboardCard.Dashboard, request.DashboardCard.Settings));
 
-            _context.DashboardCards.Add(dashboardCard);
+         _context.DashboardCards.Add(dashboardCard);
 
-            await _context.SaveChangesAsync(cancellationToken);
+         await _context.SaveChangesAsync(cancellationToken);
 
-            return new()
-            {
-                DashboardCard = dashboardCard.ToDto()
-            };
-        }
-    }
-}
+         return new()
+         {
+             DashboardCard = dashboardCard.ToDto()
+         };
+     }
+ }

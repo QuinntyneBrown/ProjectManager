@@ -22,8 +22,8 @@ public class ToDoController
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetToDoById.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetToDoById.Response>> GetById([FromRoute] GetToDoById.Request request)
+    [ProducesResponseType(typeof(GetToDoByIdResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetToDoByIdResponse>> GetById([FromRoute] GetToDoByIdRequest request)
     {
         var response = await _mediator.Send(request);
 
@@ -39,43 +39,43 @@ public class ToDoController
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetToDosByProjectName.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetToDosByProjectName.Response>> GetByProjectName([FromRoute] GetToDosByProjectName.Request request)
+    [ProducesResponseType(typeof(GetToDosByProjectNameResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetToDosByProjectNameResponse>> GetByProjectName([FromRoute] GetToDosByProjectNameRequest request)
         => await _mediator.Send(request);
 
     [HttpGet(Name = "GetToDosRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetToDos.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetToDos.Response>> Get()
-        => await _mediator.Send(new GetToDos.Request());
+    [ProducesResponseType(typeof(GetToDosResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetToDosResponse>> Get()
+        => await _mediator.Send(new GetToDosRequest());
 
     [HttpPost(Name = "CreateToDoRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(CreateToDo.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<CreateToDo.Response>> Create([FromBody] CreateToDo.Request request)
+    [ProducesResponseType(typeof(CreateToDoResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<CreateToDoResponse>> Create([FromBody] CreateToDoRequest request)
         => await _mediator.Send(request);
 
     [HttpGet("page/{pageSize}/{index}", Name = "GetToDosPageRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetToDosPage.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetToDosPage.Response>> Page([FromRoute] GetToDosPage.Request request)
+    [ProducesResponseType(typeof(GetToDosPageResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetToDosPageResponse>> Page([FromRoute] GetToDosPageRequest request)
         => await _mediator.Send(request);
 
     [HttpPut(Name = "UpdateToDoRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(UpdateToDo.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<UpdateToDo.Response>> Update([FromBody] UpdateToDo.Request request)
+    [ProducesResponseType(typeof(UpdateToDoResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<UpdateToDoResponse>> Update([FromBody] UpdateToDoRequest request)
         => await _mediator.Send(request);
 
     [HttpDelete("{toDoId}", Name = "RemoveToDoRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(RemoveToDo.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<RemoveToDo.Response>> Remove([FromRoute] RemoveToDo.Request request)
+    [ProducesResponseType(typeof(RemoveToDoResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<RemoveToDoResponse>> Remove([FromRoute] RemoveToDoRequest request)
         => await _mediator.Send(request);
 
 }

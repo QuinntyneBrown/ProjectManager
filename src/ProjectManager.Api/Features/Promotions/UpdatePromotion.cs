@@ -9,46 +9,43 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProjectManager.Api.Features;
 
-public class UpdatePromotion
-{
-    public class Validator : AbstractValidator<Request>
-    {
-        public Validator()
-        {
-            RuleFor(request => request.Promotion).NotNull();
-            RuleFor(request => request.Promotion).SetValidator(new PromotionValidator());
-        }
+ public class UpdatePromotionValidator : AbstractValidator<UpdatePromotionRequest>
+ {
+     public UpdatePromotionValidator()
+     {
+         RuleFor(request => request.Promotion).NotNull();
+         RuleFor(request => request.Promotion).SetValidator(new PromotionValidator());
+     }
 
-    }
+ }
 
-    public class Request : IRequest<Response>
-    {
-        public PromotionDto Promotion { get; set; }
-    }
+ public class UpdatePromotionRequest : IRequest<UpdatePromotionResponse>
+ {
+     public PromotionDto Promotion { get; set; }
+ }
 
-    public class Response : ResponseBase
-    {
-        public PromotionDto Promotion { get; set; }
-    }
+ public class UpdatePromotionResponse : ResponseBase
+ {
+     public PromotionDto Promotion { get; set; }
+ }
 
-    public class Handler : IRequestHandler<Request, Response>
-    {
-        private readonly IProjectManagerDbContext _context;
+ public class UpdatePromotionHandler : IRequestHandler<UpdatePromotionRequest, UpdatePromotionResponse>
+ {
+     private readonly IProjectManagerDbContext _context;
 
-        public Handler(IProjectManagerDbContext context)
-            => _context = context;
+     public UpdatePromotionHandler(IProjectManagerDbContext context)
+         => _context = context;
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-        {
-            var promotion = await _context.Promotions.SingleAsync(x => x.PromotionId == request.Promotion.PromotionId);
+     public async Task<UpdatePromotionResponse> Handle(UpdatePromotionRequest request, CancellationToken cancellationToken)
+     {
+         var promotion = await _context.Promotions.SingleAsync(x => x.PromotionId == request.Promotion.PromotionId);
 
-            await _context.SaveChangesAsync(cancellationToken);
+         await _context.SaveChangesAsync(cancellationToken);
 
-            return new Response()
-            {
-                Promotion = promotion.ToDto()
-            };
-        }
+         return new UpdatePromotionResponse()
+         {
+             Promotion = promotion.ToDto()
+         };
+     }
 
-    }
-}
+ }

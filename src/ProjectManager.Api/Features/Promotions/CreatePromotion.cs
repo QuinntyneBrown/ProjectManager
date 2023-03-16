@@ -9,48 +9,45 @@ using System.Threading.Tasks;
 
 namespace ProjectManager.Api.Features;
 
-public class CreatePromotion
-{
-    public class Validator : AbstractValidator<Request>
-    {
-        public Validator()
-        {
-            RuleFor(request => request.Promotion).NotNull();
-            RuleFor(request => request.Promotion).SetValidator(new PromotionValidator());
-        }
+ public class CreatePromotionValidator : AbstractValidator<CreatePromotionRequest>
+ {
+     public CreatePromotionValidator()
+     {
+         RuleFor(request => request.Promotion).NotNull();
+         RuleFor(request => request.Promotion).SetValidator(new PromotionValidator());
+     }
 
-    }
+ }
 
-    public class Request : IRequest<Response>
-    {
-        public PromotionDto Promotion { get; set; }
-    }
+ public class CreatePromotionRequest : IRequest<CreatePromotionResponse>
+ {
+     public PromotionDto Promotion { get; set; }
+ }
 
-    public class Response : ResponseBase
-    {
-        public PromotionDto Promotion { get; set; }
-    }
+ public class CreatePromotionResponse : ResponseBase
+ {
+     public PromotionDto Promotion { get; set; }
+ }
 
-    public class Handler : IRequestHandler<Request, Response>
-    {
-        private readonly IProjectManagerDbContext _context;
+ public class CreatePromotionHandler : IRequestHandler<CreatePromotionRequest, CreatePromotionResponse>
+ {
+     private readonly IProjectManagerDbContext _context;
 
-        public Handler(IProjectManagerDbContext context)
-            => _context = context;
+     public CreatePromotionHandler(IProjectManagerDbContext context)
+         => _context = context;
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-        {
-            var promotion = new Promotion(new(request.Promotion.Name));
+     public async Task<CreatePromotionResponse> Handle(CreatePromotionRequest request, CancellationToken cancellationToken)
+     {
+         var promotion = new Promotion(new(request.Promotion.Name));
 
-            _context.Promotions.Add(promotion);
+         _context.Promotions.Add(promotion);
 
-            await _context.SaveChangesAsync(cancellationToken);
+         await _context.SaveChangesAsync(cancellationToken);
 
-            return new Response()
-            {
-                Promotion = promotion.ToDto()
-            };
-        }
+         return new CreatePromotionResponse()
+         {
+             Promotion = promotion.ToDto()
+         };
+     }
 
-    }
-}
+ }

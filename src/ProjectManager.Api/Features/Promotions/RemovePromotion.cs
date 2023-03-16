@@ -11,38 +11,35 @@ using ProjectManager.Api.Interfaces;
 
 namespace ProjectManager.Api.Features;
 
-public class RemovePromotion
-{
-    public class Request : IRequest<Response>
-    {
-        public Guid PromotionId { get; set; }
-    }
+ public class RemovePromotionRequest : IRequest<RemovePromotionResponse>
+ {
+     public Guid PromotionId { get; set; }
+ }
 
-    public class Response : ResponseBase
-    {
-        public PromotionDto Promotion { get; set; }
-    }
+ public class RemovePromotionResponse : ResponseBase
+ {
+     public PromotionDto Promotion { get; set; }
+ }
 
-    public class Handler : IRequestHandler<Request, Response>
-    {
-        private readonly IProjectManagerDbContext _context;
+ public class RemovePromotionHandler : IRequestHandler<RemovePromotionRequest, RemovePromotionResponse>
+ {
+     private readonly IProjectManagerDbContext _context;
 
-        public Handler(IProjectManagerDbContext context)
-            => _context = context;
+     public RemovePromotionHandler(IProjectManagerDbContext context)
+         => _context = context;
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-        {
-            var promotion = await _context.Promotions.SingleAsync(x => x.PromotionId == request.PromotionId);
+     public async Task<RemovePromotionResponse> Handle(RemovePromotionRequest request, CancellationToken cancellationToken)
+     {
+         var promotion = await _context.Promotions.SingleAsync(x => x.PromotionId == request.PromotionId);
 
-            _context.Promotions.Remove(promotion);
+         _context.Promotions.Remove(promotion);
 
-            await _context.SaveChangesAsync(cancellationToken);
+         await _context.SaveChangesAsync(cancellationToken);
 
-            return new Response()
-            {
-                Promotion = promotion.ToDto()
-            };
-        }
+         return new RemovePromotionResponse()
+         {
+             Promotion = promotion.ToDto()
+         };
+     }
 
-    }
-}
+ }

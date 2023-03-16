@@ -11,38 +11,35 @@ using ProjectManager.Api.Interfaces;
 
 namespace ProjectManager.Api.Features;
 
-public class RemoveUser
-{
-    public class Request : IRequest<Response>
-    {
-        public Guid UserId { get; set; }
-    }
+ public class RemoveUserRequest : IRequest<RemoveUserResponse>
+ {
+     public Guid UserId { get; set; }
+ }
 
-    public class Response : ResponseBase
-    {
-        public UserDto User { get; set; }
-    }
+ public class RemoveUserResponse : ResponseBase
+ {
+     public UserDto User { get; set; }
+ }
 
-    public class Handler : IRequestHandler<Request, Response>
-    {
-        private readonly IProjectManagerDbContext _context;
+ public class RemoveUserHandler : IRequestHandler<RemoveUserRequest, RemoveUserResponse>
+ {
+     private readonly IProjectManagerDbContext _context;
 
-        public Handler(IProjectManagerDbContext context)
-            => _context = context;
+     public RemoveUserHandler(IProjectManagerDbContext context)
+         => _context = context;
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-        {
-            var user = await _context.Users.SingleAsync(x => x.UserId == request.UserId);
+     public async Task<RemoveUserResponse> Handle(RemoveUserRequest request, CancellationToken cancellationToken)
+     {
+         var user = await _context.Users.SingleAsync(x => x.UserId == request.UserId);
 
-            _context.Users.Remove(user);
+         _context.Users.Remove(user);
 
-            await _context.SaveChangesAsync(cancellationToken);
+         await _context.SaveChangesAsync(cancellationToken);
 
-            return new Response()
-            {
-                User = user.ToDto()
-            };
-        }
+         return new RemoveUserResponse()
+         {
+             User = user.ToDto()
+         };
+     }
 
-    }
-}
+ }

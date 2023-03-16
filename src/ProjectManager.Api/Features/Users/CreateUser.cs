@@ -9,49 +9,46 @@ using System.Threading.Tasks;
 
 namespace ProjectManager.Api.Features;
 
-public class CreateUser
-{
-    public class Validator : AbstractValidator<Request>
-    {
-        public Validator()
-        {
-            RuleFor(request => request.User).NotNull();
-            RuleFor(request => request.User).SetValidator(new UserValidator());
-        }
+ public class CreateUserValidator : AbstractValidator<CreateUserRequest>
+ {
+     public CreateUserValidator()
+     {
+         RuleFor(request => request.User).NotNull();
+         RuleFor(request => request.User).SetValidator(new UserValidator());
+     }
 
-    }
+ }
 
-    public class Request : IRequest<Response>
-    {
-        public UserDto User { get; set; }
-    }
+ public class CreateUserRequest : IRequest<CreateUserResponse>
+ {
+     public UserDto User { get; set; }
+ }
 
-    public class Response : ResponseBase
-    {
-        public UserDto User { get; set; }
-    }
+ public class CreateUserResponse : ResponseBase
+ {
+     public UserDto User { get; set; }
+ }
 
-    public class Handler : IRequestHandler<Request, Response>
-    {
-        private readonly IProjectManagerDbContext _context;
-        private readonly IPasswordHasher _passwordHasher;
+ public class CreateUserHandler : IRequestHandler<CreateUserRequest, CreateUserResponse>
+ {
+     private readonly IProjectManagerDbContext _context;
+     private readonly IPasswordHasher _passwordHasher;
 
-        public Handler(IProjectManagerDbContext context)
-            => _context = context;
+     public CreateUserHandler(IProjectManagerDbContext context)
+         => _context = context;
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-        {
-            var user = new User(new(request.User.Name, request.User.CurrentProjectName, null, _passwordHasher));
+     public async Task<CreateUserResponse> Handle(CreateUserRequest request, CancellationToken cancellationToken)
+     {
+         var user = new User(new(request.User.Name, request.User.CurrentProjectName, null, _passwordHasher));
 
-            _context.Users.Add(user);
+         _context.Users.Add(user);
 
-            await _context.SaveChangesAsync(cancellationToken);
+         await _context.SaveChangesAsync(cancellationToken);
 
-            return new Response()
-            {
-                User = user.ToDto()
-            };
-        }
+         return new CreateUserResponse()
+         {
+             User = user.ToDto()
+         };
+     }
 
-    }
-}
+ }

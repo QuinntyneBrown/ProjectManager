@@ -13,43 +13,40 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProjectManager.Api.Features;
 
-public class GetDashboardCardsPage
-{
-    public class Request : IRequest<Response>
-    {
-        public int PageSize { get; set; }
-        public int Index { get; set; }
-    }
+ public class GetDashboardCardsPageRequest : IRequest<GetDashboardCardsPageResponse>
+ {
+     public int PageSize { get; set; }
+     public int Index { get; set; }
+ }
 
-    public class Response : ResponseBase
-    {
-        public int Length { get; set; }
-        public List<DashboardCardDto> Entities { get; set; }
-    }
+ public class GetDashboardCardsPageResponse : ResponseBase
+ {
+     public int Length { get; set; }
+     public List<DashboardCardDto> Entities { get; set; }
+ }
 
-    public class Handler : IRequestHandler<Request, Response>
-    {
-        private readonly IProjectManagerDbContext _context;
+ public class GetDashboardCardsPageHandler : IRequestHandler<GetDashboardCardsPageRequest, GetDashboardCardsPageResponse>
+ {
+     private readonly IProjectManagerDbContext _context;
 
-        public Handler(IProjectManagerDbContext context)
-            => _context = context;
+     public GetDashboardCardsPageHandler(IProjectManagerDbContext context)
+         => _context = context;
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-        {
-            var query = from dashboardCard in _context.DashboardCards
-                        select dashboardCard;
+     public async Task<GetDashboardCardsPageResponse> Handle(GetDashboardCardsPageRequest request, CancellationToken cancellationToken)
+     {
+         var query = from dashboardCard in _context.DashboardCards
+                     select dashboardCard;
 
-            var length = await _context.DashboardCards.CountAsync();
+         var length = await _context.DashboardCards.CountAsync();
 
-            var dashboardCards = await query.Page(request.Index, request.PageSize)
-                .Select(x => x.ToDto()).ToListAsync();
+         var dashboardCards = await query.Page(request.Index, request.PageSize)
+             .Select(x => x.ToDto()).ToListAsync();
 
-            return new()
-            {
-                Length = length,
-                Entities = dashboardCards
-            };
-        }
+         return new()
+         {
+             Length = length,
+             Entities = dashboardCards
+         };
+     }
 
-    }
-}
+ }

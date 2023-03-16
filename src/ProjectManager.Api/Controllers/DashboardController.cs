@@ -20,8 +20,8 @@ public class DashboardController
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetDashboardById.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetDashboardById.Response>> GetById([FromRoute] GetDashboardById.Request request)
+    [ProducesResponseType(typeof(GetDashboardByIdResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetDashboardByIdResponse>> GetById([FromRoute] GetDashboardByIdRequest request)
     {
         var response = await _mediator.Send(request);
 
@@ -36,36 +36,36 @@ public class DashboardController
     [HttpGet(Name = "GetDashboardsRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetDashboards.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetDashboards.Response>> Get()
-        => await _mediator.Send(new GetDashboards.Request());
+    [ProducesResponseType(typeof(GetDashboardsResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetDashboardsResponse>> Get()
+        => await _mediator.Send(new GetDashboardsRequest());
 
     [HttpPost(Name = "CreateDashboardRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(CreateDashboard.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<CreateDashboard.Response>> Create([FromBody] CreateDashboard.Request request)
+    [ProducesResponseType(typeof(CreateDashboardResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<CreateDashboardResponse>> Create([FromBody] CreateDashboardRequest request)
         => await _mediator.Send(request);
 
     [HttpGet("page/{pageSize}/{index}", Name = "GetDashboardsPageRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetDashboardsPage.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetDashboardsPage.Response>> Page([FromRoute] GetDashboardsPage.Request request)
+    [ProducesResponseType(typeof(GetDashboardsPageResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetDashboardsPageResponse>> Page([FromRoute] GetDashboardsPageRequest request)
         => await _mediator.Send(request);
 
     [HttpPut(Name = "UpdateDashboardRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(UpdateDashboard.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<UpdateDashboard.Response>> Update([FromBody] UpdateDashboard.Request request)
+    [ProducesResponseType(typeof(UpdateDashboardResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<UpdateDashboardResponse>> Update([FromBody] UpdateDashboardRequest request)
         => await _mediator.Send(request);
 
     [HttpDelete("{dashboardId}", Name = "RemoveDashboardRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(RemoveDashboard.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<RemoveDashboard.Response>> Remove([FromRoute] RemoveDashboard.Request request)
+    [ProducesResponseType(typeof(RemoveDashboardResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<RemoveDashboardResponse>> Remove([FromRoute] RemoveDashboardRequest request)
         => await _mediator.Send(request);
 
 }

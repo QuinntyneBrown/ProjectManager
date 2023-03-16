@@ -22,8 +22,8 @@ public class ProjectController
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetProjectById.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetProjectById.Response>> GetById([FromRoute] GetProjectById.Request request)
+    [ProducesResponseType(typeof(GetProjectByIdResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetProjectByIdResponse>> GetById([FromRoute] GetProjectByIdRequest request)
     {
         var response = await _mediator.Send(request);
 
@@ -39,8 +39,8 @@ public class ProjectController
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetProjectById.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetProjectByName.Response>> GetByName([FromRoute] GetProjectByName.Request request)
+    [ProducesResponseType(typeof(GetProjectByIdResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetProjectByNameResponse>> GetByName([FromRoute] GetProjectByNameRequest request)
     {
         var response = await _mediator.Send(request);
 
@@ -55,44 +55,44 @@ public class ProjectController
     [HttpGet("user/current", Name = "GetProjectByCurrentUserRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetProjectByCurrentUser.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetProjectByCurrentUser.Response>> GetByCurrentUser()
-        => await _mediator.Send(new GetProjectByCurrentUser.Request());
+    [ProducesResponseType(typeof(GetProjectByCurrentUserResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetProjectByCurrentUserResponse>> GetByCurrentUser()
+        => await _mediator.Send(new GetProjectByCurrentUserRequest());
 
 
     [HttpGet(Name = "GetProjectsRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetProjects.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetProjects.Response>> Get()
-        => await _mediator.Send(new GetProjects.Request());
+    [ProducesResponseType(typeof(GetProjectsResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetProjectsResponse>> Get()
+        => await _mediator.Send(new GetProjectsRequest());
 
     [HttpPost(Name = "CreateProjectRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(CreateProject.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<CreateProject.Response>> Create([FromBody] CreateProject.Request request)
+    [ProducesResponseType(typeof(CreateProjectResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<CreateProjectResponse>> Create([FromBody] CreateProjectRequest request)
         => await _mediator.Send(request);
 
     [HttpGet("page/{pageSize}/{index}", Name = "GetProjectsPageRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetProjectsPage.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetProjectsPage.Response>> Page([FromRoute] GetProjectsPage.Request request)
+    [ProducesResponseType(typeof(GetProjectsPageResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetProjectsPageResponse>> Page([FromRoute] GetProjectsPageRequest request)
         => await _mediator.Send(request);
 
     [HttpPut(Name = "UpdateProjectRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(UpdateProject.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<UpdateProject.Response>> Update([FromBody] UpdateProject.Request request)
+    [ProducesResponseType(typeof(UpdateProjectResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<UpdateProjectResponse>> Update([FromBody] UpdateProjectRequest request)
         => await _mediator.Send(request);
 
     [HttpDelete("{projectId}", Name = "RemoveProjectRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(RemoveProject.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<RemoveProject.Response>> Remove([FromRoute] RemoveProject.Request request)
+    [ProducesResponseType(typeof(RemoveProjectResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<RemoveProjectResponse>> Remove([FromRoute] RemoveProjectRequest request)
         => await _mediator.Send(request);
 
 }

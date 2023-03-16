@@ -11,38 +11,35 @@ using ProjectManager.Api.Interfaces;
 
 namespace ProjectManager.Api.Features;
 
-public class RemoveToDo
-{
-    public class Request : IRequest<Response>
-    {
-        public Guid ToDoId { get; set; }
-    }
+ public class RemoveToDoRequest : IRequest<RemoveToDoResponse>
+ {
+     public Guid ToDoId { get; set; }
+ }
 
-    public class Response : ResponseBase
-    {
-        public ToDoDto ToDo { get; set; }
-    }
+ public class RemoveToDoResponse : ResponseBase
+ {
+     public ToDoDto ToDo { get; set; }
+ }
 
-    public class Handler : IRequestHandler<Request, Response>
-    {
-        private readonly IProjectManagerDbContext _context;
+ public class RemoveToDoHandler : IRequestHandler<RemoveToDoRequest, RemoveToDoResponse>
+ {
+     private readonly IProjectManagerDbContext _context;
 
-        public Handler(IProjectManagerDbContext context)
-            => _context = context;
+     public RemoveToDoHandler(IProjectManagerDbContext context)
+         => _context = context;
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-        {
-            var toDo = await _context.ToDos.SingleAsync(x => x.ToDoId == request.ToDoId);
+     public async Task<RemoveToDoResponse> Handle(RemoveToDoRequest request, CancellationToken cancellationToken)
+     {
+         var toDo = await _context.ToDos.SingleAsync(x => x.ToDoId == request.ToDoId);
 
-            toDo.Apply(new DomainEvents.DeleteToDo());
+         toDo.Apply(new DomainEvents.DeleteToDo());
 
-            await _context.SaveChangesAsync(cancellationToken);
+         await _context.SaveChangesAsync(cancellationToken);
 
-            return new Response()
-            {
-                ToDo = toDo.ToDto()
-            };
-        }
+         return new RemoveToDoResponse()
+         {
+             ToDo = toDo.ToDto()
+         };
+     }
 
-    }
-}
+ }

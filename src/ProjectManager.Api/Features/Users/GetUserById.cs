@@ -9,32 +9,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProjectManager.Api.Features;
 
-public class GetUserById
-{
-    public class Request : IRequest<Response>
-    {
-        public Guid UserId { get; set; }
-    }
+ public class GetUserByIdRequest : IRequest<GetUserByIdResponse>
+ {
+     public Guid UserId { get; set; }
+ }
 
-    public class Response : ResponseBase
-    {
-        public UserDto User { get; set; }
-    }
+ public class GetUserByIdResponse : ResponseBase
+ {
+     public UserDto User { get; set; }
+ }
 
-    public class Handler : IRequestHandler<Request, Response>
-    {
-        private readonly IProjectManagerDbContext _context;
+ public class GetUserByIdHandler : IRequestHandler<GetUserByIdRequest, GetUserByIdResponse>
+ {
+     private readonly IProjectManagerDbContext _context;
 
-        public Handler(IProjectManagerDbContext context)
-            => _context = context;
+     public GetUserByIdHandler(IProjectManagerDbContext context)
+         => _context = context;
 
-        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-        {
-            return new()
-            {
-                User = (await _context.Users.SingleOrDefaultAsync(x => x.UserId == request.UserId)).ToDto()
-            };
-        }
+     public async Task<GetUserByIdResponse> Handle(GetUserByIdRequest request, CancellationToken cancellationToken)
+     {
+         return new()
+         {
+             User = (await _context.Users.SingleOrDefaultAsync(x => x.UserId == request.UserId)).ToDto()
+         };
+     }
 
-    }
-}
+ }

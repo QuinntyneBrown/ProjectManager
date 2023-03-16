@@ -20,8 +20,8 @@ public class DashboardCardController
     [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetDashboardCardById.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetDashboardCardById.Response>> GetById([FromRoute] GetDashboardCardById.Request request)
+    [ProducesResponseType(typeof(GetDashboardCardByIdResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetDashboardCardByIdResponse>> GetById([FromRoute] GetDashboardCardByIdRequest request)
     {
         var response = await _mediator.Send(request);
 
@@ -36,36 +36,36 @@ public class DashboardCardController
     [HttpGet(Name = "GetDashboardCardsRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetDashboardCards.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetDashboardCards.Response>> Get()
-        => await _mediator.Send(new GetDashboardCards.Request());
+    [ProducesResponseType(typeof(GetDashboardCardsResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetDashboardCardsResponse>> Get()
+        => await _mediator.Send(new GetDashboardCardsRequest());
 
     [HttpPost(Name = "CreateDashboardCardRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(CreateDashboardCard.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<CreateDashboardCard.Response>> Create([FromBody] CreateDashboardCard.Request request)
+    [ProducesResponseType(typeof(CreateDashboardCardResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<CreateDashboardCardResponse>> Create([FromBody] CreateDashboardCardRequest request)
         => await _mediator.Send(request);
 
     [HttpGet("page/{pageSize}/{index}", Name = "GetDashboardCardsPageRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(GetDashboardCardsPage.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<GetDashboardCardsPage.Response>> Page([FromRoute] GetDashboardCardsPage.Request request)
+    [ProducesResponseType(typeof(GetDashboardCardsPageResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetDashboardCardsPageResponse>> Page([FromRoute] GetDashboardCardsPageRequest request)
         => await _mediator.Send(request);
 
     [HttpPut(Name = "UpdateDashboardCardRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(UpdateDashboardCardSettings.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<UpdateDashboardCardSettings.Response>> Update([FromBody] UpdateDashboardCardSettings.Request request)
+    [ProducesResponseType(typeof(UpdateDashboardCardSettingsResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<UpdateDashboardCardSettingsResponse>> Update([FromBody] UpdateDashboardCardSettingsRequest request)
         => await _mediator.Send(request);
 
     [HttpDelete("{dashboardCardId}", Name = "RemoveDashboardCardRoute")]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-    [ProducesResponseType(typeof(RemoveDashboardCard.Response), (int)HttpStatusCode.OK)]
-    public async Task<ActionResult<RemoveDashboardCard.Response>> Remove([FromRoute] RemoveDashboardCard.Request request)
+    [ProducesResponseType(typeof(RemoveDashboardCardResponse), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<RemoveDashboardCardResponse>> Remove([FromRoute] RemoveDashboardCardRequest request)
         => await _mediator.Send(request);
 
 }

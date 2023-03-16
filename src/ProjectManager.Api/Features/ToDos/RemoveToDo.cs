@@ -8,41 +8,41 @@ using ProjectManager.Api.Models;
 using ProjectManager.Api.Core;
 using ProjectManager.Api.Interfaces;
 
-namespace ProjectManager.Api.Features
+
+namespace ProjectManager.Api.Features;
+
+public class RemoveToDo
 {
-    public class RemoveToDo
+    public class Request : IRequest<Response>
     {
-        public class Request : IRequest<Response>
+        public Guid ToDoId { get; set; }
+    }
+
+    public class Response : ResponseBase
+    {
+        public ToDoDto ToDo { get; set; }
+    }
+
+    public class Handler : IRequestHandler<Request, Response>
+    {
+        private readonly IProjectManagerDbContext _context;
+
+        public Handler(IProjectManagerDbContext context)
+            => _context = context;
+
+        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
         {
-            public Guid ToDoId { get; set; }
-        }
+            var toDo = await _context.ToDos.SingleAsync(x => x.ToDoId == request.ToDoId);
 
-        public class Response : ResponseBase
-        {
-            public ToDoDto ToDo { get; set; }
-        }
+            toDo.Apply(new DomainEvents.DeleteToDo());
 
-        public class Handler : IRequestHandler<Request, Response>
-        {
-            private readonly IProjectManagerDbContext _context;
+            await _context.SaveChangesAsync(cancellationToken);
 
-            public Handler(IProjectManagerDbContext context)
-                => _context = context;
-
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            return new Response()
             {
-                var toDo = await _context.ToDos.SingleAsync(x => x.ToDoId == request.ToDoId);
-
-                toDo.Apply(new DomainEvents.DeleteToDo());
-
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return new Response()
-                {
-                    ToDo = toDo.ToDto()
-                };
-            }
-
+                ToDo = toDo.ToDto()
+            };
         }
+
     }
 }

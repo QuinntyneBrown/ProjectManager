@@ -1,17 +1,17 @@
 using ProjectManager.Api.Models;
 
-namespace ProjectManager.Api.Features
+
+namespace ProjectManager.Api.Features;
+
+public static class DashboardCardExtensions
 {
-    public static class DashboardCardExtensions
+    public static DashboardCardDto ToDto(this DashboardCard dashboardCard)
     {
-        public static DashboardCardDto ToDto(this DashboardCard dashboardCard)
+        return new()
         {
-            return new()
-            {
-                DashboardCardId = dashboardCard.DashboardCardId,
-                CardType = dashboardCard.CardType,
-                Settings = dashboardCard.Settings
-            };
-        }
+            DashboardCardId = dashboardCard.DashboardCardId,
+            CardType = dashboardCard.CardType,
+            Settings = dashboardCard.Settings
+        };
     }
 }

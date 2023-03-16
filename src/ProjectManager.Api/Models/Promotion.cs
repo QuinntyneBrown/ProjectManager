@@ -4,36 +4,36 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ProjectManager.Api.Models
+
+namespace ProjectManager.Api.Models;
+
+public class Promotion : AggregateRoot
 {
-    public class Promotion : AggregateRoot
+    public Guid PromotionId { get; private set; }
+    public string Name { get; private set; }
+    public List<PromotionTag> Tags { get; private set; }
+
+    public Promotion(CreatePromotion @event)
     {
-        public Guid PromotionId { get; private set; }
-        public string Name { get; private set; }
-        public List<PromotionTag> Tags { get; private set; }
+        Apply(@event);
+    }
 
-        public Promotion(CreatePromotion @event)
-        {
-            Apply(@event);
-        }
+    private Promotion() { }
 
-        private Promotion() { }
+    protected override void EnsureValidState() { }
 
-        protected override void EnsureValidState() { }
+    protected override void When(dynamic @event) => When(@event);
 
-        protected override void When(dynamic @event) => When(@event);
+    private void When(CreatePromotion @event)
+    {
+        PromotionId = @event.PromotionId;
+        Name = @event.Name;
+        Tags = new();
+    }
 
-        private void When(CreatePromotion @event)
-        {
-            PromotionId = @event.PromotionId;
-            Name = @event.Name;
-            Tags = new();
-        }
-
-        private void When(AddPromotionTag @event)
-        {
-            if (Tags.SingleOrDefault(x => x.Name == @event.Tag) == null)
-                Tags.Add(new(@event.Tag));
-        }
+    private void When(AddPromotionTag @event)
+    {
+        if (Tags.SingleOrDefault(x => x.Name == @event.Tag) == null)
+            Tags.Add(new(@event.Tag));
     }
 }

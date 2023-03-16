@@ -4,68 +4,68 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace ProjectManager.Api.Controllers
+
+namespace ProjectManager.Api.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class DashboardCardController
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class DashboardCardController
+    private readonly IMediator _mediator;
+
+    public DashboardCardController(IMediator mediator)
+        => _mediator = mediator;
+
+    [HttpGet("{dashboardCardId}", Name = "GetDashboardCardByIdRoute")]
+    [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(GetDashboardCardById.Response), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetDashboardCardById.Response>> GetById([FromRoute] GetDashboardCardById.Request request)
     {
-        private readonly IMediator _mediator;
+        var response = await _mediator.Send(request);
 
-        public DashboardCardController(IMediator mediator)
-            => _mediator = mediator;
-
-        [HttpGet("{dashboardCardId}", Name = "GetDashboardCardByIdRoute")]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(GetDashboardCardById.Response), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<GetDashboardCardById.Response>> GetById([FromRoute] GetDashboardCardById.Request request)
+        if (response.DashboardCard == null)
         {
-            var response = await _mediator.Send(request);
-
-            if (response.DashboardCard == null)
-            {
-                return new NotFoundObjectResult(request.DashboardCardId);
-            }
-
-            return response;
+            return new NotFoundObjectResult(request.DashboardCardId);
         }
 
-        [HttpGet(Name = "GetDashboardCardsRoute")]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(GetDashboardCards.Response), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<GetDashboardCards.Response>> Get()
-            => await _mediator.Send(new GetDashboardCards.Request());
-
-        [HttpPost(Name = "CreateDashboardCardRoute")]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(CreateDashboardCard.Response), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<CreateDashboardCard.Response>> Create([FromBody] CreateDashboardCard.Request request)
-            => await _mediator.Send(request);
-
-        [HttpGet("page/{pageSize}/{index}", Name = "GetDashboardCardsPageRoute")]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(GetDashboardCardsPage.Response), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<GetDashboardCardsPage.Response>> Page([FromRoute] GetDashboardCardsPage.Request request)
-            => await _mediator.Send(request);
-
-        [HttpPut(Name = "UpdateDashboardCardRoute")]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(UpdateDashboardCardSettings.Response), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<UpdateDashboardCardSettings.Response>> Update([FromBody] UpdateDashboardCardSettings.Request request)
-            => await _mediator.Send(request);
-
-        [HttpDelete("{dashboardCardId}", Name = "RemoveDashboardCardRoute")]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(RemoveDashboardCard.Response), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<RemoveDashboardCard.Response>> Remove([FromRoute] RemoveDashboardCard.Request request)
-            => await _mediator.Send(request);
-
+        return response;
     }
+
+    [HttpGet(Name = "GetDashboardCardsRoute")]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(GetDashboardCards.Response), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetDashboardCards.Response>> Get()
+        => await _mediator.Send(new GetDashboardCards.Request());
+
+    [HttpPost(Name = "CreateDashboardCardRoute")]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(CreateDashboardCard.Response), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<CreateDashboardCard.Response>> Create([FromBody] CreateDashboardCard.Request request)
+        => await _mediator.Send(request);
+
+    [HttpGet("page/{pageSize}/{index}", Name = "GetDashboardCardsPageRoute")]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(GetDashboardCardsPage.Response), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<GetDashboardCardsPage.Response>> Page([FromRoute] GetDashboardCardsPage.Request request)
+        => await _mediator.Send(request);
+
+    [HttpPut(Name = "UpdateDashboardCardRoute")]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(UpdateDashboardCardSettings.Response), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<UpdateDashboardCardSettings.Response>> Update([FromBody] UpdateDashboardCardSettings.Request request)
+        => await _mediator.Send(request);
+
+    [HttpDelete("{dashboardCardId}", Name = "RemoveDashboardCardRoute")]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType(typeof(ProblemDetails), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(RemoveDashboardCard.Response), (int)HttpStatusCode.OK)]
+    public async Task<ActionResult<RemoveDashboardCard.Response>> Remove([FromRoute] RemoveDashboardCard.Request request)
+        => await _mediator.Send(request);
+
 }

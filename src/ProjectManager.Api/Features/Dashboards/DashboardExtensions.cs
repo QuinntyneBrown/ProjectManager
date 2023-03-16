@@ -1,17 +1,17 @@
 using System;
 using ProjectManager.Api.Models;
 
-namespace ProjectManager.Api.Features
+
+namespace ProjectManager.Api.Features;
+
+public static class DashboardExtensions
 {
-    public static class DashboardExtensions
+    public static DashboardDto ToDto(this Dashboard dashboard)
     {
-        public static DashboardDto ToDto(this Dashboard dashboard)
+        return new()
         {
-            return new ()
-            {
-                DashboardId = dashboard.DashboardId
-            };
-        }
-        
+            DashboardId = dashboard.DashboardId
+        };
     }
+
 }

@@ -1,10 +1,10 @@
 using System;
 
-namespace ProjectManager.Api.Features
+
+namespace ProjectManager.Api.Features;
+
+public class PromotionDto
 {
-    public class PromotionDto
-    {
-        public Guid PromotionId { get; set; }
-        public string Name { get; set; }
-    }
+    public Guid PromotionId { get; set; }
+    public string Name { get; set; }
 }

@@ -7,32 +7,32 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProjectManager.Api.Features
+
+namespace ProjectManager.Api.Features;
+
+public class GetToDos
 {
-    public class GetToDos
+    public class Request : IRequest<Response> { }
+
+    public class Response : ResponseBase
     {
-        public class Request : IRequest<Response> { }
+        public List<ToDoDto> ToDos { get; set; }
+    }
 
-        public class Response : ResponseBase
+    public class Handler : IRequestHandler<Request, Response>
+    {
+        private readonly IProjectManagerDbContext _context;
+
+        public Handler(IProjectManagerDbContext context)
+            => _context = context;
+
+        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
         {
-            public List<ToDoDto> ToDos { get; set; }
-        }
-
-        public class Handler : IRequestHandler<Request, Response>
-        {
-            private readonly IProjectManagerDbContext _context;
-
-            public Handler(IProjectManagerDbContext context)
-                => _context = context;
-
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            return new()
             {
-                return new()
-                {
-                    ToDos = await _context.ToDos.Select(x => x.ToDto()).ToListAsync()
-                };
-            }
-
+                ToDos = await _context.ToDos.Select(x => x.ToDto()).ToListAsync()
+            };
         }
+
     }
 }

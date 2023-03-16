@@ -8,31 +8,32 @@ using ProjectManager.Api.Core;
 using ProjectManager.Api.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace ProjectManager.Api.Features
+
+namespace ProjectManager.Api.Features;
+
+public class GetDashboards
 {
-    public class GetDashboards
+    public class Request : IRequest<Response> { }
+
+    public class Response : ResponseBase
     {
-        public class Request: IRequest<Response> { }
+        public List<DashboardDto> Dashboards { get; set; }
+    }
 
-        public class Response: ResponseBase
-        {
-            public List<DashboardDto> Dashboards { get; set; }
-        }
+    public class Handler : IRequestHandler<Request, Response>
+    {
+        private readonly IProjectManagerDbContext _context;
 
-        public class Handler: IRequestHandler<Request, Response>
+        public Handler(IProjectManagerDbContext context)
+            => _context = context;
+
+        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
         {
-            private readonly IProjectManagerDbContext _context;
-        
-            public Handler(IProjectManagerDbContext context)
-                => _context = context;
-        
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            return new()
             {
-                return new () {
-                    Dashboards = await _context.Dashboards.Select(x => x.ToDto()).ToListAsync()
-                };
-            }
-            
+                Dashboards = await _context.Dashboards.Select(x => x.ToDto()).ToListAsync()
+            };
         }
+
     }
 }

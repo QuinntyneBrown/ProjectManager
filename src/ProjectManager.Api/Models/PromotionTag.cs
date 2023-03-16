@@ -1,14 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
-namespace ProjectManager.Api.Models
+
+namespace ProjectManager.Api.Models;
+
+[Owned]
+public class PromotionTag
 {
-    [Owned]
-    public class PromotionTag
+    public string Name { get; private set; }
+    public PromotionTag(string name)
     {
-        public string Name { get; private set; }
-        public PromotionTag(string name)
-        {
-            Name = name;
-        }
+        Name = name;
     }
 }

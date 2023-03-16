@@ -1,13 +1,13 @@
 using Newtonsoft.Json.Linq;
 using System;
 
-namespace ProjectManager.Api.Features
+
+namespace ProjectManager.Api.Features;
+
+public class DashboardCardDto
 {
-    public class DashboardCardDto
-    {
-        public Guid? DashboardCardId { get; set; }
-        public string Dashboard { get; set; }
-        public string CardType { get; set; }
-        public JObject Settings { get; set; }
-    }
+    public Guid? DashboardCardId { get; set; }
+    public string Dashboard { get; set; }
+    public string CardType { get; set; }
+    public JObject Settings { get; set; }
 }

@@ -1,6 +1,6 @@
-﻿namespace ProjectManager.Api.Interfaces
+
+namespace ProjectManager.Api.Interfaces;
+
+public interface IAggregateRoot
 {
-    public interface IAggregateRoot
-    {
-    }
 }

@@ -1,4 +1,4 @@
-﻿using ProjectManager.Api.Core;
+using ProjectManager.Api.Core;
 using ProjectManager.Api.DomainEvents;
 using ProjectManager.Api.Features.Users;
 using ProjectManager.Api.Interfaces;
@@ -11,72 +11,72 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProjectManager.Api.Features
+
+namespace ProjectManager.Api.Features;
+
+using Messages = ProjectManager.Api.DomainEvents;
+
+public class UserEventHandler :
+    INotificationHandler<Messages.CreateUser>,
+    INotificationHandler<BuildToken>,
+    INotificationHandler<QueryCurrentUser>
 {
-    using Messages = ProjectManager.Api.DomainEvents;
+    private readonly IProjectManagerDbContext _context;
+    private readonly IOrchestrationHandler _orchestrationHandler;
+    private readonly IPasswordHasher _passwordHasher;
+    private readonly ITokenBuilder _tokenBuilder;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public class UserEventHandler :
-        INotificationHandler<Messages.CreateUser>,
-        INotificationHandler<BuildToken>,
-        INotificationHandler<QueryCurrentUser>
+    public UserEventHandler(IProjectManagerDbContext context, IOrchestrationHandler messageHandlerContext, IPasswordHasher passwordHasher, ITokenBuilder tokenBuilder, IHttpContextAccessor httpContextAccessor)
     {
-        private readonly IProjectManagerDbContext _context;
-        private readonly IOrchestrationHandler _orchestrationHandler;
-        private readonly IPasswordHasher _passwordHasher;
-        private readonly ITokenBuilder _tokenBuilder;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        _context = context;
+        _orchestrationHandler = messageHandlerContext;
+        _passwordHasher = passwordHasher;
+        _tokenBuilder = tokenBuilder;
+        _httpContextAccessor = httpContextAccessor;
+    }
 
-        public UserEventHandler(IProjectManagerDbContext context, IOrchestrationHandler messageHandlerContext, IPasswordHasher passwordHasher, ITokenBuilder tokenBuilder, IHttpContextAccessor httpContextAccessor)
+
+
+    public async Task Handle(Messages.CreateUser notification, CancellationToken cancellationToken)
+    {
+        var user = new User(new DomainEvents.CreateUser(
+            notification.CurrentProjectName,
+            notification.Username,
+            notification.Password,
+            _passwordHasher));
+
+
+        _context.Users.Add(user);
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        await _orchestrationHandler.Publish(new CreatedUser(user.UserId));
+    }
+
+    public async Task Handle(BuildToken notification, CancellationToken cancellationToken)
+    {
+        var user = await _context.Users
+            .SingleAsync(x => x.Username == notification.Username);
+
+        _tokenBuilder
+            .AddUsername(user.Username)
+            .AddClaim(new System.Security.Claims.Claim(Constants.ClaimTypes.UserId, $"{user.UserId}"))
+            .AddClaim(new System.Security.Claims.Claim(Constants.ClaimTypes.Username, $"{user.Username}"));
+
+        await _orchestrationHandler.PublishBuiltTokenEvent(user.UserId, _tokenBuilder.Build());
+    }
+
+    public async Task Handle(QueryCurrentUser notification, CancellationToken cancellationToken)
+    {
+        var userId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst(Constants.ClaimTypes.UserId).Value);
+
+        User user = _context.Users
+            .Single(x => x.UserId == userId);
+
+        await _orchestrationHandler.Publish(new QueriedCurrentUser
         {
-            _context = context;
-            _orchestrationHandler = messageHandlerContext;
-            _passwordHasher = passwordHasher;
-            _tokenBuilder = tokenBuilder;
-            _httpContextAccessor = httpContextAccessor;
-        }
-
-
-
-        public async Task Handle(Messages.CreateUser notification, CancellationToken cancellationToken)
-        {
-            var user = new User(new DomainEvents.CreateUser(
-                notification.CurrentProjectName,
-                notification.Username,
-                notification.Password,
-                _passwordHasher));
-
-
-            _context.Users.Add(user);
-
-            await _context.SaveChangesAsync(cancellationToken);
-
-            await _orchestrationHandler.Publish(new CreatedUser(user.UserId));
-        }
-
-        public async Task Handle(BuildToken notification, CancellationToken cancellationToken)
-        {
-            var user = await _context.Users
-                .SingleAsync(x => x.Username == notification.Username);
-
-            _tokenBuilder
-                .AddUsername(user.Username)
-                .AddClaim(new System.Security.Claims.Claim(Constants.ClaimTypes.UserId, $"{user.UserId}"))
-                .AddClaim(new System.Security.Claims.Claim(Constants.ClaimTypes.Username, $"{user.Username}"));
-
-            await _orchestrationHandler.PublishBuiltTokenEvent(user.UserId, _tokenBuilder.Build());
-        }
-
-        public async Task Handle(QueryCurrentUser notification, CancellationToken cancellationToken)
-        {
-            var userId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst(Constants.ClaimTypes.UserId).Value);
-
-            User user = _context.Users
-                .Single(x => x.UserId == userId);
-
-            await _orchestrationHandler.Publish(new QueriedCurrentUser
-            {
-                User = user
-            });
-        }
+            User = user
+        });
     }
 }

@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace ProjectManager.Api.Features
-{
-    public class DashboardCardValidator: AbstractValidator<DashboardCardDto> { }
-}
+
+namespace ProjectManager.Api.Features;
+
+public class DashboardCardValidator : AbstractValidator<DashboardCardDto> { }

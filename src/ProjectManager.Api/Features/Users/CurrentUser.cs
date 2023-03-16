@@ -1,4 +1,4 @@
-﻿using ProjectManager.Api.Core;
+using ProjectManager.Api.Core;
 using ProjectManager.Api.Interfaces;
 using ProjectManager.Api.Models;
 using MediatR;
@@ -8,46 +8,46 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProjectManager.Api.Features
-{
-    public class CurrentUser
-    {
-        public class Request : IRequest<Response> { }
 
-        public class Response
+namespace ProjectManager.Api.Features;
+
+public class CurrentUser
+{
+    public class Request : IRequest<Response> { }
+
+    public class Response
+    {
+        public UserDto User { get; set; }
+    }
+
+    public class Handler : IRequestHandler<Request, Response>
+    {
+        private readonly IProjectManagerDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public Handler(IProjectManagerDbContext context, IHttpContextAccessor httpContextAccessor)
         {
-            public UserDto User { get; set; }
+            _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public class Handler : IRequestHandler<Request, Response>
+        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
         {
-            private readonly IProjectManagerDbContext _context;
-            private readonly IHttpContextAccessor _httpContextAccessor;
 
-            public Handler(IProjectManagerDbContext context, IHttpContextAccessor httpContextAccessor)
+            if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
             {
-                _context = context;
-                _httpContextAccessor = httpContextAccessor;
+                return new();
             }
 
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            var userId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst(Constants.ClaimTypes.UserId).Value);
+
+            User user = _context.Users
+                .Single(x => x.UserId == userId);
+
+            return new()
             {
-
-                if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
-                {
-                    return new();
-                }
-
-                var userId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst(Constants.ClaimTypes.UserId).Value);
-
-                User user = _context.Users
-                    .Single(x => x.UserId == userId);
-
-                return new()
-                {
-                    User = user.ToDto()
-                };
-            }
+                User = user.ToDto()
+            };
         }
     }
 }

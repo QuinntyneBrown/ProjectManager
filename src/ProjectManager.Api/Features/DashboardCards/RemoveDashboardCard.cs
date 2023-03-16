@@ -6,43 +6,43 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProjectManager.Api.Features
+
+namespace ProjectManager.Api.Features;
+
+public class RemoveDashboardCard
 {
-    public class RemoveDashboardCard
+    public class Request : IRequest<Response>
     {
-        public class Request : IRequest<Response>
+        public Guid DashboardCardId { get; set; }
+    }
+
+    public class Response : ResponseBase
+    {
+        public DashboardCardDto DashboardCard { get; set; }
+    }
+
+    public class Handler : IRequestHandler<Request, Response>
+    {
+        private readonly IProjectManagerDbContext _context;
+
+        public Handler(IProjectManagerDbContext context)
+            => _context = context;
+
+        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
         {
-            public Guid DashboardCardId { get; set; }
-        }
+            var dashboardCard = await _context.DashboardCards.SingleAsync(x => x.DashboardCardId == request.DashboardCardId);
 
-        public class Response : ResponseBase
-        {
-            public DashboardCardDto DashboardCard { get; set; }
-        }
+            dashboardCard.Apply(new DomainEvents.RemoveDashboardCard());
 
-        public class Handler : IRequestHandler<Request, Response>
-        {
-            private readonly IProjectManagerDbContext _context;
+            _context.DashboardCards.Remove(dashboardCard);
 
-            public Handler(IProjectManagerDbContext context)
-                => _context = context;
+            await _context.SaveChangesAsync(cancellationToken);
 
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            return new()
             {
-                var dashboardCard = await _context.DashboardCards.SingleAsync(x => x.DashboardCardId == request.DashboardCardId);
-
-                dashboardCard.Apply(new DomainEvents.RemoveDashboardCard());
-
-                _context.DashboardCards.Remove(dashboardCard);
-
-                await _context.SaveChangesAsync(cancellationToken);
-
-                return new()
-                {
-                    DashboardCard = dashboardCard.ToDto()
-                };
-            }
-
+                DashboardCard = dashboardCard.ToDto()
+            };
         }
+
     }
 }

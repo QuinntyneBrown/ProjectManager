@@ -1,18 +1,18 @@
 using ProjectManager.Api.Models;
 
-namespace ProjectManager.Api.Features
+
+namespace ProjectManager.Api.Features;
+
+public static class ToDoExtensions
 {
-    public static class ToDoExtensions
+    public static ToDoDto ToDto(this ToDo toDo)
     {
-        public static ToDoDto ToDto(this ToDo toDo)
+        return new()
         {
-            return new()
-            {
-                ToDoId = toDo.ToDoId,
-                ProjectName = toDo.ProjectName,
-                Description = toDo.Description,
-                Status = toDo.Status
-            };
-        }
+            ToDoId = toDo.ToDoId,
+            ProjectName = toDo.ProjectName,
+            Description = toDo.Description,
+            Status = toDo.Status
+        };
     }
 }

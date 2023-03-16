@@ -6,34 +6,35 @@ using ProjectManager.Api.Core;
 using ProjectManager.Api.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace ProjectManager.Api.Features
+
+namespace ProjectManager.Api.Features;
+
+public class GetPromotionById
 {
-    public class GetPromotionById
+    public class Request : IRequest<Response>
     {
-        public class Request: IRequest<Response>
-        {
-            public Guid PromotionId { get; set; }
-        }
+        public Guid PromotionId { get; set; }
+    }
 
-        public class Response: ResponseBase
-        {
-            public PromotionDto Promotion { get; set; }
-        }
+    public class Response : ResponseBase
+    {
+        public PromotionDto Promotion { get; set; }
+    }
 
-        public class Handler: IRequestHandler<Request, Response>
+    public class Handler : IRequestHandler<Request, Response>
+    {
+        private readonly IProjectManagerDbContext _context;
+
+        public Handler(IProjectManagerDbContext context)
+            => _context = context;
+
+        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
         {
-            private readonly IProjectManagerDbContext _context;
-        
-            public Handler(IProjectManagerDbContext context)
-                => _context = context;
-        
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            return new()
             {
-                return new () {
-                    Promotion = (await _context.Promotions.SingleOrDefaultAsync(x => x.PromotionId == request.PromotionId)).ToDto()
-                };
-            }
-            
+                Promotion = (await _context.Promotions.SingleOrDefaultAsync(x => x.PromotionId == request.PromotionId)).ToDto()
+            };
         }
+
     }
 }

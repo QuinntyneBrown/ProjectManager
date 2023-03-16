@@ -1,74 +1,74 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
-namespace ProjectManager.Api.Core
+
+namespace ProjectManager.Api.Core;
+
+public interface ITokenBuilder
 {
-    public interface ITokenBuilder
+    TokenBuilder AddOrUpdateClaim(Claim claim);
+    TokenBuilder AddClaim(Claim claim);
+    TokenBuilder AddUsername(string username);
+    string Build();
+    TokenBuilder FromClaimsPrincipal(ClaimsPrincipal claimsPrincipal);
+    TokenBuilder RemoveClaim(Claim claim);
+}
+public class TokenBuilder : ITokenBuilder
+{
+    private readonly ITokenProvider _tokenProivder;
+    private string _username;
+    private List<Claim> _claims = new List<Claim>();
+    public TokenBuilder(ITokenProvider tokenProvider)
     {
-        TokenBuilder AddOrUpdateClaim(Claim claim);
-        TokenBuilder AddClaim(Claim claim);
-        TokenBuilder AddUsername(string username);
-        string Build();
-        TokenBuilder FromClaimsPrincipal(ClaimsPrincipal claimsPrincipal);
-        TokenBuilder RemoveClaim(Claim claim);
+        _tokenProivder = tokenProvider;
     }
-    public class TokenBuilder : ITokenBuilder
+
+    public TokenBuilder AddUsername(string username)
     {
-        private readonly ITokenProvider _tokenProivder;
-        private string _username;
-        private List<Claim> _claims = new List<Claim>();
-        public TokenBuilder(ITokenProvider tokenProvider)
+        _username = username;
+        return this;
+    }
+
+    public TokenBuilder FromClaimsPrincipal(ClaimsPrincipal claimsPrincipal)
+    {
+        _username = claimsPrincipal.Identity.Name;
+
+        if (string.IsNullOrEmpty(_username))
         {
-            _tokenProivder = tokenProvider;
+            _username = claimsPrincipal.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
+
         }
 
-        public TokenBuilder AddUsername(string username)
-        {
-            _username = username;
-            return this;
-        }
+        _claims = claimsPrincipal.Claims.ToList();
 
-        public TokenBuilder FromClaimsPrincipal(ClaimsPrincipal claimsPrincipal)
-        {
-            _username = claimsPrincipal.Identity.Name;
+        return this;
+    }
 
-            if (string.IsNullOrEmpty(_username))
-            {
-                _username = claimsPrincipal.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
+    public TokenBuilder RemoveClaim(Claim claim)
+    {
+        _claims.Remove(_claims.SingleOrDefault(x => x.Type == claim.Type));
 
-            }
+        return this;
+    }
 
-            _claims = claimsPrincipal.Claims.ToList();
+    public TokenBuilder AddClaim(Claim claim)
+    {
+        _claims.Add(claim);
 
-            return this;
-        }
+        return this;
+    }
+    public TokenBuilder AddOrUpdateClaim(Claim claim)
+    {
+        RemoveClaim(claim);
 
-        public TokenBuilder RemoveClaim(Claim claim)
-        {
-            _claims.Remove(_claims.SingleOrDefault(x => x.Type == claim.Type));
+        _claims.Add(claim);
 
-            return this;
-        }
+        return this;
+    }
 
-        public TokenBuilder AddClaim(Claim claim)
-        {
-            _claims.Add(claim);
-
-            return this;
-        }
-        public TokenBuilder AddOrUpdateClaim(Claim claim)
-        {
-            RemoveClaim(claim);
-
-            _claims.Add(claim);
-
-            return this;
-        }
-
-        public string Build()
-        {
-            return _tokenProivder.Get(_username, _claims);
-        }
+    public string Build()
+    {
+        return _tokenProivder.Get(_username, _claims);
     }
 }

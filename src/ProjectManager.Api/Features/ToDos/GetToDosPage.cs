@@ -10,46 +10,46 @@ using ProjectManager.Api.Interfaces;
 using ProjectManager.Api.Extensions;
 using Microsoft.EntityFrameworkCore;
 
-namespace ProjectManager.Api.Features
+
+namespace ProjectManager.Api.Features;
+
+public class GetToDosPage
 {
-    public class GetToDosPage
+    public class Request : IRequest<Response>
     {
-        public class Request : IRequest<Response>
+        public int PageSize { get; set; }
+        public int Index { get; set; }
+    }
+
+    public class Response : ResponseBase
+    {
+        public int Length { get; set; }
+        public List<ToDoDto> Entities { get; set; }
+    }
+
+    public class Handler : IRequestHandler<Request, Response>
+    {
+        private readonly IProjectManagerDbContext _context;
+
+        public Handler(IProjectManagerDbContext context)
+            => _context = context;
+
+        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
         {
-            public int PageSize { get; set; }
-            public int Index { get; set; }
-        }
+            var query = from toDo in _context.ToDos
+                        select toDo;
 
-        public class Response : ResponseBase
-        {
-            public int Length { get; set; }
-            public List<ToDoDto> Entities { get; set; }
-        }
+            var length = await _context.ToDos.CountAsync();
 
-        public class Handler : IRequestHandler<Request, Response>
-        {
-            private readonly IProjectManagerDbContext _context;
+            var toDos = await query.Page(request.Index, request.PageSize)
+                .Select(x => x.ToDto()).ToListAsync();
 
-            public Handler(IProjectManagerDbContext context)
-                => _context = context;
-
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
+            return new()
             {
-                var query = from toDo in _context.ToDos
-                            select toDo;
-
-                var length = await _context.ToDos.CountAsync();
-
-                var toDos = await query.Page(request.Index, request.PageSize)
-                    .Select(x => x.ToDto()).ToListAsync();
-
-                return new()
-                {
-                    Length = length,
-                    Entities = toDos
-                };
-            }
-
+                Length = length,
+                Entities = toDos
+            };
         }
+
     }
 }

@@ -9,68 +9,68 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ProjectManager.Api.Features
+
+namespace ProjectManager.Api.Features;
+
+public class Authenticate
 {
-    public class Authenticate
+    public class Validator : AbstractValidator<Request>
     {
-        public class Validator : AbstractValidator<Request>
+        public Validator()
         {
-            public Validator()
-            {
-                RuleFor(x => x.Username).NotNull();
-                RuleFor(x => x.Password).NotNull();
-            }
+            RuleFor(x => x.Username).NotNull();
+            RuleFor(x => x.Password).NotNull();
+        }
+    }
+
+    public record Request(string Username, string Password) : IRequest<Response>;
+
+    public record Response(string AccessToken, Guid UserId);
+
+    public class Handler : IRequestHandler<Request, Response>
+    {
+        private readonly IProjectManagerDbContext _context;
+        private readonly IPasswordHasher _passwordHasher;
+        private readonly ITokenBuilder _tokenBuilder;
+        private readonly IOrchestrationHandler _orchestrationHandler;
+
+        public Handler(IProjectManagerDbContext context, IPasswordHasher passwordHasher, ITokenBuilder tokenBuilder, IOrchestrationHandler orchestrationHandler)
+        {
+            _context = context;
+            _passwordHasher = passwordHasher;
+            _tokenBuilder = tokenBuilder;
+            _orchestrationHandler = orchestrationHandler;
         }
 
-        public record Request(string Username, string Password) : IRequest<Response>;
-
-        public record Response(string AccessToken, Guid UserId);
-
-        public class Handler : IRequestHandler<Request, Response>
+        public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
         {
-            private readonly IProjectManagerDbContext _context;
-            private readonly IPasswordHasher _passwordHasher;
-            private readonly ITokenBuilder _tokenBuilder;
-            private readonly IOrchestrationHandler _orchestrationHandler;
+            var user = await _context.Users
+                .SingleOrDefaultAsync(x => x.Username == request.Username);
 
-            public Handler(IProjectManagerDbContext context, IPasswordHasher passwordHasher, ITokenBuilder tokenBuilder, IOrchestrationHandler orchestrationHandler)
-            {
-                _context = context;
-                _passwordHasher = passwordHasher;
-                _tokenBuilder = tokenBuilder;
-                _orchestrationHandler = orchestrationHandler;
-            }
+            if (user == null)
+                throw new Exception();
 
-            public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
-            {
-                var user = await _context.Users
-                    .SingleOrDefaultAsync(x => x.Username == request.Username);
+            if (!ValidateUser(user, _passwordHasher.HashPassword(user.Salt, request.Password)))
+                throw new Exception();
 
-                if (user == null)
-                    throw new Exception();
-
-                if (!ValidateUser(user, _passwordHasher.HashPassword(user.Salt, request.Password)))
-                    throw new Exception();
-
-                return await _orchestrationHandler.Handle<Response>(new BuildToken(user.Username), (tcs) => async message =>
+            return await _orchestrationHandler.Handle<Response>(new BuildToken(user.Username), (tcs) => async message =>
+             {
+                 switch (message)
                  {
-                     switch (message)
-                     {
-                         case BuiltToken builtToken:
-                             await _orchestrationHandler.Publish(new AuthenticatedUser(user.Username));
-                             tcs.SetResult(new Response(builtToken.AccessToken, builtToken.UserId));
-                             break;
-                     }
-                 });
-            }
+                     case BuiltToken builtToken:
+                         await _orchestrationHandler.Publish(new AuthenticatedUser(user.Username));
+                         tcs.SetResult(new Response(builtToken.AccessToken, builtToken.UserId));
+                         break;
+                 }
+             });
+        }
 
-            public bool ValidateUser(User user, string transformedPassword)
-            {
-                if (user == null || transformedPassword == null)
-                    return false;
+        public bool ValidateUser(User user, string transformedPassword)
+        {
+            if (user == null || transformedPassword == null)
+                return false;
 
-                return user.Password == transformedPassword;
-            }
+            return user.Password == transformedPassword;
         }
     }
 }

@@ -1,11 +1,11 @@
 using System;
 
-namespace ProjectManager.Api.Features
+
+namespace ProjectManager.Api.Features;
+
+public class ProjectDto
 {
-    public class ProjectDto
-    {
-        public Guid ProjectId { get; set; }
-        public string Name { get; set; }
-        public DateTime DueDate { get; set; }
-    }
+    public Guid ProjectId { get; set; }
+    public string Name { get; set; }
+    public DateTime DueDate { get; set; }
 }

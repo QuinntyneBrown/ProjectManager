@@ -7,36 +7,36 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
 
-namespace ProjectManager.Api
+
+namespace ProjectManager.Api;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            var host = CreateHostBuilder(args).Build();
+        var host = CreateHostBuilder(args).Build();
 
-            ProcessDbCommands(args, host);
+        ProcessDbCommands(args, host);
 
-            host.Run();
-        }
-
-        private static void ProcessDbCommands(string[] args, IHost host)
-        {
-            var services = (IServiceScopeFactory)host.Services.GetService(typeof(IServiceScopeFactory));
-
-            using (var scope = services.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetRequiredService<ProjectManagerDbContext>();
-
-                SeedData.Seed(context);
-            }
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        host.Run();
     }
+
+    private static void ProcessDbCommands(string[] args, IHost host)
+    {
+        var services = (IServiceScopeFactory)host.Services.GetService(typeof(IServiceScopeFactory));
+
+        using (var scope = services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<ProjectManagerDbContext>();
+
+            SeedData.Seed(context);
+        }
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
 }

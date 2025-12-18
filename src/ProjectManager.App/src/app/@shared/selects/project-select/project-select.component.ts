@@ -1,11 +1,21 @@
 import { ChangeDetectionStrategy, Component, forwardRef } from '@angular/core';
-import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators, ReactiveFormsModule } from '@angular/forms';
 import { map, takeUntil } from 'rxjs/operators';
 import { Destroyable, ProjectStore } from '@core';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 
 @Component({
   selector: 'app-project-select',
+  standalone: true,
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule
+  ],
   templateUrl: './project-select.component.html',
   styleUrls: ['./project-select.component.scss'],
   providers: [

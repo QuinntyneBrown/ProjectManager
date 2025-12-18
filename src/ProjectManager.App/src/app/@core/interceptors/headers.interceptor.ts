@@ -1,28 +1,15 @@
-import { Injectable } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor
-} from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { LocalStorageService } from '@core/services/local-storage.service';
 import { accessTokenKey } from '@core/constants';
 
+export const headersInterceptor: HttpInterceptorFn = (req, next) => {
+  const localStorageService = inject(LocalStorageService);
+  const token = localStorageService.get({ name: accessTokenKey }) || '';
 
-@Injectable()
-export class HeadersInterceptor implements HttpInterceptor {
+  const clonedRequest = req.clone({
+    headers: req.headers.set('Authorization', `Bearer ${token}`)
+  });
 
-  constructor(
-    private readonly _localStorageService: LocalStorageService)
-    { }
-
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const token = this._localStorageService.get({ name: accessTokenKey }) || '';
-
-    return next.handle(request.clone({
-      headers: request.headers
-        .set('Authorization', `Bearer ${token}`)
-    }));
-  }
-}
+  return next(clonedRequest);
+};

@@ -3,10 +3,21 @@ import { Project, User } from '@api';
 import { PromotionStore, UserStore, ProjectStore, ToDoStore, NavigationService, AuthStore } from '@core';
 import { combineLatest } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { RemainingDaysComponent } from '@shared/remaining-days';
+import { ToDoProgressComponent } from '@shared/to-do-progress/to-do-progress.component';
 
 
 @Component({
   selector: 'app-project-panel',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterLink,
+    RemainingDaysComponent,
+    ToDoProgressComponent
+  ],
   templateUrl: './project-panel.component.html',
   styleUrls: ['./project-panel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

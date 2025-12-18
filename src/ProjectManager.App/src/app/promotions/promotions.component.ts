@@ -1,9 +1,20 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { PromotionStore, ProjectStore, UserStore } from '@core';
 import { map, switchMap } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { PromotionCardComponent } from '@shared/cards';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-promotions',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatIconModule,
+    PromotionCardComponent,
+    RouterLink
+  ],
   templateUrl: './promotions.component.html',
   styleUrls: ['./promotions.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

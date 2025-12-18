@@ -17,7 +17,7 @@ bootstrapApplication(AppComponent, {
     ),
     {
       provide: BASE_URL,
-      useValue: "https://localhost:5001/"
+      useValue: environment.apiBaseUrl
     },
     {
       provide: MINIMUM_LOG_LEVEL,

@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  minLogLevel: 0
+  minLogLevel: 0,
+  apiBaseUrl: 'https://localhost:5001/'
 };
 
 /*

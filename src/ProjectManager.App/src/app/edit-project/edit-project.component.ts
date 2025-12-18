@@ -57,7 +57,7 @@ export class EditProjectComponent extends Destroyable {
     super();
   }
 
-  public handleSaveClick(project: any) {
+  public handleSaveClick(project: Partial<Project>) {
     if (project.projectId && project.name && project.dueDate) {
       this._projectStore.updateProject(project as Project);
     }

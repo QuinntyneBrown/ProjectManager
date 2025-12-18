@@ -39,7 +39,7 @@ export class EditUserComponent extends Destroyable {
       formControl.valueChanges
       .pipe(
         takeUntil(this._destroyed$),
-        tap((value: any)=> {
+        tap((value: string | { name: string })=> {
           const currentProjectName = typeof value === 'string' ? value : value?.name;
 
           this._userStore.update({

@@ -1,8 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ToDo } from '@api';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-to-do-progress',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './to-do-progress.component.html',
   styleUrls: ['./to-do-progress.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

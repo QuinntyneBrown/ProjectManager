@@ -1,8 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Project } from '@api';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-remaining-days',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './remaining-days.component.html',
   styleUrls: ['./remaining-days.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

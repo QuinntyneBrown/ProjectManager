@@ -1,16 +1,25 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
+import { ProjectStore, UserStore } from '@core';
+import { of } from 'rxjs';
+import { provideRouter } from '@angular/router';
 
 describe('AppComponent', () => {
+  let mockProjectStore: jasmine.SpyObj<ProjectStore>;
+  let mockUserStore: jasmine.SpyObj<UserStore>;
+
   beforeEach(async () => {
+    mockProjectStore = jasmine.createSpyObj('ProjectStore', ['getProjects']);
+    mockUserStore = jasmine.createSpyObj('UserStore', ['getCurrent']);
+    mockUserStore.getCurrent.and.returnValue(of({ username: 'test' } as any));
+
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
-      ],
+      imports: [AppComponent],
+      providers: [
+        provideRouter([]),
+        { provide: ProjectStore, useValue: mockProjectStore },
+        { provide: UserStore, useValue: mockUserStore }
+      ]
     }).compileComponents();
   });
 
@@ -18,18 +27,5 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
-  });
-
-  it(`should have as title 'App'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('App');
-  });
-
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('App app is running!');
   });
 });
